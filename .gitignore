@@ -1,0 +1,5 @@
+# 本地参考资料，不纳入版本管理
+reference/
+
+# macOS
+.DS_Store
