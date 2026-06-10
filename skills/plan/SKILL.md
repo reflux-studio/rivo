@@ -1,71 +1,95 @@
 ---
 name: plan
-description: 把 spec 拆成技术方案 plan.md（架构 + 任务拆分）和 test-cases.md（BDD 场景）。用户想出方案、拆任务或做技术设计时用。
-argument-hint: <issue-id> [--rebuild]
-allowed-tools: Read, Write, Edit, Glob, Grep, Task, Bash(git add *), Bash(git commit *), Bash(git status *)
+description: 调研并产出技术方案设计文档
+when_to_use: 需求澄清后，需要调研并产出技术方案，或是要对现有技术方案做修改时使用
+argument-hint: <issue-id>
+arguments: [issue_id]
 ---
 
-<SUBAGENT-STOP>
-若本次是被父级 agent 以具体子任务派发（prompt 已含明确任务），忽略本 SKILL.md 的流程编排与前置检查，只完成 prompt 指定的子任务。
-</SUBAGENT-STOP>
+# 技术方案设计
 
-# /rivo:plan —— 技术方案 + 测试用例
+调研并产出技术方案设计文档
 
-把 `spec.md` 拆成可执行的技术方案 `plan.md` 和测试场景 `test-cases.md`。
+若 [using-rivo](../using-rivo/SKILL.md) 总纲尚未在上下文中，先读它。
 
-只出方案与用例文档，不写实现代码、也不写测试代码——那是 `/rivo:code`（含红绿灯）。
+## 获取必要的上下文
 
-## 任务清单
+1. 读取项目全局说明：`.rivo/PROJECT.md`、`.rivo/ARCHITECTURE.md`，了解项目全貌
+2. 从当前 issue 目录 `.rivo/issues/$issue_id` 读 `prd.md`、`spec.md` 理解需求内容和交付目标
+3. 如果 issue 目录下存在 `ui-contract.md`，读取 UI 契约
+4. 如果 issue 目录下存在 `plan.md`，阅读现有技术方案
+5. 从 `.rivo/learnings/` 目录下读取可能涉及到的学习经验
+6. 结合对话上下文和上游产物文件，判断是方案设计还是方案改动
 
-1. **前置检查** —— `.rivo/` 在、`status` 为 `specified`、`spec.md` 在
-2. **读 learnings** —— 扫 `.rivo/learnings/` 里架构、选型、踩坑相关的 case
-3. **外部调研** —— 涉及选型或权衡时，调 `/rivo:survey` 外部分支，产出 `surveys/`
-4. **技术决策** —— AI 自主衍生并定（每个带理由）；需你拍板的少数项留到收敛门由 report 顶给你
-5. **写 plan.md** —— 架构决策 + 任务拆分，标清互不依赖的 task
-6. **写 test-cases.md** —— 每条 AC 对应 BDD 场景，标 `[auto]` / `[manual]`
-7. **评审** —— `/rivo:review` 分别评 `plan` 与 `test-cases` 并收敛；手动模式走 `/rivo:report` 主讲
-8. **推进状态** —— 改 `status: planned`，commit
-9. **结束语** —— 交代产物、关键决策、下一步
+## 了解现状
 
-## 工作流程
+理解需求后，并行做双视角调研：
 
-**前置检查**
+1. **内部现状调研**：探索该需求涉及的模块的真实业务逻辑，判断现有架构是否能支撑新的产品业务逻辑，着重排查改动点和影响面。
+2. **外部技术调研**：联网搜索，判断当前问题是否有现成的第三方库、框架或技术方案能解决，业界的最佳实践是怎样的。
 
-- `.rivo/` 不存在就引导用户先跑 `/rivo:init`，然后退出。
-- 从 `$ARGUMENTS` 取 issue-id，读 `README.md` frontmatter 确认 `status` 是 `specified`。
-- 当前 issue 的 `spec.md` 已存在（由 `/rivo:spec` 产出）；不在就提示先跑 `/rivo:spec`。
-- 带 `--rebuild` 时（通常是 reflow 回退后返工）放宽状态校验，允许在 `planned`、`coded` 上基于 reflow 报告在现有 plan / test-cases 上修订：照常走 review 收敛门（手动模式 report 主讲）。改完按统一规则把 `status` 设回本 skill 出口态 `planned`（即从 `coded` 回滚、显式标记下游 code 已 stale），下游 code 由 reflow 报告或用户判断是否前向重跑（`/rivo:code` 会复用盘上已有实现、按新方案改写，不当 greenfield）。
+如果有现成的调研技能或工具，请随意使用；如果明确不涉及引入外部技术，可以跳过外部调研。
 
-**调研与技术决策**
+## 方案设计
 
-- 涉及技术选型、三方库、性能或安全权衡时，内嵌 `/rivo:survey` 外部分支调研，产出 `issues/<id>/surveys/<topic>.md`。没有这类不确定性就跳过。
-- 技术决策（选型、分层、数据结构、迁移策略）尽量从 spec + `PROJECT.md` + `ARCHITECTURE.md`（系统骨架、依赖与不变量）+ 代码现状**自主衍生并定**，每个写清理由与否掉的备选——这些是可推导的，不必逐项问用户。方案须落在 `ARCHITECTURE.md` 的边界内；若需动架构（模块/数据流/存储/分层），在 `plan.md` 写清「打算怎么动、为什么」，由 code 实现、archive 时再同步回 `ARCHITECTURE.md`。个别真正需用户拍板的（成本 vs 延迟这类业务取舍），别擅自定：留到收敛门由 `/rivo:report` 顶给用户；若发现是 PRD / spec 漏项，停下走 `/rivo:reflow`。
+基于已知上下文，完成技术方案设计，写入或更新到 `.rivo/issues/$issue_id/plan.md`
 
-**写 plan 与 test-cases**
+> **注意事项**:
+> 如果是方案更新，在方案顶部用一句话注明本次改了什么（版本历史交给 git）
+> 对于前端任务，若存在 `ui-contract.md`，必须引用其中已实现的组件
 
-- 按 [templates/plan.md](templates/plan.md) 写 `plan.md`。任务拆分要标清哪些 task **互不依赖且不共享改动文件**——这才是 code 阶段能并行派 subagent 的条件，给它提供依据。
-- 按 [templates/test-cases.md](templates/test-cases.md) 写 `test-cases.md`，每条 AC 对应一个或多个 BDD 场景。`[auto]` 表示能写成自动化测试（code 阶段红绿灯覆盖），`[manual]` 表示成本高、不好自动化、留给 `/rivo:uat` 人工执行。覆盖要回扣 spec 的每一条 AC。
+> 技术方案模板：[plan.md](templates/plan.md)
 
-**评审与收尾**
+## 方案自审
 
-- 跑两道评审（单消息可并行派发）：`/rivo:review` 类型 `plan`（架构师 / 工程师视角：架构合理性、对齐 ARCHITECTURE、任务完备与并行标注、影响面）与类型 `test-cases`（测试视角：AC 全覆盖、失败路径、标注合理）。各自收敛，留痕落 `reviews/plan.md` 与 `reviews/test-cases.md`。
+使用 **review** 技能，完成技术方案交叉评审和修复。
 
-<HARD-GATE>
-`plan.md` 与 `test-cases.md` 在 commit、推进 `status` 前必须：两道 `/rivo:review`（`plan` 与 `test-cases`）都已跑完并收敛（机械项已修、判断项已标出）。任一未收敛禁止 commit、禁止推进 `status`、禁止进入 `/rivo:design` 或 `/rivo:code`。
-- **手动模式**：收敛后走 `/rivo:report` 向用户主讲方案（形状 / 自填决策 / 不确定项）；skill 到此结束、工作流自然暂停，是否进入下一步由用户决定（跑 `/rivo:design` 或 `/rivo:code` 即认可；不满意则 `/rivo:plan <id> --rebuild` 或 `/rivo:reflow`）。
-- **auto 编排下**：review 收敛即推进，跳过 report、不等人类批准（产物质量交给 review 自审）；仅 `reflow-required` 处停（会丢已提交工作的操作任何模式都停，见全局纪律）。
-</HARD-GATE>
+> 审查项提示词：[plan-reviewer.md](prompts/plan-reviewer.md)
 
-- plan 是 `specified → planned` 的边界（从这里进入实现）。把 `status` 改 `planned`、更新 `updated`，提交 `docs: plan <id>`。
-- 结束语交代产物（`plan.md`、`test-cases.md`、`surveys/`、`reviews/plan.md`、`reviews/test-cases.md`）、核心架构选择与任务拆分要点（至多 3 条）、下一步：spec 涉及 UI 就 `/rivo:design <id>`，否则 `/rivo:code <id>`。
+## 请求定版
+
+评审收敛后，把方案核心摆给用户定版：总体思路、关键技术决策（选了什么、放弃了什么）、改动点与影响面。
+
+这是工作流的第二道关口——**等用户明确确认后再拆任务**。方案被否时 tasks 还没产出，返工成本最低；用户有异议就回到方案设计，改完重走自审，再次请求定版。
+
+## 任务拆分
+
+基于定版的 `plan.md`、`ui-contract.md` 和其他上下文，将方案拆解为一系列**可独立执行、可验证**的原子任务。拆解原则：
+
+- **粒度**：每个任务应聚焦于单一模块 / 组件 / 功能点，可在一次 `build` 调用中完成。
+- **顺序**：明确任务之间的依赖关系，先基础后上层（如先建表，再写服务，再写控制器，最后前端对接）。
+- **可验证**：每个任务必须附带一个明确的 **验证标准**（如「测试通过」「API 返回 200」「浏览器中按钮可点击」等）。
+- **追溯 AC**：每个任务标明覆盖 spec 的哪些 AC；无直接对应 AC 的支撑性任务（如建表、装依赖）注明它支撑哪个任务。
+- **对接 UI 契约**：只分配接入数据、状态管理和交互逻辑的任务，不分配重复 UI 编写任务，完成后需删除模拟数据。
+- **避免遗漏**：必须覆盖 plan.md 中所有改动点、数据迁移、配置更新、环境变量等。
+
+按 [tasks.md](templates/tasks.md) 模板，将任务清单写入 `.rivo/issues/$issue_id/tasks.md`。
+
+## 任务拆分自审
+
+使用 **review** 技能，完成任务拆分交叉评审和修复。
+
+> 审查项提示词：[task-reviewer.md](prompts/task-reviewer.md)
+
+## 收尾
+
+自审通过后，提交 `docs: plan $issue_id`，含 `plan.md`、`tasks.md` 与 reviews/。
+
+总结技术方案设计和任务拆分思路，提示用户调用 `/rivo:build` 开始执行任务
 
 ## 核心原则
 
-- **只出文档** —— 方案与用例；实现代码和测试代码都是 code 的事。
-- **任务拆分服务于并行** —— 标清依赖与可并行项（互不依赖 + 不共享改动文件），code 才能放心并行派发。
-- **测试回扣 AC** —— spec 的每条 AC 都要有对应场景，一条都不漏。
-- **方案对齐 spec 与架构** —— 不引入 spec 里没有的目标，不越 `ARCHITECTURE.md` 的边界；方案是 spec 的落地不是再设计。
+- **没有调研就没有发言权** —— 做方案前必须先调研现状与业界实践。
+- **简洁优先，不绕远路** —— 一个功能需要大量额外工作时，先考虑是否有更简单的解法。
+- **大胆重构，小心设计** —— 现有架构撑不住现状就大胆重构，但重构本身要细设计，做足影响面分析与控制。
+- **精准修改** —— 改动严格限定在需求范围内。
+- **定版后才拆任务** —— 方案没经用户点头，不产出 tasks。
 
-## 反例
+## 危险信号
 
-**"方案想清楚了，顺手把代码也写了"** —— plan 一旦开始写实现，就越过了红绿灯、也跳过了用户对方案的确认。这里只产出文档；动手写代码是 code 的事。
+- 「这个问题很简单，不需要方案设计」—— 不经调研你无法真正确认，小需求也得定清改动点和影响面。
+- 「需求说了这么做，我就这么做」—— 上游产物也可能错，带着挑刺的心态读它。
+- 「我知道这个库的用法，直接开始写方案」—— 模型记忆有滞后，动手前先核实最新用法。
+- 「这个问题不太清楚，我猜用户想这么做」—— 别猜，停下来问清楚。
+- 「这次没直接改到，但我想顺手把这个模块也重构了」—— 不做和需求无关的事。
+- 「方案评审过了，顺手把任务也拆了吧」—— 拆任务前必须先让用户对方案定版。

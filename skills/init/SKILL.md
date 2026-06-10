@@ -1,56 +1,62 @@
 ---
 name: init
-description: 仓库首次接入 rivo，建立 .rivo/ 骨架与 PROJECT.md 项目宪章。用户想接入或初始化 rivo 时用。
-allowed-tools: Read, Write, Glob, Grep, Bash(git add *), Bash(git commit *), Bash(git status *), Bash(git rev-parse *), Bash(git branch *), Bash(mkdir *)
+description: 为仓库初始化 rivo 工作流骨架，调研并落地项目宪章与架构文档
+when_to_use: 在尚未接入 rivo 的仓库里首次建立工作流时使用
 ---
 
-<SUBAGENT-STOP>
-若本次是被父级 agent 以具体子任务派发（prompt 已含明确任务），忽略本 SKILL.md 的流程编排与前置检查，只完成 prompt 指定的子任务。
-</SUBAGENT-STOP>
+# 初始化 rivo 工作流
 
-# /rivo:init —— 接入 rivo
+为当前仓库建立 `.rivo/` 骨架，了解技术栈与架构，产出 `PROJECT.md`、`ARCHITECTURE.md` 和 `DESIGN.md`（如涉及前端交互）。
 
-为仓库建立 `.rivo/` 骨架、项目宪章 `PROJECT.md` 与技术架构文档 `ARCHITECTURE.md`。这是唯一在 `.rivo/` 不存在时仍可运行的 skill。
+若 [using-rivo](../using-rivo/SKILL.md) 总纲尚未在上下文中，先读它。
 
-## 任务清单
+## 建骨架
 
-1. **检查** —— 不在 git 仓库就提示先 `git init`（rivo 不负责建仓库）；`.rivo/` 已存在就提示已接入，问是否只补 `PROJECT.md` / `ARCHITECTURE.md`
-2. **摸项目** —— 读构建配置、README、CLAUDE.md 与代码结构，认出技术栈、命令，以及模块 / 依赖 / 数据流 / 存储 / 分层
-3. **建骨架** —— 创建 `.rivo/` 目录结构
-4. **写 PROJECT.md + ARCHITECTURE.md** —— 项目身份与操作落 PROJECT.md，技术架构落 ARCHITECTURE.md
-5. **commit** —— 提交 `chore: init rivo`
-6. **结束语** —— 交代产物、关键决策、下一步 `/rivo:issue`
+检查项目根目录是否已有 `.rivo` 目录：
 
-## 工作流程
+- 不存在 → 创建，并预建空目录 `.rivo/issues/`、`.rivo/archived/`、`.rivo/learnings/`、`.rivo/reviews/`。
+- 已存在 → 问用户要补齐缺失的文档，还是重写宪章文档。无论哪种，`issues/`、`archived/`、`learnings/` 一律保留不动。
 
-**摸项目**
+## 了解现状
 
-读 `package.json`、`Makefile`、`pyproject.toml`、`README`、`CLAUDE.md` 等，认出技术栈、构建 / 测试 / lint 命令、目录约定、默认分支。再扫一遍代码结构，摸清主要模块、依赖方向、数据流与存储——这是 `ARCHITECTURE.md` 的素材。都要基于真实配置与代码、不凭印象填；代码规模大时可内嵌 `/rivo:survey --internal` 摸底。
+先读取仓库根目录的 `README.md`、`package.json`、`CLAUDE.md` 等配置文件，初步了解项目类型与技术栈。
 
-**建骨架**
+读以下三个模板：
 
-```
-.rivo/
-├── PROJECT.md
-├── ARCHITECTURE.md
-├── issues/
-├── archived/
-└── learnings/
-```
+- [PROJECT.md](templates/PROJECT.md)
+- [ARCHITECTURE.md](templates/ARCHITECTURE.md)
+- [DESIGN.md](templates/DESIGN.md)
 
-rivo 在你当前所在分支上工作、不自建分支或 worktree；要不要为每个 issue 开独立分支属隔离偏好，写进 PROJECT.md 的「分支与交付约定」即可。
+基于模板的结构和内容，带着问题做一次全面调研。
 
-**写 PROJECT.md + ARCHITECTURE.md 并收尾**
+> **注意事项**：
+>
+> 1. 空项目时，按模板列出需要在开发前确定的信息，逐项与用户确认。
+> 2. 可以派多个 subagent 并行做多视角调研。
+> 3. 拿不准的信息标明是你的推断，请用户确认或修正。
 
-- 按 [templates/project.md](templates/project.md) 写项目宪章（身份 / 用户 / 能力 / 技术栈 / 命令 / 规约 / 分支约定）；按 [templates/architecture.md](templates/architecture.md) 把摸到的架构落成 `ARCHITECTURE.md`（组件、依赖、数据流、存储、目录骨架，能画 ASCII 图就画）。都填真实信息，没摸清的留占位、不编造。
-- 在仓库提交 `chore: init rivo`。
-- 结束语交代产物（`.rivo/PROJECT.md`、`ARCHITECTURE.md` 加骨架）、关键决策（技术栈 / 构建·测试·lint 命令 / 架构骨架，至多 3 条）、下一步 `/rivo:issue` 开第一个需求。
+## 汇总结果
+
+对项目建立整体了解后，按调研结果将文件写入 `.rivo/`。
+
+> 信息够写几个就落几个文档；章节按调研所得取舍，不适用的小节整段省略。
+
+## 交叉评审
+
+使用 **review** 技能对落地的宪章文档做一轮交叉评审：核对内容与代码现状是否相符、有无凭空编造的信息、有无该留空却被猜测填充的小节。评审记录落到 `.rivo/reviews/`。
+
+## 收尾
+
+全部完成后宣告初始化完成，做一句话总结与汇报。
 
 ## 核心原则
 
-- **摸了再写** —— PROJECT.md 的命令约定、ARCHITECTURE.md 的架构都基于真实配置与代码，写错了后续每个阶段都跟着错。
-- **唯一的例外入口** —— 这是 `.rivo/` 不存在时唯一能跑的 skill，其它 skill 都要先接入。
+- **调研先行** —— 先充分了解项目现状，再下笔写文档。不凭猜测填充模板。
+- **宁缺毋滥** —— 不确定的信息宁可留空请用户补充，不编造、不捏造。
+- **产物即承诺** —— 写入 `.rivo/` 的文档将是后续所有阶段的事实源，对准确性负责。
 
-## 反例
+## 危险信号
 
-**"构建 / 测试命令凭印象填"** —— PROJECT.md 是后续所有阶段的命令来源，命令错一条，code 的门禁、测试就全跑空。拿不准就去 `package.json` / `Makefile` 里核实。
+- 「这个项目看起来是标准的 React 项目，直接按模板填就行」—— 每个项目都有特殊性，必须实际读取代码后再写。
+- 「这个信息拿不准，但模板要求填，我先猜一个」—— 拿不准就标出来请用户确认，猜错比不填更糟。
+- 「用户没提到前端，但看起来应该有，我先建上 DESIGN.md」—— 涉及前端才建 DESIGN.md，不替用户做假设。

@@ -1,64 +1,72 @@
 ---
 name: archive
-description: 完结并归档一个已交付的 issue：抽 learnings、移目录到 archived/、改状态。用户想归档、结案或收尾时用。
+description: 沉淀学习经验、同步架构文档并归档 issue
+when_to_use: 用户验收完成后，需求完结，需要复盘沉淀并归档 issue 时使用
 argument-hint: <issue-id>
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(git add *), Bash(git mv *), Bash(git commit *), Bash(git status *)
+arguments: [issue_id]
 ---
 
-<SUBAGENT-STOP>
-若本次是被父级 agent 以具体子任务派发（prompt 已含明确任务），忽略本 SKILL.md 的流程编排与前置检查，只完成 prompt 指定的子任务。
-</SUBAGENT-STOP>
+# 归档
 
-# /rivo:archive —— 完结 + 沉淀 learnings
+把已完成的 issue 收尾：复盘、沉淀 learnings、同步宪章文档、移到归档目录。
 
-把 `coded` 的 issue 收尾归档：复盘沉淀 learnings、移动目录、推到 `archived`。
+若 [using-rivo](../using-rivo/SKILL.md) 总纲尚未在上下文中，先读它。
 
-提交落在你当前所在的分支上。rivo 自己不 merge、不直提主线——分支合并与清理按 `PROJECT.md` 的约定、由你（或外部 PM 工具）做。
+## 获取必要的上下文
 
-## 任务清单
+1. 确认 `.rivo/` 存在
+2. 读 `.rivo/issues/$issue_id/` 下全套产物——prd、spec、plan、tasks、reviews、uat
+3. 重点读 plan.md 的「现状与影响面」一节，对照初始判断和最终实现，找出哪里判断偏了——learning 多藏在这
+4. 读 `git log` 里本次 issue 的所有 commits
+5. 扫 `.rivo/learnings/` 已有案例做复盘对照
+6. 检查 `uat.md`：不存在（还没走 verify）或结论不是「全部通过」时，如实向用户指出，确认是否仍要归档——归不归由用户拍板
 
-1. **前置检查** —— `.rivo/` 在、`status` 为 `coded`、若有 `uat.md` 须结论为通过
-2. **读 learnings** —— 扫 `.rivo/learnings/` 里相关 case（为复盘提供对照，也避免抽出重复条目）
-3. **复盘、抽 learnings** —— 高门槛，没值得沉淀的就跳过
-4. **同步 ARCHITECTURE.md** —— 本次若动了架构（模块/依赖/数据流/存储/边界）就必须更新；纯增量则跳过
-5. **移目录 + 改状态** —— `git mv` 到 `archived/<id>/`，`status: archived`
-6. **commit** —— `chore: archive <id>`
-7. **结束语** —— 交代产物、关键决策、下一步
+## 复盘与 learnings
 
-## 工作流程
+通读全过程产物 + 源码 commits，对照三类判据：
 
-**前置检查**
+- 踩过的坑及根因（下次怎么避免）
+- 被验证有效的模式 / 决策
+- 被推翻的假设（如果中途返工过）
 
-- `.rivo/` 不存在就引导用户先跑 `/rivo:init`，然后退出。
-- 从 `$ARGUMENTS` 取 issue-id，读 `README.md` frontmatter 确认 `status` 是 `coded`。
-- 若存在 `uat.md`，其结论必须是「通过」；没通过就拒绝归档，提示先按缺陷分流处理（见 `/rivo:uat`）。
+命中任何一类，就按 [templates/learning.md](templates/learning.md) 格式沉淀到 `.rivo/learnings/<slug>.md`。slug 用 3-5 个词的 kebab-case 概括主题，不带 issue-id。落盘前扫 `.rivo/learnings/` 的已有 slug，避免撞名。
 
-**复盘与 learnings**
+**门槛要高，但别漏真货**：三类一条都没命中，就如实说「本次无特殊经验沉淀」，跳过，不凑流水账；命中了却拿不准值不值得写的，宁可写——被推翻的假设和建模层面的决策最容易被低估。发现已有 learning 过时了，顺手更新或标记。
 
-- 先扫 `.rivo/learnings/` 已有相关 case（既作复盘对照，也避免抽出重复条目），再通读本次全过程产物（README、spec、plan、reviews、uat、reflow）加源码 commits，找**真问题、真痛点**，不是记流水账。门槛要高：并非每次都得产出 learning，没有值得沉淀的就如实说明、跳过。
-- 值得沉淀的（按 [templates/learning.md](templates/learning.md) 写进 `.rivo/learnings/<slug>.md`）：
-  - 踩过的坑及根因（下次怎么避免）
-  - 被验证有效的模式 / 决策
-  - 被推翻的假设（reflow 暴露的方向性误判）
-- 顺手处理过期 learnings：该改的改、该删的删，附变更说明。
+## 同步 PROJECT.md
 
-**同步 ARCHITECTURE.md**
+本次动了技术栈（新增 / 升级 / 替换了语言、框架或关键依赖），就把 `.rivo/PROJECT.md` 更新到与代码一致；都没动就跳过。
 
-- 本次交付若改动了系统架构——新增/删除模块、改了依赖方向、数据流、存储模型或分层边界——就**必须**把 `.rivo/ARCHITECTURE.md` 更新到与代码一致（含 ASCII 图），对照 `plan.md` 里记的「打算怎么动架构」核对最终实现。这是条件强制、不是高门槛沉淀：动了架构就更新，纯增量、没动架构则跳过。
-- 代码是实现的唯一真相；ARCHITECTURE.md 与代码对不上时以代码为准——这次就是把文档校准回代码的时机。
+对照 `package.json` 等依赖声明文件核验，代码是唯一真相。
 
-**移目录与收尾**
+## 同步 ARCHITECTURE.md
 
-- `git mv` 把 `issues/<id>/` 整体移到 `archived/<id>/`，并把它的 `README.md` frontmatter 改成 `status: archived`、更新 `updated`。
-- 提交 `chore: archive <id>`（含 learnings、ARCHITECTURE 更新如有、目录移动、状态）。
-- 结束语交代产物（`archived/<id>/`、`learnings/<slug>.md` 如有、`ARCHITECTURE.md` 是否更新、归档 commit）、是否沉淀 learning 及要点（至多 3 条）、下一步：按 `PROJECT.md` 的分支约定把本次交付合并进主线、清理分支（rivo 不 merge），再开下一个 `/rivo:issue`。
+本次动了模块增删、依赖方向、数据流、存储模型、分层边界任一项，就把 `.rivo/ARCHITECTURE.md` 更新到与代码一致；都没动就跳过。
+
+对照 plan.md 里「打算怎么动架构」核验最终实现。代码是唯一真相，冲突时以代码为准。
+
+## 同步 DESIGN.md
+
+本次动了设计 token、新增了可复用组件、或改了组件库约定任一项，就把 `.rivo/DESIGN.md` 更新到与代码一致；纯业务改动、没动设计规约就跳过。
+
+对照 `ui-contract.md` 里的新增组件清单核验最终实现。代码是唯一真相，冲突时以代码为准。
+
+## 移目录与收尾
+
+- 移动目录：`mv .rivo/issues/$issue_id/ .rivo/archived/$issue_id/`，然后 `git add` 旧路径和新路径。不要用 `git mv`——如果其他分支仍有同名 issue 目录，git mv 可能在合并时引发冲突。
+- 提交 `chore: archive $issue_id`，含目录移动、learnings（如有）、PROJECT / ARCHITECTURE / DESIGN 更新（如有）
+- 列交付物：归档目录、learnings（如有）、各宪章文档是否更新
+- 摘关键复盘发现，至多 3 条
+- 指下一步：按 PROJECT.md 合并清理分支
 
 ## 核心原则
 
-- **learnings 高门槛** —— 只沉淀真痛点和真模式，没有就如实跳过，绝不凑流水账。
-- **架构动了就同步** —— ARCHITECTURE.md 是条件强制：动了模块/数据流/存储/边界就更新到与代码一致，纯增量则跳过；它不是高门槛沉淀。
-- **不直提、不自清** —— 提交落在当前分支，合并与分支清理由你（或外部 PM 工具）按 `PROJECT.md` 约定做，rivo 不 merge。
+- **learnings 宁缺毋滥** —— 凑数的流水账污染检索、稀释真正有用的
+- **宪章文档动了就同步** —— PROJECT、ARCHITECTURE、DESIGN 只要实际有变动就必须更新，不是高门槛沉淀
+- **不 merge** —— 提交落在当前分支，合并清理由用户按 PROJECT.md 执行
 
-## 反例
+## 危险信号
 
-**"归档嘛，凑一条 learning 交差"** —— learnings 是给未来的自己省坑用的，凑数的流水账只会污染检索、稀释真正有用的那几条。这次没有真正值得记的，就明说跳过。
+- 「这次没什么特别的，写一条简单的 learning 凑数」—— 宁缺毋滥，流水账污染检索。
+- 「架构改动不大，下次归档再一起更新」—— 架构动了就必须同步，推迟就是文档开始腐化。
+- 「uat 说基本通过，应该可以归档了」——「基本」「有条件」不是「通过」，把偏差指给用户看，归不归由用户决定。

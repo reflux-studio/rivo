@@ -1,7 +1,7 @@
 {
   "name": "rivo",
-  "version": "0.1.0",
-  "description": "AI 研发工作流 —— 把产研流程抽象成可中断、可评审、可回退的工作流节点，让 AI 像真实的产研团队一样交付。",
+  "version": "1.0.0",
+  "description": "AI 研发工作流 —— 让 AI 像真实的产研团队一样交付：需求评审、方案评审、TDD、同行评审、验收、复盘一个不少，两道关口由你把关。",
   "author": {
     "name": "Reflux Studio",
     "url": "https://github.com/reflux-studio"
@@ -20,10 +20,14 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "rivo",
-    "shortDescription": "可中断、可评审、可回退的 AI 研发工作流",
-    "longDescription": "rivo 把现实世界的产研流程抽象成一组可中断、可评审、可回退的工作流节点，让你在 AI Coding 时代依然掌控对代码与产品的理解。需求 → 方案 → 编码 → 测试 → 验收，每个阶段独立可唤起，配套 survey/review/handoff/reflow 等横切方法论。",
+    "shortDescription": "让 AI 像真实产研团队一样交付的工作流",
+    "longDescription": "rivo 把真实产研团队的交付流程做成 agent skills：clarify（需求评审）→ ui-plan（设计走查）→ plan（方案评审）→ build（TDD 开发）→ verify（人工验收）→ archive（复盘归档），配套 review（同行评审）与 backtrack（缺陷返工）两个横切技能。每个阶段产出人类可读的产物，需求与方案两道关口由你把关——一个人，跑出一个团队的交付质量。",
     "developerName": "Reflux Studio",
     "category": "Coding",
-    "capabilities": ["Interactive", "Read", "Write"]
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ]
   }
 }

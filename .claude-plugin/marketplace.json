@@ -9,8 +9,8 @@
     {
       "name": "rivo",
       "source": "./",
-      "description": "AI 研发工作流 —— 把产研流程抽象成可中断、可评审、可回退的工作流节点，让 AI 像真实的产研团队一样交付。",
-      "version": "0.1.0",
+      "description": "AI 研发工作流 —— 让 AI 像真实的产研团队一样交付：需求评审、方案评审、TDD、同行评审、验收、复盘一个不少，两道关口由你把关。",
+      "version": "1.0.0",
       "license": "MIT",
       "homepage": "https://github.com/reflux-studio/rivo",
       "repository": "https://github.com/reflux-studio/rivo",
