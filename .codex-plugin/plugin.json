@@ -1,0 +1,35 @@
+{
+  "name": "rivo",
+  "version": "1.1.0",
+  "description": "AI 研发工作流 —— 让 AI 像真实的产研团队一样交付：需求评审、方案评审、TDD、同行评审、验收、复盘一个不少，两道关口由你把关。",
+  "author": {
+    "name": "Reflux Studio",
+    "url": "https://github.com/reflux-studio"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/reflux-studio/rivo",
+  "repository": "https://github.com/reflux-studio/rivo",
+  "keywords": [
+    "workflow",
+    "spec-driven-development",
+    "product-development",
+    "tdd",
+    "code-review",
+    "uat",
+    "design-to-code",
+    "subagent"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "rivo",
+    "shortDescription": "让 AI 像真实产研团队一样交付的工作流",
+    "longDescription": "rivo 把真实产研团队的交付流程做成 agent skills：clarify（需求评审）→ ui-plan（设计走查）→ plan（方案评审）→ build（TDD 开发）→ verify（人工验收）→ archive（复盘归档），配套 review（同行评审）与 backtrack（缺陷返工）两个横切技能。每个阶段产出人类可读的产物，需求与方案两道关口由你把关——一个人，跑出一个团队的交付质量。",
+    "developerName": "Reflux Studio",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ]
+  }
+}

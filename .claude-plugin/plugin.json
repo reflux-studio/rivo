@@ -1,0 +1,22 @@
+{
+  "name": "rivo",
+  "version": "1.0.0",
+  "description": "AI 研发工作流 —— 让 AI 像真实的产研团队一样交付：需求评审、方案评审、TDD、同行评审、验收、复盘一个不少，两道关口由你把关。",
+  "author": {
+    "name": "Reflux Studio",
+    "url": "https://github.com/reflux-studio"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/reflux-studio/rivo",
+  "repository": "https://github.com/reflux-studio/rivo",
+  "keywords": [
+    "workflow",
+    "spec-driven-development",
+    "product-development",
+    "tdd",
+    "code-review",
+    "uat",
+    "design-to-code",
+    "subagent"
+  ]
+}
