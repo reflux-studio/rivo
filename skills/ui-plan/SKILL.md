@@ -14,6 +14,7 @@ arguments: [issue_id]
 
 ## 获取必要的上下文
 
+0. 读 `.rivo/issues/$issue_id/handoff.md`（如有），定位现状与细读范围
 1. 读 `.rivo/PROJECT.md`、`.rivo/ARCHITECTURE.md` 了解项目信息和现有架构
 2. 读 `.rivo/DESIGN.md` 了解项目现有设计规约与现有组件目录
 3. 读 `.rivo/issues/$issue_id` 目录下的 `prd.md` 和 `spec.md` 了解现有需求
@@ -73,7 +74,7 @@ arguments: [issue_id]
 
 ## 收尾
 
-提交 `feat: ui $issue_id`，含 UI 代码、`ui-plan.md`、`ui-contract.md` 与 reviews/。
+用 **handoff** 技能更新交接纪要，提交 `feat: ui $issue_id`。
 
 全部完成后，提示用户执行 `/rivo:plan` 进入技术方案设计。
 

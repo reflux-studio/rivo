@@ -14,6 +14,7 @@ arguments: [issue_id]
 
 ## 获取必要的上下文
 
+0. 读 `.rivo/issues/$issue_id/handoff.md`（如有），定位现状与细读范围——尤其中断恢复时，先看哪些 task 已全绿
 1. 读取项目全局说明：`.rivo/PROJECT.md`、`.rivo/ARCHITECTURE.md`，了解项目全貌
 2. 从当前 issue 目录 `.rivo/issues/$issue_id` 读 `spec.md`、`plan.md`、`tasks.md`，理解需求、技术方案与任务拆解；若存在 `ui-contract.md` 一并读取——派活和批次规划需要知道哪些 task 对接已实现的 UI
 3. 从 `.rivo/learnings/` 目录下读取可能涉及到的学习经验
@@ -86,7 +87,9 @@ subagent 返回后，按状态分流。**返回成功不等于 task 完成**—�
 
 ## 收尾
 
-问题收敛后，总结本次实现的 task 覆盖情况与测试结果，提示用户进入 `/rivo:verify` 做人工验收。
+问题收敛后，用 **handoff** 技能更新交接纪要，提交 `docs: build $issue_id`。
+
+总结本次实现的 task 覆盖情况与测试结果，提示用户进入 `/rivo:verify` 做人工验收。
 
 ## 核心原则
 

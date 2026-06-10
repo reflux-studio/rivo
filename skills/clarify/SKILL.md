@@ -24,7 +24,7 @@ argument-hint: <需求描述|issue-id>
 
 1. 读 `.rivo/PROJECT.md`、`.rivo/ARCHITECTURE.md` 了解项目信息和现有架构
 2. 扫 `.rivo/learnings/` 里可能和本需求相关的学习经验
-3. 变更模式下，读 `.rivo/issues/<slug>/prd.md`、`spec.md` 了解现有需求与规格
+3. 变更模式下，先读 `.rivo/issues/<slug>/handoff.md`（如有）定位现状，再读 `prd.md`、`spec.md` 了解现有需求与规格
 
 ## 了解现状
 
@@ -66,7 +66,7 @@ argument-hint: <需求描述|issue-id>
 
 ## 收尾
 
-定版后，提交 `docs: clarify <issue-id>`，含 `prd.md`、`spec.md` 与 reviews/。
+定版后，用 **handoff** 技能更新交接纪要，提交 `docs: clarify <issue-id>`。
 
 一句话总结工作内容。按 prd 是否新增或改动页面、弹窗、交互流程判断是否涉及前端：涉及就建议下一步执行 `/rivo:ui-plan` 进入设计评审，不涉及就建议 `/rivo:plan` 设计技术方案；拿不准就把判断摆给用户选。
 

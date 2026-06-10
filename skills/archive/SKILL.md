@@ -15,7 +15,7 @@ arguments: [issue_id]
 ## 获取必要的上下文
 
 1. 确认 `.rivo/` 存在
-2. 读 `.rivo/issues/$issue_id/` 下全套产物——prd、spec、plan、tasks、reviews、uat
+2. 读 `.rivo/issues/$issue_id/` 下全套产物——handoff、prd、spec、plan、tasks、reviews、uat
 3. 重点读 plan.md 的「现状与影响面」一节，对照初始判断和最终实现，找出哪里判断偏了——learning 多藏在这
 4. 读 `git log` 里本次 issue 的所有 commits
 5. 扫 `.rivo/learnings/` 已有案例做复盘对照
@@ -53,8 +53,9 @@ arguments: [issue_id]
 
 ## 移目录与收尾
 
-- 移动目录：`mv .rivo/issues/$issue_id/ .rivo/archived/$issue_id/`，然后 `git add` 旧路径和新路径。不要用 `git mv`——如果其他分支仍有同名 issue 目录，git mv 可能在合并时引发冲突。
-- 提交 `chore: archive $issue_id`，含目录移动、learnings（如有）、PROJECT / ARCHITECTURE / DESIGN 更新（如有）
+- 删除 `handoff.md`——交接是过程产物，issue 完结即失效，不入归档
+- 把 `.rivo/issues/$issue_id/` 整体移到 `.rivo/archived/$issue_id/`
+- 提交 `chore: archive $issue_id`
 - 列交付物：归档目录、learnings（如有）、各宪章文档是否更新
 - 摘关键复盘发现，至多 3 条
 - 指下一步：按 PROJECT.md 合并清理分支

@@ -14,6 +14,7 @@ arguments: [issue_id]
 
 ## 获取必要的上下文
 
+0. 读 `.rivo/issues/$issue_id/handoff.md`（如有），定位现状与本轮验收范围
 1. 读 `.rivo/issues/$issue_id/spec.md` —— 验收的唯一标准
 2. 读 `.rivo/issues/$issue_id/prd.md` —— PRD 的核心场景
 3. 若存在 `.rivo/issues/$issue_id/ui-contract.md`，读它 —— UI 验收依据
@@ -40,6 +41,7 @@ arguments: [issue_id]
 
 全部通过后：
 
+- 用 **handoff** 技能更新交接纪要
 - 提交 `docs: uat $issue_id`
 - 总结：通过的 AC 数量、验收轮次（如有回溯返工）
 - 交代产物和下一步
