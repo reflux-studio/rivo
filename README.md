@@ -1,152 +1,102 @@
 # rivo
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](https://docs.claude.com/en/docs/claude-code)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#贡献)
 
-> 一套给独立开发者的 AI 研发工作流：让 AI 像一个真实的产研团队那样交付。
+> 一个人，一支 AI 产研团队。
 
-**一个人，跑出一个团队的交付质量。**
+rivo 是跑在 Claude Code 里的多 Agent 交付工作流。你提需求、在该拍板的地方拍板，澄清、设计、编码、评审、验收、复盘——整条交付链由一支各守一问的 Agent 团队跑完。
 
-AI 已经能把代码全写了，但「写得出」和「交付得住」之间，隔着一整个团队的流程：需求有人澄清、方案有人评审、代码有测试纪律、上线前有人验收、出了问题能追到根因。独立开发者没有这个团队。rivo 把这套流程原样搬给你的 AI——每个阶段对应一个角色的活儿，产物人类可读，关键决策由你拍板。
-
-rivo 是一套 agent skills——一组 SKILL.md 指令文件加插件声明，以插件形式装进 Claude Code 或 Codex 即生效，按 `/rivo:<阶段>` 调用。
-
-## 它和别的工作流有什么不同
-
-同类工作流的取舍可以放在四个维度上看：事实源放在哪、有没有宪章层、自动化推到多满、为谁优化。
-
-| | 事实源 | 宪章层 | 自动化程度 | 为谁优化 |
-| --- | --- | --- | --- | --- |
-| [openspec](https://github.com/Fission-AI/OpenSpec) | spec（长期活文档，变更合回） | 无 | 低——人审每个变更提案 | 人机对需求无歧义 |
-| [speckit](https://github.com/github/spec-kit) | spec | 有（constitution） | 中——流程化命令逐步推进 | 把 SDD 流程标准化 |
-| [superpowers](https://github.com/obra/superpowers) | 代码 + 测试（计划是过程产物） | 无 | 高——subagent 自治执行 | 最少人工干预把活干完 |
-| [GSD](https://github.com/glittercowboy/get-shit-done)（get-shit-done） | 计划文档（.planning/） | 有（PROJECT.md） | 高——并行 subagent 自动提交 | 大项目对抗上下文腐化 |
-| **rivo** | 调研结果（内部现状 + 外部实践），决策由它派生 | 有（PROJECT / ARCHITECTURE / DESIGN） | 中——两道关口人把关 | 一个人跑出一个团队的交付纪律 |
-
-它们优化的各是流程里的某一段——需求共识、执行效率、或规模工程化。rivo 搬的是真实产研团队的完整仪式：需求评审、设计走查、方案评审、TDD、同行评审、验收、复盘，一个不少，关键节点仍由你拍板。
-
-### UI 还原是一等环节
-
-设计稿先精确还原、由你走查定版、锁进 `ui-contract.md`，build 只做接数据——AI 不会在写逻辑的同时顺手糊样式。全局设计规约 `DESIGN.md` 管住 token、组件库与断点。
-
-> 思想源自于早年间前后端不分离时代的样式还原工程师，只负责产出前端代码，不负责填写业务逻辑
-
-### 评审用的是另一双眼睛
-
-任何产物落地，都派**独立上下文**的模型交叉评审，能跨厂商就跨厂商——比如让 GPT 审 Claude 的产出。作者审自己必然放水，换一双眼睛是原生设计，不是可选插件。
-
-### 返工回根因层
-
-下游发现上游错，不就地打补丁——**backtrack** 先判定根因在哪一层（实现、任务、方案还是需求），回那一层修正，再向下重放。代价是多走几步，换来的是 spec、plan、代码永远一致。
-
-## 核心理念
-
-- **先调研，再下结论**：聊需求、定方案之前先做调研——内部读代码现状，外部查业界实践。决策从调研派生，不从模型记忆里掏。
-- **宪章约束决策，决策派生执行**：宪章文档（`PROJECT.md` / `ARCHITECTURE.md` / `DESIGN.md`）一次定义、长期维护，约束每个需求的决策文档（`prd.md` / `plan.md`，人读人签）；决策再落成给 AI 的执行清单（`spec.md` / `tasks.md`）。约束与决策各有归处。
-- **工作流单向，纠偏靠 backtrack**：PRD 是唯一需要人来写的源头，spec、plan、代码沿工作流逐级产出，下游忠于上游。要改，回到出错的那一层改起，再向下重放——而不是在下游打补丁。
-- **关键决策由你拍板**：需求定版（clarify）和方案定版（plan）两道关口，AI 把结论摆到你面前、你点头才放行；其余环节遇到拿不准的，停下来问而不是替你猜。
-- **文件可省，决策不可省**：小需求可以跳过某些文件，但不能跳过文件背后的决策——文件只是决策留下的痕迹。
-- **写完就评审**：任何产物落地后，派一个独立上下文的模型交叉评审——不能既当运动员又当裁判。
-- **阶段间靠交接**：一个阶段一个会话，收尾写交接纪要、开工先读它——上下文靠交接衔接，不靠攒长对话。
-
-## 工作流
-
-需求沿工作流单向流动，每一阶段的产物是下一阶段的输入：
-
-```
-[一个需求]
-  │ clarify    聊清产品诉求                    → prd.md + spec.md
-  ▼
-  ┊ ui-plan    设计评审 / 视觉还原 / 交互验收     → ui-plan.md + ui-contract.md    （涉及前端才走）
-  ▼
-  │ plan       技术方案 + 任务拆分               → plan.md + tasks.md
-  ▼
-  │ build      逐任务 TDD 红-绿-重构             → 实现代码
-  ▼
-  │ verify     按 AC 逐条人工验收                → uat.md
-  ▼
-  │ archive    复盘沉淀 / 同步架构 / 归档          → learnings + 归档目录
-  ▼
-[完结]
-```
-
-三个横切能力，由各阶段按需调用：
-
-- **review** —— 任何产物写完，派一个独立上下文的模型交叉评审，分级分类后驱动修复。
-- **backtrack** —— 下游发现上游错时，定位根因层、回该层修正、再向下重放。
-- **handoff** —— 阶段收尾沉淀交接纪要，下一阶段开新会话凭它快速接手，不靠攒长对话。
-
-## 技能一览
-
-每个技能对应真实团队里的一个环节：
-
-| 技能 | 对应环节 | 作用 | 产物 |
-| --- | --- | --- | --- |
-| `init` | 接手盘点 | 调研仓库，建 `.rivo/` 骨架与宪章 | PROJECT / ARCHITECTURE / DESIGN.md |
-| `clarify` | 需求评审 | 提出 / 变更需求，澄清到位，请你定版 | prd.md + spec.md |
-| `ui-plan` | 设计走查 | 设计评审、视觉还原、交互验收（涉及前端才走） | ui-plan.md + ui-contract.md |
-| `plan` | 方案评审 | 技术方案请你定版，再拆任务 | plan.md + tasks.md |
-| `build` | 开发 | 逐任务 TDD 实现，每个任务过两级审查 | 实现代码 |
-| `verify` | UAT 验收 | 按验收标准（AC）逐条人工验收 | uat.md |
-| `archive` | 复盘会 | 沉淀 learnings、同步架构、归档 | learnings + 归档 |
-| `review` | 同行评审 | 独立上下文交叉评审产物（横切，任意产物） | reviews/ |
-| `backtrack` | 缺陷返工 | 定位根因层并回源修复（横切，发现上游错） | —— |
-| `handoff` | 交接 | 沉淀交接纪要，下一阶段在新会话快速接手（横切，每阶段收尾） | handoff.md |
+AI 写代码早就不是瓶颈，交付才是：需求问清楚、方案审一遍、测试配齐、上线前真跑一遍。单干的人最容易省这些环节，而省掉的地方就是 bug 和返工的来源。rivo 把这些环节变成流程的默认值，不靠自觉。
 
 ## 安装
 
-### Claude Code
+前置：Claude Code，并开启实验特性 Agent Team（`settings.json` 或环境变量）：
+
+```json
+{ "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
+```
+
+安装插件：
 
 ```
 /plugin marketplace add reflux-studio/rivo
 /plugin install rivo@rivo-marketplace
 ```
 
-### Codex
+## 一次交付长什么样
 
-在 Codex CLI 中输入 `/plugins` 搜索 `rivo` 安装（上架官方插件市场后可用）。
+第一次进项目，先跑 `/rivo:onboarding`：五个 Agent 分头勘测你的代码库，产出项目身份、系统架构、设计系统、代码规约、验证基建五份契约，作为之后所有决策的依据。
 
-## 怎么用
+然后把需求丢给 `/rivo:orchestrating`：
 
-1. **接入一次**：在仓库里跑 `/rivo:init`，调研项目、建立 `.rivo/` 骨架与宪章文档。
-2. **每个需求沿工作流走**：`/rivo:clarify` →（`/rivo:ui-plan`）→ `/rivo:plan` → `/rivo:build` → `/rivo:verify` → `/rivo:archive`。带括号的 ui-plan 按需走——不涉及前端就跳过。
-3. **发现上游错就回溯**：任意阶段察觉根因在更上游，用 **backtrack** 回源头改、向下重放，而不是就地打补丁。
+1. **澄清。** Framer 和你对话，把模糊诉求变成带验收标准（AC）的需求规格。每轮只问一小组问题、都附建议答案，你在锚点上拍板就行。
+2. **定方案。** 前端需求 Designer 先出 UI 规格；Planner 出全栈技术方案，接口、数据模型、组件契约拆到能直接施工。
+3. **写代码。** Implementor 照方案 TDD 施工，一条 AC 一轮红绿。
+4. **过双门。** 每份产物先过 Reviewer 评审——按产物类型的清单逐项审，高风险多开几个并行；代码再加一道：Verifier 把系统真跑起来，逐条 AC 亲手点、亲手验。不过就打回，直到过。
+5. **UAT。** 上线前带你把真实场景走一遍，由你确认价值兑现。收尾跑 `/rivo:retrospective`，团队各自沉淀经验，下次更懂这个项目。
 
-以「订单列表加导出」为例，一个需求的完整旅程：
+你只在少数几处出现：需求定版、方案定版、UAT，以及所有**不可逆变更**（数据迁移、对外契约、技术栈更换——这是唯一的硬门，无论改动多小）。小需求聊清楚了团队自己干完，你不用一步步说「下一步」。
 
-```
-/rivo:clarify 订单列表要支持导出 CSV
-   # 对话澄清 → 产出 prd.md + spec.md（含 AC 编号）→ 请你定版
-/rivo:ui-plan order-export
-   # 设计稿评审 → 还原 UI → 你走查通过 → 产出 ui-contract.md
-/rivo:plan order-export
-   # 调研 → 技术方案 → 请你定版 → 拆成任务清单
-/rivo:build order-export
-   # 逐任务 TDD，每个任务过两级审查，最后全局终审
-/rivo:verify order-export
-   # 按 AC 逐条人工验收，结论落 uat.md
-/rivo:archive order-export
-   # 复盘沉淀 learnings → 同步宪章文档 → 归档
-```
+缺陷工单走另一条轨道，从「真的坏了吗」进：Verifier 先黑盒复现，Framer 再定该修成什么样，Planner 拿着复现测试定位根因——修复本质就是把那个失败测试改绿。
 
-## 最佳实践
+交付中队友要问你的问题，都由 Orchestrator 收口：按你的偏好，提醒你进那个队友的会话直接聊，或代为转述。转述可以把「SSR 还是 CSR」翻成「要不要被搜索引擎良好收录」，但选项和代价保真，答案永远由你给。
 
-- **宪章文档要持续维护**。`PROJECT.md` / `ARCHITECTURE.md` / `DESIGN.md` 是整个工作流的约束源，归档阶段动了架构就同步回去，别让它腐化。
-- **把好两道关**。clarify 和 plan 收尾时 AI 会请你定版——认真读完再点头，掌控感来自这两次确认，而不是事后翻代码。
-- **方向性问题交给人**。评审发现的不是简单缺陷、而是需求或方案本身的缺陷时，回上游或交你拍板，别让 AI 自作主张硬补。
-- **learnings 宁缺毋滥**。只沉淀真问题、真经验，凑数的流水账会污染检索。
+## 团队
 
-## 目录结构
+主线程是 **Orchestrator**——控制面，只做编排：判型、派活、守门、推进，从不下场创作。干活的是六个 Agent，每个只对一个问题负责：
+
+| Agent | 回答的问题 | 产出 |
+| --- | --- | --- |
+| **Framer** | 做什么、做成什么样算成功 | spec |
+| **Designer** | 用户怎么交互（仅前端） | ui-spec |
+| **Planner** | 怎么做 | plan |
+| **Implementor** | 把事做完 | 代码 |
+| **Reviewer** | 写得对不对 | 评审报告（临时拉起，审完即弃） |
+| **Verifier** | 真的坏了吗、做完了没有 | 复现结论、验收记录 |
+
+**为什么按问题分，不按岗位分？** 人类团队按岗位分工，是因为一个人精力有限；把模型切成只做一件事的工种，只会平白多出交接损耗。rivo 拆开 Agent 只为一件事：让视角彼此独立——定需求的不下场实现，写代码的不审自己的代码，验收的不读实现。质量不靠自觉，靠交叉验证。
+
+## 设计选择
+
+真正有取舍的几条：
+
+- **流程按问题组织，不按产物链硬串。** 轨道的每个阶段回答一个问题，主办就是管这个问题的站位。裁掉一个阶段，等于断言这个问题的答案已经摆在那了——答案真一眼见底就跳（最小轨道只剩几行 spec、编码和质量门），答案不明还跳才是偷步。
+- **方法与流程分层。** 技能只装方法，检验标准是拎出 rivo 也能单独用；谁在什么阶段用什么技能、读写哪个产物，全部绑定在编排层。换宿主平台时，方法层原样带走。
+- **两道质量门，作者都不碰自己的。** Reviewer 静态审读，Verifier 黑盒实证、不读实现，专逮「代码看着对、点下去不对」的问题。按你的习惯，评审还可以调本机外部 AI CLI 做跨厂商外审。
+- **集中编排，不靠自组织。** 走哪一步由 Orchestrator 定，Agent 不自己决定流程。模型干活通常一口气到底，靠产物落盘和独立评审兜底，不指望它们中途互相问。
+- **团队会记事。** 常驻 Agent 有私有记忆，复盘时把对全队有用的经验沉淀成 learnings，契约随代码同步。
+
+## 留在你仓库里的东西
 
 ```
 your-repo/
 ├── .rivo/
-│   ├── PROJECT.md              # 项目宪章：身份 / 技术栈 / 规约
-│   ├── ARCHITECTURE.md         # 技术架构：模块 / 数据流 / 存储 / 分层
-│   ├── DESIGN.md               # 设计规约：token / 组件库 / 断点（涉及前端才有）
-│   ├── issues/<issue-id>/      # 进行中的 issue（prd / spec / plan / tasks / uat / handoff / reviews / assets）
-│   ├── archived/<issue-id>/    # 已归档 issue
-│   └── learnings/<slug>.md     # 跨 issue 沉淀的经验
-└── ...
+│   ├── PROJECT.md              # 项目契约：身份、用户、能力、技术栈
+│   ├── ARCHITECTURE.md         # 架构契约：模块、数据流、存储、分层
+│   ├── DESIGN.md               # 设计契约：token、组件库、断点（涉及前端才有）
+│   ├── CONVENTIONS.md          # 代码规约契约：命名、目录、错误处理、测试范式
+│   ├── TESTING.md              # 验证基建契约：怎么跑起来、测试与 e2e 现状
+│   ├── issues/<id>/            # 进行中的需求（ticket / spec / ui-spec / plan / reviews / verification / uat / assets）
+│   ├── archived/<id>/          # 已归档需求
+│   └── learnings/<slug>.md     # 跨需求沉淀的团队经验
+└── .claude/agent-memory/<agent>/  # 各 Agent 的私有记忆（Claude Code 内置，随项目入库）
 ```
 
-issue 的标识（即各技能参数里的 `issue-id`）是一个 3–5 词的 kebab-case slug（如 `order-export`），由 clarify 在新建时确定，不带序号——多分支并行也不撞。
+需求标识 `<id>` 是一个 3 到 5 词的 kebab-case slug（如 `order-export`），澄清需求时定，不带序号，多分支并行也不会撞。
+
+## 贡献
+
+欢迎提 issue 和 PR。rivo 没有构建步骤，整个插件就是一组 Markdown，分四层，写之前先想清楚内容属于哪一层：
+
+- `agents/<agent>.md`：**站位**——它是谁、答什么问题、协作时的行为约束、边界在哪。不写流水线时序，也不写方法。
+- `skills/<skill>/SKILL.md`：**方法**——这件事怎么做好，检验标准是拎出 rivo 也能单独用。引用 rivo 产物用「（rivo 里是 X）」的软绑定；各产物的评审清单在 `reviewing` 的 `checklists/` 下，外审配方在它的 `external-audit.md`。
+- `skills/orchestrating/`：**绑定**——谁在什么阶段用什么技能、读写哪个产物、怎么把关和返工，全在这里和 `flows.md`。
+- `templates/<产物>.md`：**产物契约**——每份产物长什么样。「写什么」以模板为准，技能只管「怎么写」。
+
+改完在自己的 Claude Code 里装个本地版本，走一遍真实需求验证，再提 PR。改动尽量小而聚焦，附上改了什么、为什么。
+
+## 许可
+
+[MIT](LICENSE)。

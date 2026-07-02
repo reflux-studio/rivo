@@ -1,6 +1,6 @@
 {
   "name": "rivo-marketplace",
-  "description": "rivo 官方插件市场 —— 让 AI 像真实的产研团队一样交付。",
+  "description": "rivo 官方插件市场 —— 一支 AI 产研团队，把需求交付到上线。",
   "owner": {
     "name": "Reflux Studio",
     "url": "https://github.com/reflux-studio"
@@ -9,20 +9,20 @@
     {
       "name": "rivo",
       "source": "./",
-      "description": "AI 研发工作流 —— 让 AI 像真实的产研团队一样交付：需求评审、方案评审、TDD、同行评审、验收、复盘一个不少，两道关口由你把关。",
-      "version": "1.0.0",
+      "description": "一支 AI 产研团队 —— 主线程当 Orchestrator，编排 Framer、Designer、Planner、Implementor、Reviewer、Verifier 六个全才 Agent，按工单类型的流程把需求交付到上线，该问你的地方停下来问你。",
+      "version": "2.0.0",
       "license": "MIT",
       "homepage": "https://github.com/reflux-studio/rivo",
       "repository": "https://github.com/reflux-studio/rivo",
       "keywords": [
-        "workflow",
-        "spec-driven-development",
+        "agent-team",
+        "multi-agent",
         "product-development",
+        "spec-driven-development",
         "tdd",
         "code-review",
         "uat",
-        "design-to-code",
-        "subagent"
+        "design-to-code"
       ]
     }
   ]
