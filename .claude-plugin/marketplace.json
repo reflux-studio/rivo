@@ -9,8 +9,8 @@
     {
       "name": "rivo",
       "source": "./",
-      "description": "一支 AI 产研团队 —— 主线程当 Orchestrator，编排 Framer、Designer、Planner、Implementor、Reviewer、Verifier 六个全才 Agent，按工单类型的流程把需求交付到上线，该问你的地方停下来问你。",
-      "version": "2.0.0",
+      "description": "一支 AI 产研团队 —— Team Lead 带着 Product、Designer、Engineer、Reviewer 四个成员，按预设的产研流程把需求交付到上线，该你拍板的地方停下来等你。",
+      "version": "2.1.0",
       "license": "MIT",
       "homepage": "https://github.com/reflux-studio/rivo",
       "repository": "https://github.com/reflux-studio/rivo",
