@@ -1,6 +1,6 @@
 {
   "name": "rivo",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "一支 AI 产研团队 —— Team Lead 带着 Product、Designer、Engineer、Reviewer 四个成员，按预设的产研流程把需求交付到上线，该你拍板的地方停下来等你。",
   "author": {
     "name": "Reflux Studio",
