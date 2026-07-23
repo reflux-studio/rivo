@@ -1,99 +1,142 @@
+<div align="center">
+
 # rivo
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](https://docs.claude.com/en/docs/claude-code)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#贡献)
+**把一支产研团队装进你的 Agent 宿主**
 
-> 一个人，一支 AI 产研团队。
+五个角色 · 一份协作协议 · 全程留痕的交付流程
 
-rivo 是跑在 Claude Code 里的 AI 产研团队。你提需求、在该拍板的地方拍板；团队按标准的产研流程，把需求从澄清一路推进到上线。
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/reflux-studio/rivo/pulls)
+![Host Agnostic](https://img.shields.io/badge/host-agnostic-blue.svg)
+![Roles](https://img.shields.io/badge/roles-5-8957e5.svg)
 
-AI 写代码早就不是瓶颈，交付才是：需求问清楚、方案审一遍、测试配齐、上线前带用户真跑一遍。单干的人最容易省这些环节，而省掉的地方就是 bug 和返工的来源。rivo 把它们变成流程的默认值，不靠自觉。
+</div>
 
-## 安装
+---
 
-前置：Claude Code，并开启实验特性 Agent Team（`settings.json` 或环境变量）：
+## rivo 是什么
 
-```json
-{ "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
+rivo 是一套**纯文本定义的多 Agent 产研团队**:五个角色、每个角色自己的方法技能,外加一份约束全员的协作协议。它不写代码、不依赖特定平台——角色是 Markdown 定义,技能是标准的 `SKILL.md`,接到任何支持多 Agent 与技能机制的宿主上都能工作。
+
+它想解决的问题很具体:单个 Agent 既当裁判又当运动员——自己写需求、自己实现、自己说"测试通过了"。rivo 把这件事拆开:**写的人不放行,放行靠证据,证据要留痕**。
+
+三条设计红线贯穿所有文件:
+
+- **宿主无关**——协议只规定角色责任和放行规则,调度方式服从宿主能力,角色责任不随宿主改变;
+- **验证平级不降级**——Verifier 是与创作者平级的独立角色,不是创作流程里的一个步骤;
+- **一切留痕**——评审发现、跳过理由、用户裁决都落在正式载体上,可供复盘追溯;文件是正本,记忆只是缓存。
+
+## 角色与决定权
+
+<p align="center"><img src="assets/roles.svg" alt="rivo 角色与决定权" width="760"></p>
+
+每个决定只有一个归属,对他人辖区只有提案权;重大决策(架构方向、生产发布、回滚、删数据等不可逆动作)必须先经用户批准。
+
+| 决定 | 归属 |
+| --- | --- |
+| 价值取舍、最终验收、不可逆操作的批准 | 用户 |
+| 问题定义、范围与验收标准 | Product |
+| 交互语义与体验表达 | Designer |
+| 技术方案、实现与发布执行 | Engineer |
+| 证据是否足以放行 | Verifier |
+| 入口判断、调度与交付状态 | Team Lead |
+
+每个角色带着自己的方法技能上场:
+
+| 角色 | 方法技能 |
+| --- | --- |
+| **Team Lead** | `onboarding` 入场 · `coordinating` 组织交付 · `organizing-retro` 复盘 |
+| **Product** | `writing-requirements` · `running-uat` · `surveying-product` · `competitive-brief` · `roadmap-update` |
+| **Designer** | `writing-ui-design` · `surveying-design` |
+| **Engineer** | `writing-system-design` · `implementing-changes` · `test-driven-development` · `systematic-debugging` · `shipping` · `surveying-codebase` · `tech-debt` |
+| **Verifier** | `verifying` |
+| **全员共享** | `collaborating` 协作协议 · `brainstorming` 脑暴 · `frontier-questioning` 前沿提问 |
+
+## 一次完整交付如何推进
+
+<p align="center"><img src="assets/delivery-flow.svg" alt="rivo 交付流程" width="820"></p>
+
+**入口由工作触达的最高抽象层决定。** 改变产品价值从 requirement 进入;产品预期已定、只改体验从 ui-design 进入;只改内部机制从 system-design 进入。上一层的方案就是下一层的验收依据,未被触达的层不生产占位产物。观察到软件行为异常时不预设归属,由 Engineer 先用 `systematic-debugging` 调查,再归类到该负责的层去修。
+
+**放行靠双查。** 每个新版本要过两道独立的关:
+
+1. **交叉评审**——持有不同领域判断权的成员检查这份产物对自己辖区的影响(例如 requirement 由 Designer 和 Engineer 评"体验是否可定义、技术代价是否可行");
+2. **独立验证**——交给没有参与创作的 Verifier,用审阅、构建、测试、UI 走查或隔离实验形成结论,注明实际验证的版本和证据。
+
+**发现必须闭环。** 每条发现只有三条路:**已解决**(改完并经提出者复核)、**已跳过**(说明理由并经提出者认可,记录重新打开的条件)、**待裁决**(双方不再拉扯,由 Team Lead 收口给用户)。只要还有一条发现未关闭,当前版本就不能放行——严重度只用来排序和理解风险,**不决定放行**。
+
+**变更向下传播。** 上游发布新修订后,每个直接下游必须三选一明确回复:无需修改(说明理由)、需要更新(发布新修订)、需要上游说明(提出明确问题)。沉默不是选项。
+
+不想走完整流程时也可以**自由协作**:直接找任何角色对话,产出默认是草稿——就地结束、转成正式需求、或沉淀进长期认知,三选一。
+
+## 一切留痕:`.rivo` 工作区
+
+没有指定外部系统(工单、在线文档)时,所有产物落在项目仓库的 `.rivo/` 目录,随仓库提交。大写文件是跨交付的长期认知,小写目录是单次交付:
+
+```text
+.rivo/
+├── PRODUCT.md          # 产品认知,Product 持有
+├── DESIGN.md           # 设计认知(设计系统),Designer 持有
+├── ENGINEERING.md      # 工程认知,Engineer 持有
+├── VERIFICATION.md     # 验证校准知识,Verifier 按需创建
+├── PROFILE.md          # 协作配置,全员共同约定
+├── issues/<slug>/      # 进行中的交付
+│   ├── state.md            # 当前状态、下一步、产物位置、未关闭发现
+│   ├── requirement.md      # ↓ 各层产物与记录,按需创建,不占位
+│   ├── ui-design.md
+│   ├── system-design.md
+│   ├── implementation.md
+│   ├── reviews.md          # 交叉评审、作者回应、跳过理由、用户裁决
+│   ├── verification.md     # 各版本的独立验证结论和证据
+│   └── evidence/           # 截图、录屏、日志
+└── archived/<slug>/    # 交付完结后整个目录移入
 ```
 
-安装插件：
+`state.md` 是可恢复的现场:会话中断后,任何成员读它就能接手,不依赖聊天记忆。协作配置为某类产物指定了外部系统时,以外部系统为事实源,`.rivo` 不放副本——一份产物只有一个正本。
 
-```
-/plugin marketplace add reflux-studio/rivo
-/plugin install rivo@rivo-marketplace
-```
+## 仓库结构
 
-## 团队
-
-五个成员，四个生产，一个推进：
-
-| 成员 | 负责 | 产出 |
-| --- | --- | --- |
-| **Product** | 需求、缺陷复现、UAT | spec、复现记录、uat 记录 |
-| **Designer** | 界面的交互与视觉（仅前端） | ui-spec |
-| **Engineer** | 技术方案、编码、测试、发布 | plan、代码、测试记录 |
-| **Reviewer** | 评审一切承载判断的产物 | 评审意见 |
-| **Team Lead** | 开工单、照流程表推进、把该拍板的事收口给你 | —— |
-
-为什么这么分？不是在模拟人类分工——模型没有精力上限，按职业拆开不会让它更能干。每道拆分对应一个真实机制：**立场**，Reviewer 被授权挑剔、Engineer 被授权为架构推回需求，对冲模型天生的顺从倾向；**隔离**，评审者只拿产物、不听作者辩解，独立判断靠物理隔开的上下文保证；**异构**，把关的座位可以换不同厂商的模型，错误分布不相关，才是真正的第二双眼睛。
-
-## 一次交付长什么样
-
-第一次进项目先跑 `/rivo:onboarding`：Engineer 勘测代码库、Designer 勘测设计体系、Product 和你对话，产出三份长期文档，之后所有方案和评审以它们为准绳。
-
-然后把需求丢给团队。Team Lead 判断工单类型，照该类型的流程表推进：
-
-```
-产品需求  产品方案 → 〔界面设计〕 → 技术方案 → 编码 → 测试 → UAT → 发布 → 复盘
-缺陷      复现 → 定修复预期 → 〔技术方案〕 → 编码 → 测试 → 发布 → 复盘
-技术任务  定目标 → 技术方案 → 编码 → 测试 → 发布 → 复盘
+```text
+rivo/
+├── roles/                      # 五个角色,每个 = agent.md(角色定义)+ skills/(方法技能)
+│   ├── team-lead/
+│   ├── product/
+│   ├── designer/
+│   ├── engineer/
+│   └── verifier/
+└── skills/                     # 全员共享技能
+    ├── collaborating/          # 协作协议:决定权、放行、留痕、变更回流
+    ├── brainstorming/          # 发散出真正不同的候选方向和取舍
+    └── frontier-questioning/   # 按设计树分轮提问,直到没有默默假设
 ```
 
-每个产出步骤后面都跟着 Reviewer 的评审；评审由作者直接发起，打回直达作者，通过才推进。
+技能内的 `references/` 存放按需加载的深度材料(文档结构模板、检查清单、示例),主文件保持精简。
 
-你只在少数几处出现：需求定稿、方案定稿、UAT、发布放行，以及一切不可逆变更——数据迁移、对外接口变更、换技术栈，无论改动多小都等你点头。其余时间团队自己往前走，不需要你一步步说「继续」。
+## 设计理念问答
 
-再小的需求也开工单、走完整流程——改一行文案也是产品需求。它不会因此变重：spec 一句话，方案一句话，评审三十秒。**流程的重量跟着决策量缩放，不跟步骤数。**
+**已经有交叉评审了,为什么还要一个独立的 Verifier?**
+两者回答的问题不同。交叉评审是领域负责人检查产物对自己辖区的影响——Designer 评 requirement 问的是"这能定义出正确的体验吗"。Verifier 回答的是"这个版本的关键声明有证据支撑吗",而且它只接收产物、上游依据和项目认知,不接收作者的创作过程——不被"作者觉得没问题"污染,是独立验证的前提。
 
-## 设计选择
+**为什么严重度不决定放行?**
+"轻微问题可以直接过"意味着有人可以通过把问题标成轻微来绕过流程。rivo 把两件事分开:严重度描述影响,用于排序;放行只看每条发现是否走完闭环——解决、经认可地跳过、或交用户裁决。跳过是允许的,但要留下理由、认可者和重新打开的条件。
 
-真正有取舍的几条：
+**rivo 绑定哪个 Agent 平台?**
+不绑定。角色和技能都是纯文本,协议只规定"谁对什么负责、什么条件下放行",调度方式(并行、串行、子 Agent)服从宿主能力。换宿主,角色责任不变。
 
-- **流程是预设的，不是动态编排的。** 现实中的产研团队也不靠 PM 每单现场发明流程。三类工单三张流程表，Team Lead 照表推进；表上的步骤不许跳，但每步的产物按决策量收缩。
-- **决策与写作分离。** 每类产物两个技能：brainstorming 管探索与收敛（对话式），writing 管决策定稿后一次性成文——product-brainstorming 配 writing-specs，architecture-brainstorming 配 writing-plans。写作中发现大方向没定，停下来回探索。
-- **评审是双模的。** 同一套检查清单，评自家产物给裁决，评外来的 PRD 和设计稿给反馈与澄清问题。企业环境的存量输入和个人项目的自产产物，一套方法通吃。
-- **单一事实源。** 设计稿能查到的值不抄进文档，代码能读出的事实不抄进勘测记录——抄一份就是双写，源头一改副本就撒谎。文档只写源头表达不了的东西，并告诉你去哪查。
-- **状态落盘。** 会话上下文随时可清，进度和结论住在工单目录里，断了从盘上接着走。
-- **方法技能可移植。** 技能全部用「若已连接……」的能力句式写成，正文零 rivo 词汇，拎出去在任何环境单独可用。方法内化自 Anthropic 官方插件与 superpowers，保留原有的结构与密度。
-- **团队会记事。** 每个成员有私有记忆。复盘的经验三个去向：全队通用的进 `learnings/`，属于某份长期文档的直接改文档，属于个人工作方式的进各自记忆——同一条经验只住一个家。
+**五个角色必须都由 AI 承担吗?**
+不必须。角色是逻辑责任。企业里已有 PM、设计师或架构师对正式产物负责时,他们就是该层负责人——rivo 不为了统一格式夺走所有权,也不复制一份内部副本。
 
-## 留在你仓库里的东西
+**为什么不建统一的产物 ID 和版本系统?**
+每个产物都能通过文件路径、文档链接或宿主对象直接定位,版本用后端已有的标记(commit、文档版本)。再造一层注册表意味着多一个要维护、会失同步的正本——rivo 的原则是一份产物只有一个事实源。
 
-```
-your-repo/
-├── .rivo/
-│   ├── PROJECT.md          ← 给谁用、什么算价值、交付约定（Product 维护）
-│   ├── ARCHITECTURE.md     ← 架构、代码规约、验证基建（Engineer 维护）
-│   ├── DESIGN.md           ← token、组件库、业务组件清单（Designer 维护，仅前端）
-│   ├── issues/<id>/        ← 进行中的工单：ticket、spec、plan、评审意见、测试与 uat 记录
-│   ├── archived/<id>/      ← 已交付的工单
-│   └── learnings/          ← 跨工单的团队经验（INDEX.md 索引，一条一文件）
-└── .claude/agent-memory/   ← 各成员的私有记忆（Claude Code 内置，随项目入库）
-```
+**`.rivo` 会不会把我的仓库弄乱?**
+不发生的阶段不创建占位文件,交付完结后整个 issue 目录移入 `archived/`。已在用工单系统或在线文档的团队,可以在协作配置里把产物指到外部系统,`.rivo` 里就只剩指向事实源的链接。
 
 ## 贡献
 
-欢迎提 issue 和 PR。rivo 没有构建步骤，整个插件是一组 Markdown，分三层，写之前先想清楚内容属于哪一层：
+欢迎 Issue 和 PR——尤其是真实使用中发现的协议漏洞:哪个环节可以被绕过、哪条规则在实践中形同虚设。
 
-- `agents/`——**成员**。五节解剖：身份、立场与价值序、行为红线、协作方式、记忆职责。不写流程时序，不写方法；检验标准是卸掉所有技能，光凭这份文件拉起来的成员性格仍然是对的。
-- `skills/`（方法技能）——**方法**。对标 Anthropic 官方技能的结构与密度写作：编号工作流、可翻查的方法知识、产出结构、注意事项；外部依赖一律写成「若已连接……未连接则基于现有信息推进」的能力句式。检验标准是拎出 rivo 在任何环境单独可用。reviewing 系技能的检查清单与对应 writing 技能的产出结构成对维护，改一边必查另一边。
-- `skills/collaborating`、`skills/onboarding`——**协作协议**。角色分工、流程表、交接与记录规则；只编排，不夹带方法，持有型内容必须短。
-- 命名规则：生态里有既定名的照搬原名（product-brainstorming、test-driven-development、systematic-debugging）；自造的用动词-产物格式（writing-specs、reviewing-code、surveying-codebases）。
+## License
 
-改完在自己的 Claude Code 里装个本地版本，拿一个真实需求走一单验证，再提 PR。改动尽量小而聚焦，附上改了什么、为什么。
-
-## 许可
-
-[MIT](LICENSE)。
+[MIT](LICENSE) © Reflux Studio

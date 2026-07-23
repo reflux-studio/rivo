@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="-apple-system,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <style>
+    .t{fill:#1f2328;font-weight:600}
+    .s{fill:#57606a}
+    .ln{stroke:#8c959f;stroke-width:1.5;fill:none}
+    .ah{fill:#8c959f}
+    .box{stroke-width:1.5}
+    .user{fill:#fff8c5;stroke:#d4a72c}
+    .lead{fill:#ddf4ff;stroke:#54aeff}
+    .prod{fill:#fff1e5;stroke:#e16f24}
+    .des{fill:#fbefff;stroke:#8957e5}
+    .eng{fill:#dafbe1;stroke:#2da44e}
+    .ver{fill:#ffebe9;stroke:#fa4549}
+    @media (prefers-color-scheme: dark){
+      .t{fill:#e6edf3}
+      .s{fill:#9198a1}
+      .ln{stroke:#6e7681}
+      .ah{fill:#6e7681}
+      .user{fill:#2a230b;stroke:#9e6a03}
+      .lead{fill:#0f2440;stroke:#1f6feb}
+      .prod{fill:#2b1a10;stroke:#bd561d}
+      .des{fill:#231532;stroke:#8957e5}
+      .eng{fill:#0f2417;stroke:#238636}
+      .ver{fill:#2b1215;stroke:#da3633}
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="ah" d="M0 0L10 5L0 10z"/>
+    </marker>
+  </defs>
+
+  <!-- 用户 -->
+  <rect class="box user" x="250" y="24" width="400" height="56" rx="10"/>
+  <text class="t" x="450" y="47" font-size="15" text-anchor="middle">用户</text>
+  <text class="s" x="450" y="68" font-size="12" text-anchor="middle">价值取舍 · 最终验收 · 不可逆操作的批准</text>
+
+  <!-- 用户 <-> Team Lead -->
+  <line class="ln" x1="450" y1="86" x2="450" y2="124" marker-start="url(#a)" marker-end="url(#a)"/>
+  <text class="s" x="466" y="109" font-size="12">重大决策收口给用户拍板</text>
+
+  <!-- Team Lead -->
+  <rect class="box lead" x="350" y="130" width="200" height="60" rx="10"/>
+  <text class="t" x="450" y="154" font-size="15" text-anchor="middle">Team Lead</text>
+  <text class="s" x="450" y="175" font-size="12" text-anchor="middle">入口判断 · 调度 · 交付状态</text>
+
+  <!-- Team Lead -> 三个领域负责人 -->
+  <line class="ln" x1="450" y1="190" x2="170" y2="244" marker-end="url(#a)"/>
+  <line class="ln" x1="450" y1="190" x2="450" y2="244" marker-end="url(#a)"/>
+  <line class="ln" x1="450" y1="190" x2="730" y2="244" marker-end="url(#a)"/>
+
+  <!-- Product -->
+  <rect class="box prod" x="50" y="250" width="232" height="80" rx="10"/>
+  <text class="t" x="166" y="276" font-size="15" text-anchor="middle">Product · 意图层</text>
+  <text class="s" x="166" y="297" font-size="12" text-anchor="middle">为什么做、做到什么算好</text>
+  <text class="s" x="166" y="316" font-size="12" text-anchor="middle">requirement · 验收标准 · UAT</text>
+
+  <!-- Designer -->
+  <rect class="box des" x="334" y="250" width="232" height="80" rx="10"/>
+  <text class="t" x="450" y="276" font-size="15" text-anchor="middle">Designer · 体验层</text>
+  <text class="s" x="450" y="297" font-size="12" text-anchor="middle">用户如何理解和操作</text>
+  <text class="s" x="450" y="316" font-size="12" text-anchor="middle">ui-design · 设计系统</text>
+
+  <!-- Engineer -->
+  <rect class="box eng" x="618" y="250" width="232" height="80" rx="10"/>
+  <text class="t" x="734" y="276" font-size="15" text-anchor="middle">Engineer · 机制层</text>
+  <text class="s" x="734" y="297" font-size="12" text-anchor="middle">系统如何构建和交付</text>
+  <text class="s" x="734" y="316" font-size="12" text-anchor="middle">system-design · 实现 · 发布</text>
+
+  <!-- 汇聚到 Verifier -->
+  <path class="ln" d="M166 330 V352 M734 330 V352 M166 352 H734"/>
+  <line class="ln" x1="450" y1="352" x2="450" y2="372" marker-end="url(#a)"/>
+  <text class="s" x="462" y="368" font-size="11">每个需要放行的新版本</text>
+
+  <!-- Verifier -->
+  <rect class="box ver" x="200" y="376" width="500" height="64" rx="10" stroke-dasharray="6 4"/>
+  <text class="t" x="450" y="401" font-size="15" text-anchor="middle">Verifier · 独立验证</text>
+  <text class="s" x="450" y="422" font-size="12" text-anchor="middle">不参与创作，用证据判断每个版本能否放行</text>
+</svg>

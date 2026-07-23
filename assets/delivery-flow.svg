@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 380" font-family="-apple-system,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <style>
+    .t{fill:#1f2328;font-weight:600}
+    .s{fill:#57606a}
+    .ln{stroke:#8c959f;stroke-width:1.5;fill:none}
+    .ah{fill:#8c959f}
+    .gate{fill:#eaeef2;stroke:#57606a;stroke-width:1.2}
+    .box{stroke-width:1.5}
+    .user{fill:#fff8c5;stroke:#d4a72c}
+    .lead{fill:#ddf4ff;stroke:#54aeff}
+    .prod{fill:#fff1e5;stroke:#e16f24}
+    .des{fill:#fbefff;stroke:#8957e5}
+    .eng{fill:#dafbe1;stroke:#2da44e}
+    .mem{fill:#f6f8fa;stroke:#8c959f}
+    @media (prefers-color-scheme: dark){
+      .t{fill:#e6edf3}
+      .s{fill:#9198a1}
+      .ln{stroke:#6e7681}
+      .ah{fill:#6e7681}
+      .gate{fill:#21262d;stroke:#9198a1}
+      .user{fill:#2a230b;stroke:#9e6a03}
+      .lead{fill:#0f2440;stroke:#1f6feb}
+      .prod{fill:#2b1a10;stroke:#bd561d}
+      .des{fill:#231532;stroke:#8957e5}
+      .eng{fill:#0f2417;stroke:#238636}
+      .mem{fill:#161b22;stroke:#6e7681}
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="ah" d="M0 0L10 5L0 10z"/>
+    </marker>
+  </defs>
+
+  <!-- 三个入口 -->
+  <text class="s" x="105" y="44" font-size="12.5" text-anchor="middle">改变产品价值或预期</text>
+  <line class="ln" x1="105" y1="54" x2="105" y2="94" marker-end="url(#a)"/>
+  <text class="s" x="315" y="44" font-size="12.5" text-anchor="middle">只改变体验表达</text>
+  <line class="ln" x1="315" y1="54" x2="315" y2="94" marker-end="url(#a)"/>
+  <text class="s" x="525" y="44" font-size="12.5" text-anchor="middle">只改变内部机制</text>
+  <line class="ln" x1="525" y1="54" x2="525" y2="94" marker-end="url(#a)"/>
+
+  <!-- 第一行：分层产出 -->
+  <rect class="box prod" x="30" y="100" width="150" height="64" rx="10"/>
+  <text class="t" x="105" y="127" font-size="14.5" text-anchor="middle">requirement</text>
+  <text class="s" x="105" y="148" font-size="12" text-anchor="middle">Product · 为什么做</text>
+
+  <line class="ln" x1="186" y1="132" x2="199" y2="132"/>
+  <path class="gate" d="M210 123 L219 132 L210 141 L201 132 z"/>
+  <line class="ln" x1="221" y1="132" x2="236" y2="132" marker-end="url(#a)"/>
+  <text class="s" x="210" y="160" font-size="11" text-anchor="middle">双查</text>
+
+  <rect class="box des" x="240" y="100" width="150" height="64" rx="10"/>
+  <text class="t" x="315" y="127" font-size="14.5" text-anchor="middle">ui-design</text>
+  <text class="s" x="315" y="148" font-size="12" text-anchor="middle">Designer · 体验方案</text>
+
+  <line class="ln" x1="396" y1="132" x2="409" y2="132"/>
+  <path class="gate" d="M420 123 L429 132 L420 141 L411 132 z"/>
+  <line class="ln" x1="431" y1="132" x2="446" y2="132" marker-end="url(#a)"/>
+  <text class="s" x="420" y="160" font-size="11" text-anchor="middle">双查</text>
+
+  <rect class="box eng" x="450" y="100" width="150" height="64" rx="10"/>
+  <text class="t" x="525" y="127" font-size="14.5" text-anchor="middle">system-design</text>
+  <text class="s" x="525" y="148" font-size="12" text-anchor="middle">Engineer · 技术方案</text>
+
+  <line class="ln" x1="606" y1="132" x2="619" y2="132"/>
+  <path class="gate" d="M630 123 L639 132 L630 141 L621 132 z"/>
+  <line class="ln" x1="641" y1="132" x2="656" y2="132" marker-end="url(#a)"/>
+  <text class="s" x="630" y="160" font-size="11" text-anchor="middle">双查</text>
+
+  <rect class="box eng" x="660" y="100" width="150" height="64" rx="10"/>
+  <text class="t" x="735" y="127" font-size="14.5" text-anchor="middle">实现</text>
+  <text class="s" x="735" y="148" font-size="12" text-anchor="middle">Engineer · 代码与测试</text>
+
+  <!-- 实现 -> UAT 的折线 -->
+  <path class="ln" d="M735 164 V210 H90 V238" marker-end="url(#a)"/>
+  <path class="gate" d="M735 178 L744 187 L735 196 L726 187 z"/>
+  <text class="s" x="752" y="192" font-size="11">双查</text>
+
+  <!-- 第二行：验收与收尾 -->
+  <rect class="box user" x="30" y="244" width="120" height="56" rx="10"/>
+  <text class="t" x="90" y="268" font-size="14.5" text-anchor="middle">UAT</text>
+  <text class="s" x="90" y="288" font-size="11.5" text-anchor="middle">Product 带用户验收</text>
+
+  <line class="ln" x1="150" y1="272" x2="186" y2="272" marker-end="url(#a)"/>
+
+  <rect class="box eng" x="190" y="244" width="120" height="56" rx="10"/>
+  <text class="t" x="250" y="268" font-size="14.5" text-anchor="middle">发布</text>
+  <text class="s" x="250" y="288" font-size="11.5" text-anchor="middle">Engineer · shipping</text>
+
+  <line class="ln" x1="310" y1="272" x2="346" y2="272" marker-end="url(#a)"/>
+
+  <rect class="box lead" x="350" y="244" width="120" height="56" rx="10"/>
+  <text class="t" x="410" y="268" font-size="14.5" text-anchor="middle">复盘</text>
+  <text class="s" x="410" y="288" font-size="11.5" text-anchor="middle">Team Lead 组织</text>
+
+  <line class="ln" x1="470" y1="272" x2="506" y2="272" marker-end="url(#a)"/>
+
+  <rect class="box mem" x="510" y="244" width="230" height="56" rx="10" stroke-dasharray="6 4"/>
+  <text class="t" x="625" y="268" font-size="14.5" text-anchor="middle">沉淀与归档</text>
+  <text class="s" x="625" y="288" font-size="11.5" text-anchor="middle">认知回填 · issue 移入 archived</text>
+
+  <!-- 图例 -->
+  <path class="gate" d="M38 335 L45 342 L38 349 L31 342 z"/>
+  <text class="s" x="54" y="347" font-size="12">双查 = 交叉评审 + 独立验证；存在未关闭的发现，当前版本就不能放行进入下一层</text>
+</svg>
