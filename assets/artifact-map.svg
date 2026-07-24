@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 610" font-family="-apple-system,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <style>
+    .title{fill:#1f2328;font-size:20px;font-weight:700}
+    .label{fill:#1f2328;font-size:14px;font-weight:600}
+    .small{fill:#57606a;font-size:12px}
+    .tiny{fill:#57606a;font-size:11px}
+    .line{stroke:#8c959f;stroke-width:1.6;fill:none}
+    .arrow{fill:#8c959f}
+    .row{fill:#f6f8fa;stroke:#d0d7de;stroke-width:1.2}
+    .product{fill:#fff1e5;stroke:#e16f24;stroke-width:1.4}
+    .design{fill:#fbefff;stroke:#8957e5;stroke-width:1.4}
+    .engineer{fill:#dafbe1;stroke:#2da44e;stroke-width:1.4}
+    .investigate{fill:#ddf4ff;stroke:#54aeff;stroke-width:1.4}
+    .neutral{fill:#ffffff;stroke:#8c959f;stroke-width:1.2}
+    .rule{fill:#fff8c5;stroke:#d4a72c;stroke-width:1.3}
+    @media (prefers-color-scheme: dark){
+      .title,.label{fill:#e6edf3}
+      .small,.tiny{fill:#9198a1}
+      .line{stroke:#6e7681}
+      .arrow{fill:#6e7681}
+      .row{fill:#161b22;stroke:#30363d}
+      .product{fill:#2b1a10;stroke:#bd561d}
+      .design{fill:#231532;stroke:#8957e5}
+      .engineer{fill:#0f2417;stroke:#238636}
+      .investigate{fill:#0f2440;stroke:#1f6feb}
+      .neutral{fill:#21262d;stroke:#6e7681}
+      .rule{fill:#2a230b;stroke:#9e6a03}
+    }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow" d="M0 0L10 5L0 10z"/>
+    </marker>
+  </defs>
+
+  <text class="title" x="480" y="34" text-anchor="middle">多入口产物图</text>
+  <text class="small" x="480" y="56" text-anchor="middle">从变化实际触达的最高决定层进入；只让受影响的节点加入交付</text>
+
+  <text class="tiny" x="112" y="85" text-anchor="middle">变化 / 证据</text>
+  <text class="tiny" x="351" y="85" text-anchor="middle">入口产物</text>
+  <text class="tiny" x="718" y="85" text-anchor="middle">按依赖传播到实际受影响的下游</text>
+
+  <!-- 产品变化 -->
+  <rect class="row" x="20" y="98" width="920" height="92" rx="14"/>
+  <rect class="product" x="38" y="116" width="148" height="56" rx="10"/>
+  <text class="label" x="112" y="139" text-anchor="middle">产品变化</text>
+  <text class="small" x="112" y="158" text-anchor="middle">价值 · 行为 · 验收</text>
+  <line class="line" x1="186" y1="144" x2="250" y2="144" marker-end="url(#arrow)"/>
+  <rect class="product" x="260" y="116" width="182" height="56" rx="10"/>
+  <text class="label" x="351" y="140" text-anchor="middle">requirement</text>
+  <text class="small" x="351" y="159" text-anchor="middle">Product 持有</text>
+  <line class="line" x1="442" y1="144" x2="490" y2="144" marker-end="url(#arrow)"/>
+  <rect class="design" x="500" y="119" width="112" height="50" rx="9"/>
+  <text class="label" x="556" y="149" text-anchor="middle">ui-design</text>
+  <line class="line" x1="612" y1="144" x2="638" y2="144" marker-end="url(#arrow)"/>
+  <rect class="engineer" x="648" y="119" width="130" height="50" rx="9"/>
+  <text class="label" x="713" y="149" text-anchor="middle">system-design</text>
+  <line class="line" x1="778" y1="144" x2="804" y2="144" marker-end="url(#arrow)"/>
+  <rect class="engineer" x="814" y="119" width="106" height="50" rx="9"/>
+  <text class="label" x="867" y="149" text-anchor="middle">实现 / UAT</text>
+  <text class="tiny" x="710" y="182" text-anchor="middle">没有实际影响的中间节点不创建占位产物</text>
+
+  <!-- 体验与设计系统 -->
+  <rect class="row" x="20" y="202" width="920" height="92" rx="14"/>
+  <rect class="design" x="38" y="220" width="148" height="56" rx="10"/>
+  <text class="label" x="112" y="243" text-anchor="middle">体验 / 设计系统</text>
+  <text class="small" x="112" y="262" text-anchor="middle">路径 · 组件 · token</text>
+  <line class="line" x1="186" y1="248" x2="250" y2="248" marker-end="url(#arrow)"/>
+  <rect class="design" x="260" y="220" width="182" height="56" rx="10"/>
+  <text class="label" x="351" y="244" text-anchor="middle">DESIGN / ui-design</text>
+  <text class="small" x="351" y="263" text-anchor="middle">Designer 持有</text>
+  <line class="line" x1="442" y1="248" x2="516" y2="248" marker-end="url(#arrow)"/>
+  <rect class="engineer" x="526" y="223" width="174" height="50" rx="9"/>
+  <text class="label" x="613" y="244" text-anchor="middle">system-design</text>
+  <text class="tiny" x="613" y="261" text-anchor="middle">机制受影响时</text>
+  <line class="line" x1="700" y1="248" x2="750" y2="248" marker-end="url(#arrow)"/>
+  <rect class="engineer" x="760" y="223" width="142" height="50" rx="9"/>
+  <text class="label" x="831" y="244" text-anchor="middle">受影响的实现</text>
+  <text class="tiny" x="831" y="261" text-anchor="middle">产品语义变化则重路由</text>
+
+  <!-- 技术债 -->
+  <rect class="row" x="20" y="306" width="920" height="92" rx="14"/>
+  <rect class="engineer" x="38" y="324" width="148" height="56" rx="10"/>
+  <text class="label" x="112" y="347" text-anchor="middle">技术目标 / 技术债</text>
+  <text class="small" x="112" y="366" text-anchor="middle">成本 · 风险 · 质量</text>
+  <line class="line" x1="186" y1="352" x2="250" y2="352" marker-end="url(#arrow)"/>
+  <rect class="engineer" x="260" y="324" width="214" height="56" rx="10"/>
+  <text class="label" x="367" y="348" text-anchor="middle">技术证据 / system-design</text>
+  <text class="small" x="367" y="367" text-anchor="middle">Engineer 持有</text>
+  <line class="line" x1="474" y1="352" x2="570" y2="352" marker-end="url(#arrow)"/>
+  <rect class="engineer" x="580" y="327" width="160" height="50" rx="9"/>
+  <text class="label" x="660" y="357" text-anchor="middle">受影响的实现</text>
+  <line class="line" x1="740" y1="352" x2="768" y2="352" marker-end="url(#arrow)"/>
+  <rect class="neutral" x="778" y="327" width="142" height="50" rx="9" stroke-dasharray="5 4"/>
+  <text class="label" x="849" y="348" text-anchor="middle">外显约束检查</text>
+  <text class="tiny" x="849" y="365" text-anchor="middle">仅在有影响时参与</text>
+
+  <!-- 异常调查 -->
+  <rect class="row" x="20" y="410" width="920" height="92" rx="14"/>
+  <rect class="investigate" x="38" y="428" width="148" height="56" rx="10"/>
+  <text class="label" x="112" y="451" text-anchor="middle">已观察异常</text>
+  <text class="small" x="112" y="470" text-anchor="middle">先证据，不猜归属</text>
+  <line class="line" x1="186" y1="456" x2="250" y2="456" marker-end="url(#arrow)"/>
+  <rect class="investigate" x="260" y="428" width="182" height="56" rx="10"/>
+  <text class="label" x="351" y="452" text-anchor="middle">investigation</text>
+  <text class="small" x="351" y="471" text-anchor="middle">复现 · 根因 · 证据</text>
+  <line class="line" x1="442" y1="456" x2="510" y2="456" marker-end="url(#arrow)"/>
+  <rect class="neutral" x="520" y="425" width="226" height="62" rx="10"/>
+  <text class="label" x="633" y="448" text-anchor="middle">归类到负责的节点</text>
+  <text class="tiny" x="633" y="467" text-anchor="middle">产品 · 设计 · 技术 · 实现</text>
+  <text class="tiny" x="633" y="481" text-anchor="middle">环境 · 外部依赖</text>
+  <line class="line" x1="746" y1="456" x2="786" y2="456" marker-end="url(#arrow)"/>
+  <rect class="neutral" x="796" y="428" width="124" height="56" rx="10"/>
+  <text class="label" x="858" y="451" text-anchor="middle">修订并传播</text>
+  <text class="small" x="858" y="470" text-anchor="middle">不默认从 Product 开始</text>
+
+  <!-- 共同治理 -->
+  <path class="line" d="M480 512 V535" marker-end="url(#arrow)"/>
+  <rect class="rule" x="138" y="542" width="684" height="48" rx="12"/>
+  <text class="label" x="480" y="563" text-anchor="middle">共同治理：每个需要放行的新版本都经过交叉评审、独立验证和发现闭环</text>
+  <text class="tiny" x="480" y="580" text-anchor="middle">发布后由直接下游明确判断影响；路由错误可以被任何成员报告并纠正</text>
+</svg>
