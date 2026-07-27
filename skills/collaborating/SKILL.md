@@ -1,6 +1,6 @@
 ---
 name: collaborating
-description: rivo 全员共享的协作协议：决定权如何划分、交付如何逐层推进、评审与验证如何放行、变更与问题如何回流。
+description: rivo 全员共享的协作协议：决定权如何划分、工作如何进入多入口产物依赖图、评审与验证如何放行、变更与问题如何回流。
 user-invocable: true
 ---
 
@@ -12,7 +12,8 @@ user-invocable: true
 
 - 团队有两种工作方式：**完整交付**（第 4–8 节）和**自由协作**（第 9 节）。两种方式共享同一批角色、产物和长期认知。
 - 每个正式产物都有明确负责人，并能通过文件路径、文档链接、设计稿或宿主对象直接定位。交接时把当前位置告诉接收方；评审和验证记录注明自己实际针对的版本。协议不另建产物 ID 或地址注册表。
-- 上一层的方案就是下一层的验收依据：requirement 约束 ui-design，requirement 与 ui-design 约束 system-design，system-design 约束实现。未被触达的层不生产占位产物。
+- 上一层的方案就是下一层的验收依据：requirement 约束 ui-design，requirement 与 ui-design 约束 system-design，system-design 约束实现。这些依赖组成一张多入口产物图，不是所有工作必经的线性流水线；未被触达的层不生产占位产物。
+- 进入第 5 节双查表并形成逐层依赖的交付对象是 requirement、ui-design、system-design 和实现。长期认知为它们提供跨交付约束；state、reviews、verification、investigation、UAT、release、retro 和 evidence 记录状态、过程与证据，不构成新的决定层。
 - 协作配置是全员的共同约定：沟通方式、产物落点、审批点和验证策略以它为准；建立和调整经 `onboarding` 与用户确认。
 - 未指定后端的产物落在 `.rivo` 默认工作区，布局见 [references/workspace-layout.md](references/workspace-layout.md)。
 - 产物使用项目认知中的统一词汇；新名词在首次出现的产物中定义，并回填到对应负责人持有的认知。
@@ -38,19 +39,16 @@ user-invocable: true
 - **兜底**：看到问题就报告——不管是不是你的辖区、是不是你造成的。发现队友产物有明显问题，立即告知 Team Lead 或责任人；"这不是我的事"不是沉默的理由。
 - **底线**：报告问题，但不越权代改——他人辖区你只有提案权。反过来，损害你辖区的决定，你有职责驳回：Engineer 面对破坏架构的需求、Designer 面对践踏一致性的方案，提出发现不是不配合，顺从才是失职。同意和反对一样需要理由。
 
-## 4. 交付如何推进
+## 4. 工作如何进入产物图
 
-```text
-判断入口 → 分层产出 → 实现 → 独立验证 → UAT → 发布 → 复盘
-           （每个新修订经交叉评审 + 独立验证放行后进入下一层）
-```
+完整交付先判断这次变化实际触达的最高决定层，再沿依赖关系通知受影响的下游。固定的是每个被触达产物的负责人、评审者、验证与退出条件，不是所有工作都经过同一组产物。
 
 入口由工作触达的最高抽象层决定：
 
 - 改变产品价值、用户行为或验收预期：从 requirement 开始，Product 负责。
-- 产品预期已确定，只改变体验表达：从 ui-design 开始，Designer 负责。
-- 只改变内部机制、质量属性或实现：从 system-design 或明确技术目标开始，Engineer 负责。
-- 已观察到软件行为异常：Engineer 先用 `systematic-debugging` 调查，不预设问题归属。
+- 产品预期已确定，只改变体验表达：从 ui-design 开始，Designer 负责。设计系统巡查和收编本身更新设计认知；形成交付工作时，再按实际影响判断正式入口。
+- 只改变内部机制、质量属性或实现：从 system-design 或明确技术目标开始，Engineer 负责。技术债评估先作为证据；需要落地时再收敛为技术目标或 system-design。
+- 已观察到软件行为异常：Engineer 先用 `systematic-debugging` 调查，不预设问题归属；正式交付中的排查可记录为 investigation，但它不是入口层，取得根因证据后仍要归类到负责的正式产物、实现、环境或外部依赖。
 
 混合工作从最高层进入。有用户可感知结果时，Product 在发布前组织 `running-uat`；纯技术任务不强制 UAT。
 
