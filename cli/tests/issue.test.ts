@@ -3,14 +3,20 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+// A mutable object so individual tests can configure notification scripts
+// without affecting the rest of the suite.
+const { settingsState } = vi.hoisted(() => ({
+  settingsState: {
+    agents: { product: {}, designer: {}, engineer: {} },
+    scripts: {} as Record<string, string>,
+  },
+}));
+
 vi.mock("../src/settings.js", async (orig) => {
   const actual = await orig<typeof import("../src/settings.js")>();
   return {
     ...actual,
-    loadSettings: () => ({
-      agents: { product: {}, designer: {}, engineer: {} },
-      scripts: {},
-    }),
+    loadSettings: () => settingsState,
   };
 });
 
@@ -21,6 +27,7 @@ const { closeIssue, newIssue, recallIssue, recordVerdict, showIssue } = await im
 let ws: string;
 
 beforeEach(() => {
+  settingsState.scripts = {};
   ws = mkdtempSync(join(tmpdir(), "rivo-issue-"));
   mkdirSync(join(ws, ".rivo", "flows"), { recursive: true });
   writeFileSync(
@@ -114,6 +121,25 @@ describe("recordVerdict", () => {
     const view = showIssue(ws, "i");
     expect(view.node).toBe("plan");
     expect(view.verdicts).toEqual([]);
+  });
+
+  it("打回到下游节点被拒绝,且不写入任何事件", () => {
+    newIssue(ws, "i", "demo");
+    recordVerdict(ws, "i", "product", "approve", "ok");
+    expect(() =>
+      recordVerdict(ws, "i", "designer", "reject", "想跳过", "implement"),
+    ).toThrow(/之前/);
+    const view = showIssue(ws, "i");
+    expect(view.node).toBe("review");
+    expect(view.verdicts).toEqual([]);
+  });
+
+  it("通知脚本执行失败不影响流转,且不抛出", () => {
+    newIssue(ws, "i", "demo");
+    settingsState.scripts.transition = "/no/such/rivo-notify-script-xyz";
+    expect(() => recordVerdict(ws, "i", "product", "approve", "ok")).not.toThrow();
+    const view = showIssue(ws, "i");
+    expect(view.node).toBe("review");
   });
 });
 

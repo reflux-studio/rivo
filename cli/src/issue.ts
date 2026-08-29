@@ -2,7 +2,7 @@ import { existsSync, mkdirSync } from "node:fs";
 import { loadFlow, nodeById, nodeIndex, prevNode } from "./flow.js";
 import { appendEvent, nowIso, readLog } from "./log.js";
 import { issuePaths } from "./paths.js";
-import type { Flow, FlowNode, Verdict } from "./schema.js";
+import type { Flow, FlowNode, Settings, Verdict } from "./schema.js";
 import { runScript, type Vars } from "./scripts.js";
 import { loadSettings } from "./settings.js";
 import { decide, foldLog, type State } from "./state.js";
@@ -60,32 +60,45 @@ function isCompleted(flow: Flow, node: FlowNode | null, verdicts: Verdict[]): bo
   }
 }
 
-/** Fire one script per assignee of the node just entered. */
+/**
+ * Fire one script per assignee of the node just entered. Best effort: by the
+ * time this runs the transition is already committed to the log, so nothing
+ * in here — including the flow/settings the caller already loaded — may
+ * escape and make a successful command look failed.
+ */
 function notifyEntered(
   ws: string,
   slug: string,
+  flow: Flow,
+  settings: Settings,
   state: State,
   nodeId: string,
   cause: "approve" | "reject" | "recall",
 ): void {
-  const { flow, settings } = load(ws, slug);
-  const event = cause === "approve" ? "transition" : cause;
-  for (const agent of nodeById(flow, nodeId).assignees) {
-    const result = runScript(
-      settings,
-      event,
-      vars(ws, slug, state, {
-        node: nodeId,
-        agent,
-        agent_ref: settings.agents[agent]?.ref ?? "",
-      }),
-    );
-    if (result.error) {
-      console.warn(
-        `[rivo] scripts.${event} 执行失败:${result.error}\n` +
-          `       流转已写入 log,状态是对的;请手工通知 ${agent},或修好脚本后重新触发。`,
+  try {
+    const event = cause === "approve" ? "transition" : cause;
+    for (const agent of nodeById(flow, nodeId).assignees) {
+      const result = runScript(
+        settings,
+        event,
+        vars(ws, slug, state, {
+          node: nodeId,
+          agent,
+          agent_ref: settings.agents[agent]?.ref ?? "",
+        }),
       );
+      if (result.error) {
+        console.warn(
+          `[rivo] scripts.${event} 执行失败:${result.error}\n` +
+            `       流转已写入 log,状态是对的;请手工通知 ${agent},或修好脚本后重新触发。`,
+        );
+      }
     }
+  } catch (e) {
+    console.warn(
+      `[rivo] 通知失败:${e instanceof Error ? e.message : String(e)}\n` +
+        `       流转已写入 log,状态是对的;请手工确认通知是否送达。`,
+    );
   }
 }
 
@@ -93,10 +106,11 @@ export function newIssue(ws: string, slug: string, flowName: string): void {
   const { issueDir, logPath } = issuePaths(ws, slug);
   if (existsSync(logPath)) throw new Error(`交付 ${slug} 已存在`);
   const flow = loadFlow(ws, flowName);
+  const settings = loadSettings(ws);
   mkdirSync(issueDir, { recursive: true });
   const first = flow.nodes[0].id;
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: first, flow: flowName });
-  notifyEntered(ws, slug, foldLog(readLog(logPath).events), first, "approve");
+  notifyEntered(ws, slug, flow, settings, foldLog(readLog(logPath).events), first, "approve");
 }
 
 export function showIssue(ws: string, slug: string): IssueView {
@@ -128,7 +142,7 @@ export function recordVerdict(
   reason: string,
   to?: string,
 ): void {
-  const { logPath, state, flow } = load(ws, slug);
+  const { logPath, state, flow, settings } = load(ws, slug);
   if (state.closed) throw new Error(`交付 ${slug} 已关闭`);
   if (!state.node) throw new Error(`交付 ${slug} 没有当前节点`);
 
@@ -139,7 +153,12 @@ export function recordVerdict(
   if (!node.assignees.includes(by)) {
     throw new Error(`${by} 不是节点 ${node.id} 的 assignee(${node.assignees.join(", ")})`);
   }
-  if (to) nodeById(flow, to); // 目标不存在时抛错
+  if (to) {
+    nodeById(flow, to); // throws if the target node does not exist
+    if (nodeIndex(flow, to) >= nodeIndex(flow, node.id)) {
+      throw new Error(`打回目标必须在当前节点之前,${to} 不在 ${node.id} 之前`);
+    }
+  }
   // A reject at the first node has nowhere upstream to go, and --to cannot
   // help: every node is at or after this one. Reject before any append, or
   // the event lands on disk while `decide` throws below, and every later
@@ -161,14 +180,14 @@ export function recordVerdict(
   if (decision.kind === "waiting") return;
 
   if (decision.kind === "advance") {
-    if (decision.to === null) return; // 最后一个节点通过,等待 close
+    if (decision.to === null) return; // last node passed; wait for close
     appendEvent(logPath, { t: "transition", ts: nowIso(), node: decision.to, cause: "approve" });
-    notifyEntered(ws, slug, after, decision.to, "approve");
+    notifyEntered(ws, slug, flow, settings, after, decision.to, "approve");
     return;
   }
 
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: decision.to, cause: "reject" });
-  notifyEntered(ws, slug, after, decision.to, "reject");
+  notifyEntered(ws, slug, flow, settings, after, decision.to, "reject");
 }
 
 export function recallIssue(
@@ -178,18 +197,18 @@ export function recallIssue(
   to: string,
   reason: string,
 ): void {
-  const { logPath, state, flow } = load(ws, slug);
+  const { logPath, state, flow, settings } = load(ws, slug);
   if (state.closed) throw new Error(`交付 ${slug} 已关闭`);
   if (!state.node) throw new Error(`交付 ${slug} 没有当前节点`);
 
-  nodeById(flow, to); // 目标不存在时抛错
+  nodeById(flow, to); // throws if the target node does not exist
   if (nodeIndex(flow, to) >= nodeIndex(flow, state.node)) {
     throw new Error(`recall 只能回退到更早的节点,${to} 不在 ${state.node} 之前`);
   }
 
   appendEvent(logPath, { t: "recall", ts: nowIso(), from: state.node, to, by, reason });
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: to, cause: "recall" });
-  notifyEntered(ws, slug, foldLog(readLog(logPath).events), to, "recall");
+  notifyEntered(ws, slug, flow, settings, foldLog(readLog(logPath).events), to, "recall");
 }
 
 export function closeIssue(ws: string, slug: string, by: string, reason?: string): void {
