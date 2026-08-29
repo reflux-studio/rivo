@@ -68,6 +68,7 @@ export const SettingsSchema = z.object({
       recall: z.string().optional(),
       close: z.string().optional(),
     })
+    .strict()
     .default({}),
 });
 
@@ -76,7 +77,7 @@ export type Flow = z.infer<typeof FlowSchema>;
 export type Event = z.infer<typeof EventSchema>;
 export type Settings = z.infer<typeof SettingsSchema>;
 
-/** 一个 assignee 在当前节点上的最终表态。 */
+/** The final verdict from an assignee on the current node. */
 export type Verdict = {
   by: string;
   verdict: "approve" | "reject";

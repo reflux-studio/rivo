@@ -81,4 +81,8 @@ describe("SettingsSchema", () => {
     const s = SettingsSchema.parse({ agents: { qa: {} } });
     expect(s.agents.qa.ref).toBeUndefined();
   });
+
+  it("拒绝拼错的 script 键", () => {
+    expect(() => SettingsSchema.parse({ scripts: { transitoin: "x" } })).toThrow();
+  });
 });
