@@ -55,7 +55,7 @@ rivo doctor                        # 校验:agent 是否已声明、模板变量
 
 `rivo flow list [--json]` 看已有哪些流程,`rivo flow show <name> [--node <id>] [--json]` 看流程或某个节点的细节。
 
-`doctor` 检查的这几类问题不会在 `rivo issue new` / `approve` 等命令里被自动拦下——模板变量拼错时不会报错,只会静默渲染成空字符串。提前跑 `rivo doctor` 能在配置阶段一次性发现,而不是等流转出了怪现象才回头查。
+`doctor` 检查的模板变量拼写、log 连续性这两类问题不会在 `rivo issue new` / `approve` 等命令里被自动拦下——模板变量拼错时不会报错,只会静默渲染成空字符串。提前跑 `rivo doctor` 能在配置阶段一次性发现,而不是等流转出了怪现象才回头查。
 
 **flow 引用了未声明的 agent 时,不同命令的态度不一样,不要指望统一报错:**
 

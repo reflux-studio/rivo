@@ -35,7 +35,8 @@ export function unknownVars(template: string): string[] {
 
 /**
  * Notification is best effort: the log is the source of truth, so a failing
- * script never rolls anything back. Recover with `rivo issue notify`.
+ * script never rolls anything back. The transition is already committed by
+ * the time this runs; on failure the caller warns and recovery is manual.
  */
 export function runScript(
   settings: Settings,
