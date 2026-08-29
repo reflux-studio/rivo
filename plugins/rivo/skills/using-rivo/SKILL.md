@@ -5,17 +5,9 @@ description: 用 rivo 跑一次交付流程,或配置 rivo 的参与者、流程
 
 # 使用 rivo
 
-先确认 CLI 可用:`rivo --version`。
+先确认 CLI 可用:`rivo --version`。没装的话见 [references/setup.md](references/setup.md) 的安装说明。
 
-没装的话:发布的 npm 包不在这份计划范围内,眼下要从仓库的 `cli/` 目录构建并链接:
-
-```bash
-cd cli && npm install && npx tsup && npm link
-```
-
-(以后会有发布好的 npm 包替代这一步。)
-
-配置相关的操作(声明参与者、接入平台、建流程)见 [references/setup.md](references/setup.md)。
+配置相关的操作(声明参与者、接入平台、建流程)也见 [references/setup.md](references/setup.md)。
 
 ## 你被唤起时
 
@@ -56,9 +48,15 @@ rivo issue reject  <slug> --as <你的角色名> --reason "为什么退回" [--t
 
 **rivo 无法中止已经在跑的任务。** recall 之后对方可能还在执行,rivo 只会触发通知脚本。要真正终止,取决于你的平台脚本怎么写。
 
-## 没有配置平台时
+## 没有人被唤起时
 
-`rivo issue approve` 之后如果没有任何人被唤起,说明没配 `scripts`——这是手工模式。**把下一步是谁告诉用户**,由人去开对应的会话。
+`rivo issue approve` 之后如果没人被唤起,原因有三种,不要混为一谈:
+
+- 根本没配 `scripts`——手工模式,预期如此。
+- 下个节点的 assignee 声明时没绑 `--ref`——设计如此,这个节点本来就该由人接手,rivo 不会调用脚本。
+- 下个节点的 assignee 压根没声明——是错误,rivo 会打印 `console.warn` 点名是谁、在哪个节点。
+
+不管是哪一种,**把下一步是谁告诉用户**,由人去开对应的会话或去声明缺失的 agent。
 
 ## 流程设计原则
 
