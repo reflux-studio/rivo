@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { addAgent, listFlows, newFlow, removeAgent } from "./config-cmd.js";
+import { addAgent, initWorkspace, listFlows, newFlow, removeAgent } from "./config-cmd.js";
 import { doctor } from "./doctor.js";
 import { loadFlow, nodeById } from "./flow.js";
 import { closeIssue, newIssue, recallIssue, recordVerdict, showIssue } from "./issue.js";
@@ -14,11 +14,28 @@ function ws(): string {
   return findWorkspace(process.cwd());
 }
 
+/** For commands that read global settings and work fine outside a project. */
+function optionalWs(): string | null {
+  try {
+    return findWorkspace(process.cwd());
+  } catch {
+    return null;
+  }
+}
+
 function who(opt?: string): string {
   const name = opt ?? process.env.RIVO_AGENT;
   if (!name) throw new Error("需要 --as <name> 指定身份,或设置 RIVO_AGENT 环境变量");
   return name;
 }
+
+program
+  .command("init")
+  .description("在当前目录初始化 .rivo 工作区")
+  .action(() => {
+    const { rivoDir, created } = initWorkspace(process.cwd());
+    console.log(created ? `已初始化 ${rivoDir}` : `${rivoDir} 已存在,无需重复初始化`);
+  });
 
 const issue = program.command("issue").description("交付");
 
@@ -134,7 +151,7 @@ agentCmd
   .option("--ref <id>", "平台标识;不给表示由人承担")
   .option("--local", "写进项目而不是 ~/.rivo/settings.json")
   .action((name: string, opts: { ref?: string; local?: boolean }) => {
-    addAgent(ws(), name, opts.ref, !!opts.local);
+    addAgent(opts.local ? ws() : null, name, opts.ref, !!opts.local);
     console.log(`已声明 ${name}${opts.ref ? ` → ${opts.ref}` : "(未绑定,由人承担)"}`);
   });
 
@@ -142,7 +159,7 @@ agentCmd
   .command("list")
   .option("--json", "输出 JSON")
   .action((opts: { json?: boolean }) => {
-    const { agents } = loadSettings(ws());
+    const { agents } = loadSettings(optionalWs());
     if (opts.json) {
       console.log(JSON.stringify(agents, null, 2));
       return;
@@ -156,7 +173,7 @@ agentCmd
   .command("remove <name>")
   .option("--local", "从项目设置中移除")
   .action((name: string, opts: { local?: boolean }) => {
-    removeAgent(ws(), name, !!opts.local);
+    removeAgent(opts.local ? ws() : null, name, !!opts.local);
     console.log(`已移除 ${name}`);
   });
 

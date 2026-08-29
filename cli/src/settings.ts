@@ -25,9 +25,9 @@ export function mergeSettings(global: Settings, local: Settings): Settings {
   };
 }
 
-export function loadSettings(workspaceDir: string): Settings {
-  return mergeSettings(
-    readSettingsFile(globalSettingsPath()),
-    readSettingsFile(paths(workspaceDir).localSettings),
-  );
+/** `null` workspace = global settings only, for commands that run outside a project. */
+export function loadSettings(workspaceDir: string | null): Settings {
+  const global = readSettingsFile(globalSettingsPath());
+  if (!workspaceDir) return global;
+  return mergeSettings(global, readSettingsFile(paths(workspaceDir).localSettings));
 }

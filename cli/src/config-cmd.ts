@@ -1,10 +1,26 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { globalSettingsPath, paths } from "./paths.js";
+import { globalSettingsPath, isHomeDir, paths } from "./paths.js";
 import { readSettingsFile } from "./settings.js";
 
-function targetPath(ws: string, local: boolean): string {
-  return local ? paths(ws).localSettings : globalSettingsPath();
+function targetPath(ws: string | null, local: boolean): string {
+  if (!local) return globalSettingsPath();
+  if (!ws) throw new Error("--local 需要在已初始化的项目里执行,先跑 rivo init");
+  return paths(ws).localSettings;
+}
+
+/**
+ * Explicit initialisation, like `git init`. Without it every command failed in
+ * a fresh repo, including the one the missing-workspace error used to name.
+ */
+export function initWorkspace(dir: string): { rivoDir: string; created: boolean } {
+  const { rivoDir, flowsDir } = paths(dir);
+  if (isHomeDir(dir)) {
+    throw new Error("不能在用户主目录初始化工作区:~/.rivo 是全局设置目录,交付日志必须待在仓库里");
+  }
+  const created = !existsSync(rivoDir);
+  mkdirSync(flowsDir, { recursive: true });
+  return { rivoDir, created };
 }
 
 function writeRaw(path: string, data: unknown) {
@@ -22,17 +38,17 @@ function ensureGitignore(ws: string) {
   writeFileSync(file, existing ? `${existing.replace(/\n*$/, "\n")}${line}\n` : `${line}\n`);
 }
 
-export function addAgent(ws: string, name: string, ref: string | undefined, local: boolean): void {
+export function addAgent(ws: string | null, name: string, ref: string | undefined, local: boolean): void {
   const path = targetPath(ws, local);
   const settings = readSettingsFile(path);
   settings.agents[name] = ref ? { ref } : {};
   // Gitignore the local settings file before it exists, so there is no window
   // where settings.local.json is on disk but untracked-by-git status isn't guaranteed yet.
-  if (local) ensureGitignore(ws);
+  if (local && ws) ensureGitignore(ws);
   writeRaw(path, settings);
 }
 
-export function removeAgent(ws: string, name: string, local: boolean): void {
+export function removeAgent(ws: string | null, name: string, local: boolean): void {
   const path = targetPath(ws, local);
   const settings = readSettingsFile(path);
   if (!(name in settings.agents)) throw new Error(`${path} 中没有 agent ${name}`);
