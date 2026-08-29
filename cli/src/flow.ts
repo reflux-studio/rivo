@@ -29,25 +29,30 @@ export function loadFlow(workspaceDir: string, name: string): Flow {
   return parseFlow(readFileSync(file, "utf8"), name);
 }
 
+/** Flow has no name field, so callers that know it pass it in for the message. */
+function noSuchNode(id: string, flowName?: string): string {
+  return flowName ? `流程 ${flowName} 中没有节点 ${id}` : `流程中没有节点 ${id}`;
+}
+
 export function nodeIndex(flow: Flow, id: string): number {
   return flow.nodes.findIndex((n) => n.id === id);
 }
 
-export function nodeById(flow: Flow, id: string): FlowNode {
+export function nodeById(flow: Flow, id: string, flowName?: string): FlowNode {
   const node = flow.nodes[nodeIndex(flow, id)];
-  if (!node) throw new Error(`流程中没有节点 ${id}`);
+  if (!node) throw new Error(noSuchNode(id, flowName));
   return node;
 }
 
-export function nextNode(flow: Flow, id: string): string | null {
+export function nextNode(flow: Flow, id: string, flowName?: string): string | null {
   const i = nodeIndex(flow, id);
-  if (i < 0) throw new Error(`流程中没有节点 ${id}`);
+  if (i < 0) throw new Error(noSuchNode(id, flowName));
   return flow.nodes[i + 1]?.id ?? null;
 }
 
-export function prevNode(flow: Flow, id: string): string | null {
+export function prevNode(flow: Flow, id: string, flowName?: string): string | null {
   const i = nodeIndex(flow, id);
-  if (i < 0) throw new Error(`流程中没有节点 ${id}`);
+  if (i < 0) throw new Error(noSuchNode(id, flowName));
   return i === 0 ? null : flow.nodes[i - 1].id;
 }
 

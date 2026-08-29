@@ -383,14 +383,15 @@ else                               → transition(rejectTarget)
 
 **加载 = 两份浅合并,项目覆盖全局**(`agents` 与 `scripts` 各自合并),和 git config、`.npmrc`、VS Code settings 是同一个模式,不需要额外解释。加载逻辑本身只有几行。
 
-```jsonc
-// ~/.rivo/settings.json
+`~/.rivo/settings.json` 长这样(`readSettingsFile` 走 `JSON.parse`,**不支持注释**):
+
+```json
 {
   "agents": {
     "product":  { "ref": "a1b2…" },
     "designer": { "ref": "c3d4…" },
     "engineer": { "ref": "e5f6…" },
-    "qa":       {}                    // 已声明未绑定 → 人类承担
+    "qa":       {}
   },
   "scripts": {
     "transition": "multica issue assign {issue_slug} --to-id {agent_ref}",
@@ -400,6 +401,8 @@ else                               → transition(rejectTarget)
   }
 }
 ```
+
+`qa` 已声明但没绑 `ref` → 这个节点由人承担。
 
 **为什么默认全局而不是每项目一份:** 两类配置的自然作用域不同——`scripts` 模板取决于你用哪个平台的 CLI,同一台机器上对所有项目都一样;`agents` 的 `ref` 是工作区级的,多数人只有一个工作区。所以绝大多数情况下**只需要那一个全局文件**。
 

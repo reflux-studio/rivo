@@ -48,6 +48,32 @@ rivo issue reject  <slug> --as <你的角色名> --reason "为什么退回" [--t
 
 **rivo 无法中止已经在跑的任务。** recall 之后对方可能还在执行,rivo 只会触发通知脚本。要真正终止,取决于你的平台脚本怎么写。
 
+## 收尾:close
+
+`rivo issue show` 打出 `全部节点已通过,可以 rivo issue close` 时,交付走完了最后一个节点,但**还没结束**——rivo 不会自己关闭交付,关闭是显式动作。
+
+```bash
+rivo issue close <slug> --reason "为什么结束" [--as <who>]
+```
+
+什么时候用它:
+
+- 最后一个节点通过、产物已经落地 → 正常收尾。
+- 需求撤了、方案作废 → 也是 close,rivo 没有单独的"取消"。
+- 首节点被打回时报错会点名它:第一个节点没有上游,想终止只能 close。
+
+**close 不可逆。** log 是追加式的,没有 reopen;关闭之后不能再表态,也不能再 recall。所以正常收尾之前,先确认没有节点还在等人。
+
+## 看原始记录:log
+
+```bash
+rivo issue log <slug>
+```
+
+一行一个事件,按时间顺序。`show` 给的是折叠之后的结论,`log` 给的是过程——排查"为什么它停在这个节点""谁在什么时候表了什么态""这一步是 reject 还是 recall 带回来的"时看它。
+
+`show` 里出现 `有 N 条陈旧事件被忽略` 或 `有 N 行 log 无法解析` 时,先看 `log`,再跑 `rivo doctor`。
+
 ## 没有人被唤起时
 
 `rivo issue approve` 之后如果没人被唤起,原因有三种,不要混为一谈:

@@ -210,7 +210,7 @@ export function showIssue(ws: string, slug: string): IssueView {
     if (nodeIndex(flow, state.node) < 0) {
       flowError = `流程 ${state.flow} 中没有节点 ${state.node}`;
     } else {
-      node = nodeById(flow, state.node);
+      node = nodeById(flow, state.node, state.flow);
     }
   }
   const acted = new Set(state.verdicts.map((v) => v.by));
@@ -248,7 +248,7 @@ export function recordVerdict(
   if (!state.node) throw new Error(`交付 ${slug} 没有当前节点`);
   const flow = lazyFlow(state);
 
-  const node = nodeById(flow, state.node);
+  const node = nodeById(flow, state.node, state.flow);
   if (isCompleted(flow, node, state.verdicts)) {
     throw new Error(`交付 ${slug} 已走完全部节点,请 rivo issue close`);
   }
@@ -256,7 +256,7 @@ export function recordVerdict(
     throw new Error(`${by} 不是节点 ${node.id} 的 assignee(${node.assignees.join(", ")})`);
   }
   if (to) {
-    nodeById(flow, to); // throws if the target node does not exist
+    nodeById(flow, to, state.flow); // throws if the target node does not exist
     if (nodeIndex(flow, to) >= nodeIndex(flow, node.id)) {
       throw new Error(`打回目标必须在当前节点之前,${to} 不在 ${node.id} 之前`);
     }
@@ -307,7 +307,7 @@ export function recallIssue(
   if (!state.node) throw new Error(`交付 ${slug} 没有当前节点`);
   const flow = lazyFlow(state);
 
-  nodeById(flow, to); // throws if the target node does not exist
+  nodeById(flow, to, state.flow); // throws if the target node does not exist
   if (nodeIndex(flow, to) >= nodeIndex(flow, state.node)) {
     throw new Error(`recall 只能回退到更早的节点,${to} 不在 ${state.node} 之前`);
   }
@@ -325,6 +325,17 @@ export function closeIssue(ws: string, slug: string, by: string, reason?: string
   if (state.closed) throw new Error(`交付 ${slug} 已关闭`);
   warnMalformed(logPath, malformed);
   appendEvent(logPath, { t: "close", ts: nowIso(), by, ...(reason ? { reason } : {}) });
-  const result = runScript(settings, "close", vars(ws, slug, state, { reason: reason ?? "" }));
+  // Nobody is being woken here, so {agent} is whoever closed it — the only
+  // agent this event knows about — and {node} is where the delivery stopped.
+  const result = runScript(
+    settings,
+    "close",
+    vars(ws, slug, state, {
+      node: state.node ?? "",
+      agent: by,
+      agent_ref: settings.agents[by]?.ref ?? "",
+      reason: reason ?? "",
+    }),
+  );
   if (result.error) console.warn(`[rivo] scripts.close 执行失败:${result.error}`);
 }

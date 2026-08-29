@@ -85,4 +85,8 @@ describe("SettingsSchema", () => {
   it("拒绝拼错的 script 键", () => {
     expect(() => SettingsSchema.parse({ scripts: { transitoin: "x" } })).toThrow();
   });
+
+  it("顶层拼错的 key 也报错,不静默丢掉", () => {
+    expect(() => SettingsSchema.parse({ agent: { qa: {} } })).toThrow();
+  });
 });

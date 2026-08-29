@@ -53,4 +53,8 @@ describe("unknownVars", () => {
   it("全部合法时返回空数组", () => {
     expect(unknownVars("mycli {agent_ref} {node}")).toEqual([]);
   });
+
+  it("大小写写错的变量也算未知,不被当成普通文本放过", () => {
+    expect(unknownVars("mycli {agentRef}")).toEqual(["agentRef"]);
+  });
 });

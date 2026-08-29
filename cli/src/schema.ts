@@ -70,7 +70,7 @@ export const SettingsSchema = z.object({
     })
     .strict()
     .default({}),
-});
+}).strict();
 
 export type FlowNode = z.infer<typeof NodeSchema>;
 export type Flow = z.infer<typeof FlowSchema>;

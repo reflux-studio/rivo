@@ -8,7 +8,9 @@ import {
 
 export type Vars = Partial<Record<TemplateVar, string>>;
 
-const VAR_PATTERN = /\{([a-z_]+)\}/g;
+// Matches uppercase too, so a typo like {agentRef} is caught by doctor
+// instead of silently rendering as an empty string.
+const VAR_PATTERN = /\{([A-Za-z_]+)\}/g;
 const KNOWN = new Set<string>(TEMPLATE_VARS);
 
 /**
