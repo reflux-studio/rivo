@@ -94,6 +94,30 @@ nodes:
     });
   });
 
+  it("非 assignee 的表态不凑数:表态没齐仍然等待", () => {
+    // review 的 assignees 中途被改过,ghost 是改之前留下的一票
+    expect(decide(flow, review, [v("designer", "approve"), v("ghost", "approve")])).toEqual({
+      kind: "waiting",
+    });
+  });
+
+  it("非 assignee 的 approve 不参与阈值", () => {
+    const f = parseFlow(
+      `
+nodes:
+  - id: a
+    assignees: [x]
+  - id: b
+    assignees: [p, q]
+    approve: any
+`,
+      "d",
+    );
+    expect(
+      decide(f, nodeById(f, "b"), [v("p", "reject"), v("q", "reject"), v("ghost", "approve")]),
+    ).toEqual({ kind: "reject", to: "a" });
+  });
+
   it("第一个节点打回且没给 to 时抛错", () => {
     expect(() => decide(flow, nodeById(flow, "plan"), [v("product", "reject")])).toThrow(
       /没有上游/,
@@ -146,6 +170,26 @@ describe("foldLog", () => {
     const s = foldLog(events);
     expect(s.stale).toBe(1);
     expect(s.verdicts).toEqual([]);
+  });
+
+  it("重复的 transition 计为 stale,不重复推进 path", () => {
+    const events: Event[] = [
+      { t: "transition", ts, node: "plan", flow: "demo" },
+      { t: "transition", ts, node: "review", cause: "approve" },
+      { t: "transition", ts, node: "review", cause: "approve" },
+    ];
+    const s = foldLog(events);
+    expect(s.path).toEqual(["plan", "review"]);
+    expect(s.stale).toBe(1);
+  });
+
+  it("传入 flow 时,非当前 assignee 的表态计为 stale", () => {
+    const events: Event[] = [
+      { t: "transition", ts, node: "review", flow: "demo" },
+      { t: "approve", ts, node: "review", by: "ghost", reason: "改 assignees 之前留下的" },
+    ];
+    expect(foldLog(events, flow).stale).toBe(1);
+    expect(foldLog(events).stale).toBe(0);
   });
 
   it("close 之后 closed 为真", () => {

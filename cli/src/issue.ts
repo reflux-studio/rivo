@@ -2,7 +2,7 @@ import { existsSync, mkdirSync } from "node:fs";
 import { checkFlowAgents, loadFlow, nodeById, nodeIndex, prevNode } from "./flow.js";
 import { appendEvent, nowIso, readLog } from "./log.js";
 import { issuePaths } from "./paths.js";
-import type { Flow, FlowNode, Settings, Verdict } from "./schema.js";
+import { type Flow, type FlowNode, type Settings, SettingsSchema, type Verdict } from "./schema.js";
 import { runScript, type Vars } from "./scripts.js";
 import { loadSettings } from "./settings.js";
 import { decide, foldLog, type State } from "./state.js";
@@ -19,6 +19,10 @@ export type IssueView = {
   verdicts: Verdict[];
   path: string[];
   stale: number;
+  /** Unparseable log lines: the folded state below is built without them. */
+  malformed: number;
+  /** Set when the flow could not be loaded; everything flow-derived is degraded. */
+  flowError?: string;
   issueDir: string;
   instruction?: string;
 };
@@ -40,11 +44,44 @@ function assertKnownAgents(flow: Flow, flowName: string, settings: Settings): vo
 function load(ws: string, slug: string) {
   const { issueDir, logPath } = issuePaths(ws, slug);
   if (!existsSync(logPath)) throw new Error(`交付 ${slug} 不存在`);
-  const { events } = readLog(logPath);
-  const state = foldLog(events);
-  const flow = loadFlow(ws, state.flow);
-  const settings = loadSettings(ws);
-  return { issueDir, logPath, state, flow, settings };
+  const { events, malformed } = readLog(logPath);
+  // The flow is lazy: closeIssue never needs it, and a deleted or renamed
+  // flow file must not make an in-flight delivery un-closeable.
+  return {
+    issueDir,
+    logPath,
+    events,
+    malformed,
+    state: foldLog(events),
+    settings: tolerantSettings(ws),
+    flow: (state: State) => loadFlow(ws, state.flow),
+  };
+}
+
+/**
+ * A corrupt settings file must not brick a delivery either — same fallback
+ * doctor already uses. Empty settings mean no scripts fire, which is a
+ * degraded notification, not a lost transition.
+ */
+function tolerantSettings(ws: string): Settings {
+  try {
+    return loadSettings(ws);
+  } catch (e) {
+    console.warn(
+      `[rivo] settings 读取失败:${e instanceof Error ? e.message : String(e)}\n` +
+        `       已按空配置继续,通知脚本不会执行;修好之后跑 rivo doctor 复查。`,
+    );
+    return SettingsSchema.parse({});
+  }
+}
+
+/** The log lost lines, so the folded state may be wrong. Say so before appending to it. */
+function warnMalformed(logPath: string, malformed: number): void {
+  if (!malformed) return;
+  console.warn(
+    `[rivo] ${logPath} 有 ${malformed} 行无法解析,当前状态可能不完整;\n` +
+      `       这一步会基于它继续追加,先跑 rivo doctor 确认。`,
+  );
 }
 
 function vars(ws: string, slug: string, state: State, extra: Vars): Vars {
@@ -64,9 +101,8 @@ function vars(ws: string, slug: string, state: State, extra: Vars): Vars {
  * flow, so it cannot live in foldLog. Never throws: `show` is the diagnostic
  * command and must stay readable even against a damaged log.
  */
-function isCompleted(flow: Flow, node: FlowNode | null, verdicts: Verdict[]): boolean {
-  if (!node) return false;
-  if (verdicts.length < node.assignees.length) return false;
+function isCompleted(flow: Flow | null, node: FlowNode | null, verdicts: Verdict[]): boolean {
+  if (!flow || !node) return false;
   try {
     const d = decide(flow, node, verdicts);
     return d.kind === "advance" && d.to === null;
@@ -146,13 +182,30 @@ export function newIssue(ws: string, slug: string, flowName: string): void {
 }
 
 export function showIssue(ws: string, slug: string): IssueView {
-  const { issueDir, state, flow } = load(ws, slug);
-  const node = state.node ? nodeById(flow, state.node) : null;
+  const { issueDir, events, malformed, state: folded, flow: lazyFlow } = load(ws, slug);
+  let flow: Flow | null = null;
+  let flowError: string | undefined;
+  try {
+    flow = lazyFlow(folded);
+  } catch (e) {
+    flowError = e instanceof Error ? e.message : String(e);
+  }
+  const state = foldLog(events, flow ?? undefined);
+  let node: FlowNode | null = null;
+  if (flow && state.node) {
+    if (nodeIndex(flow, state.node) < 0) {
+      flowError = `流程 ${state.flow} 中没有节点 ${state.node}`;
+    } else {
+      node = nodeById(flow, state.node);
+    }
+  }
   const acted = new Set(state.verdicts.map((v) => v.by));
   return {
     slug,
     flow: state.flow,
-    mode: flow.mode,
+    // Unknown without the flow. manual is the schema default and the safe
+    // answer: it asks for a human before anything advances.
+    mode: flow?.mode ?? "manual",
     node: state.node,
     closed: state.closed,
     completed: isCompleted(flow, node, state.verdicts),
@@ -161,6 +214,8 @@ export function showIssue(ws: string, slug: string): IssueView {
     verdicts: state.verdicts,
     path: state.path,
     stale: state.stale,
+    malformed,
+    ...(flowError ? { flowError } : {}),
     issueDir,
     instruction: node?.instruction,
   };
@@ -174,9 +229,10 @@ export function recordVerdict(
   reason: string,
   to?: string,
 ): void {
-  const { logPath, state, flow, settings } = load(ws, slug);
+  const { logPath, state, malformed, settings, flow: lazyFlow } = load(ws, slug);
   if (state.closed) throw new Error(`交付 ${slug} 已关闭`);
   if (!state.node) throw new Error(`交付 ${slug} 没有当前节点`);
+  const flow = lazyFlow(state);
 
   const node = nodeById(flow, state.node);
   if (isCompleted(flow, node, state.verdicts)) {
@@ -198,6 +254,7 @@ export function recordVerdict(
   if (verdict === "reject" && prevNode(flow, node.id) === null) {
     throw new Error(`节点 ${node.id} 没有上游,不能打回;要终止这次交付请用 rivo issue close`);
   }
+  warnMalformed(logPath, malformed);
 
   appendEvent(logPath, {
     ts: nowIso(),
@@ -229,14 +286,16 @@ export function recallIssue(
   to: string,
   reason: string,
 ): void {
-  const { logPath, state, flow, settings } = load(ws, slug);
+  const { logPath, state, malformed, settings, flow: lazyFlow } = load(ws, slug);
   if (state.closed) throw new Error(`交付 ${slug} 已关闭`);
   if (!state.node) throw new Error(`交付 ${slug} 没有当前节点`);
+  const flow = lazyFlow(state);
 
   nodeById(flow, to); // throws if the target node does not exist
   if (nodeIndex(flow, to) >= nodeIndex(flow, state.node)) {
     throw new Error(`recall 只能回退到更早的节点,${to} 不在 ${state.node} 之前`);
   }
+  warnMalformed(logPath, malformed);
 
   appendEvent(logPath, { t: "recall", ts: nowIso(), from: state.node, to, by, reason });
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: to, cause: "recall" });
@@ -244,8 +303,11 @@ export function recallIssue(
 }
 
 export function closeIssue(ws: string, slug: string, by: string, reason?: string): void {
-  const { logPath, state, settings } = load(ws, slug);
+  // Deliberately never touches the flow: close is the escape hatch, and it
+  // has to work when the flow file is gone or the settings file is corrupt.
+  const { logPath, state, malformed, settings } = load(ws, slug);
   if (state.closed) throw new Error(`交付 ${slug} 已关闭`);
+  warnMalformed(logPath, malformed);
   appendEvent(logPath, { t: "close", ts: nowIso(), by, ...(reason ? { reason } : {}) });
   const result = runScript(settings, "close", vars(ws, slug, state, { reason: reason ?? "" }));
   if (result.error) console.warn(`[rivo] scripts.close 执行失败:${result.error}`);

@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -82,5 +82,58 @@ describe("工作区不会落到主目录", () => {
     expect(r.code).toBe(1);
     expect(r.err).toMatch(/rivo init/);
     expect(existsSync(join(home, ".rivo", "issues"))).toBe(false);
+  });
+});
+
+/** A workspace with one delivery in flight, built entirely through the CLI. */
+function bootstrapped() {
+  const { home, proj } = fixture();
+  run(["init"], proj, home);
+  run(["agent", "add", "product"], proj, home);
+  writeFileSync(
+    join(proj, ".rivo", "flows", "demo.yaml"),
+    "nodes:\n  - id: plan\n    assignees: [product]\n  - id: ship\n    assignees: [product]\n",
+  );
+  const created = run(["issue", "new", "fix-login", "--flow", "demo"], proj, home);
+  expect(created.code).toBe(0);
+  return { home, proj };
+}
+
+// No mocks on purpose: mocking loadSettings is what let a corrupt settings
+// file brick `show` and `close` through nine reviews.
+describe("配置漂移之后 show 和 close 仍然可用", () => {
+  it("settings.json 损坏", () => {
+    const { home, proj } = bootstrapped();
+    writeFileSync(join(home, ".rivo", "settings.json"), "{ 这不是 JSON");
+
+    const show = run(["issue", "show", "fix-login"], proj, home);
+    expect(show.code).toBe(0);
+    expect(show.out).toMatch(/plan/);
+
+    expect(run(["issue", "close", "fix-login", "--reason", "收尾"], proj, home).code).toBe(0);
+  });
+
+  it("flow 文件被删掉", () => {
+    const { home, proj } = bootstrapped();
+    rmSync(join(proj, ".rivo", "flows", "demo.yaml"));
+
+    const show = run(["issue", "show", "fix-login"], proj, home);
+    expect(show.code).toBe(0);
+    expect(show.out).toMatch(/流程加载失败/);
+
+    expect(run(["issue", "close", "fix-login", "--reason", "收尾"], proj, home).code).toBe(0);
+  });
+
+  it("flow 里的节点 id 对不上时 show 降级但不报错", () => {
+    const { home, proj } = bootstrapped();
+    writeFileSync(
+      join(proj, ".rivo", "flows", "demo.yaml"),
+      "nodes:\n  - id: renamed\n    assignees: [product]\n",
+    );
+
+    const show = run(["issue", "show", "fix-login"], proj, home);
+    expect(show.code).toBe(0);
+    expect(show.out).toMatch(/没有节点 plan/);
+    expect(run(["issue", "close", "fix-login", "--reason", "收尾"], proj, home).code).toBe(0);
   });
 });

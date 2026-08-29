@@ -61,6 +61,8 @@ issue
     if (view.pending.length) console.log(`待表态 ${view.pending.join(", ")}`);
     if (view.completed) console.log("全部节点已通过,可以 rivo issue close");
     if (view.stale) console.log(`注意   有 ${view.stale} 条陈旧事件被忽略`);
+    if (view.malformed) console.log(`注意   有 ${view.malformed} 行 log 无法解析,状态可能不完整`);
+    if (view.flowError) console.log(`注意   流程加载失败,节点信息不可用:${view.flowError}`);
     console.log(`路径   ${view.path.join(" → ")}`);
     console.log(`目录   ${view.issueDir}`);
     if (view.instruction) console.log(`\n节点说明\n${view.instruction}`);

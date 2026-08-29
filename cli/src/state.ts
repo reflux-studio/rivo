@@ -24,7 +24,12 @@ export function threshold(approve: FlowNode["approve"], total: number): number {
   return Math.min(approve, total);
 }
 
-export function foldLog(events: Event[]): State {
+/**
+ * `flow` is optional because the flow name only becomes known by folding, and
+ * a missing flow file must not stop the fold. Pass it when you have it: it is
+ * what turns a verdict from a former assignee into a stale one.
+ */
+export function foldLog(events: Event[], flow?: Flow): State {
   const state: State = {
     flow: "",
     node: null,
@@ -39,6 +44,13 @@ export function foldLog(events: Event[]): State {
   for (const e of events) {
     switch (e.t) {
       case "transition":
+        // Two writers can both commit the same transition (the TOCTOU window
+        // in §9). Applying it twice duplicates the path and re-fires the
+        // notification script; no legal transition ever targets its own node.
+        if (e.node === state.node) {
+          state.stale += 1;
+          break;
+        }
         if (e.flow) state.flow = e.flow;
         state.node = e.node;
         state.path.push(e.node);
@@ -69,19 +81,29 @@ export function foldLog(events: Event[]): State {
   }
 
   state.verdicts = [...latest.values()];
+  // Editing a node's assignees mid-flight (spec §9) leaves verdicts behind
+  // from people who no longer count. `decide` ignores them; surface them.
+  const node = flow && state.node ? flow.nodes.find((n) => n.id === state.node) : undefined;
+  if (node) {
+    state.stale += state.verdicts.filter((v) => !node.assignees.includes(v.by)).length;
+  }
   return state;
 }
 
 export function decide(flow: Flow, node: FlowNode, verdicts: Verdict[]): Decision {
-  if (verdicts.length < node.assignees.length) return { kind: "waiting" };
+  // Verdicts are keyed by author, not by membership: foldLog knows nothing
+  // about assignees. Counting raw verdicts lets a stale one from a former
+  // assignee pad the tally, so the node advances before everyone has spoken.
+  const relevant = verdicts.filter((v) => node.assignees.includes(v.by));
+  if (relevant.length < node.assignees.length) return { kind: "waiting" };
 
-  const approved = verdicts.filter((v) => v.verdict === "approve").length;
+  const approved = relevant.filter((v) => v.verdict === "approve").length;
   if (approved >= threshold(node.approve, node.assignees.length)) {
     return { kind: "advance", to: nextNode(flow, node.id) };
   }
 
   // Most upstream target among the rejects; falls back to the previous node.
-  const targets = verdicts
+  const targets = relevant
     .filter((v) => v.verdict === "reject" && v.to)
     .map((v) => v.to as string);
   if (targets.length > 0) {
