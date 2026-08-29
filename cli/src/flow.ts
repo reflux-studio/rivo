@@ -5,7 +5,13 @@ import { type Flow, type FlowNode, FlowSchema, type Settings } from "./schema.js
 import { paths } from "./paths.js";
 
 export function parseFlow(text: string, name: string): Flow {
-  const parsed = FlowSchema.safeParse(parseYaml(text));
+  let raw: unknown;
+  try {
+    raw = parseYaml(text);
+  } catch (e) {
+    throw new Error(`流程 ${name} 不是合法的 YAML:${e instanceof Error ? e.message : String(e)}`);
+  }
+  const parsed = FlowSchema.safeParse(raw);
   if (!parsed.success) {
     const detail = parsed.error.issues
       .map((i) => `  ${i.path.join(".") || "(root)"}: ${i.message}`)
@@ -18,7 +24,7 @@ export function parseFlow(text: string, name: string): Flow {
 export function loadFlow(workspaceDir: string, name: string): Flow {
   const file = join(paths(workspaceDir).flowsDir, `${name}.yaml`);
   if (!existsSync(file)) {
-    throw new Error(`流程 ${name} 不存在:${file}`);
+    throw new Error(`流程 ${name} 不存在: ${file}`);
   }
   return parseFlow(readFileSync(file, "utf8"), name);
 }

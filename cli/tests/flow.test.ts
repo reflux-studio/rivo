@@ -21,8 +21,12 @@ describe("parseFlow", () => {
     expect(flow.nodes[0].approve).toBe("all");
   });
 
-  it("非法 yaml 报错时带上流程名", () => {
+  it("schema 不合法时报错带上流程名", () => {
     expect(() => parseFlow("nodes: []", "demo")).toThrow(/demo/);
+  });
+
+  it("YAML 语法错误时报错带上流程名", () => {
+    expect(() => parseFlow("nodes:\n  - id: a\n   bad: indent\n", "demo")).toThrow(/demo/);
   });
 });
 
