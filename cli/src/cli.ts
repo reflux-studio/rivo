@@ -1,7 +1,11 @@
 import { Command } from "commander";
+import { addAgent, listFlows, newFlow, removeAgent } from "./config-cmd.js";
+import { doctor } from "./doctor.js";
+import { loadFlow, nodeById } from "./flow.js";
 import { closeIssue, newIssue, recallIssue, recordVerdict, showIssue } from "./issue.js";
 import { readLog } from "./log.js";
 import { findWorkspace, issuePaths } from "./paths.js";
+import { loadSettings } from "./settings.js";
 
 const program = new Command();
 program.name("rivo").description("无状态的 AI 交付流程编排器").version("0.1.0");
@@ -80,6 +84,99 @@ issue.command("log <slug>").action((slug: string) => {
   const { logPath } = issuePaths(ws(), slug);
   for (const e of readLog(logPath).events) console.log(JSON.stringify(e));
 });
+
+const flowCmd = program.command("flow").description("流程定义");
+
+flowCmd
+  .command("show <name>")
+  .option("--node <id>", "只看某个节点")
+  .option("--json", "输出 JSON")
+  .action((name: string, opts: { node?: string; json?: boolean }) => {
+    const flow = loadFlow(ws(), name);
+    const payload = opts.node ? nodeById(flow, opts.node) : flow;
+    if (opts.json) {
+      console.log(JSON.stringify(payload, null, 2));
+      return;
+    }
+    if (opts.node) {
+      const node = payload as ReturnType<typeof nodeById>;
+      console.log(`节点 ${node.id}`);
+      console.log(`assignees ${node.assignees.join(", ")}`);
+      console.log(`approve   ${node.approve}`);
+      if (node.instruction) console.log(`\n${node.instruction}`);
+      return;
+    }
+    for (const node of flow.nodes) {
+      console.log(`${node.id}  [${node.assignees.join(", ")}]  approve=${node.approve}`);
+    }
+  });
+
+flowCmd.command("new <name>").action((name: string) => {
+  console.log(newFlow(ws(), name));
+});
+
+flowCmd
+  .command("list")
+  .option("--json", "输出 JSON")
+  .action((opts: { json?: boolean }) => {
+    const flows = listFlows(ws());
+    if (opts.json) {
+      console.log(JSON.stringify(flows, null, 2));
+      return;
+    }
+    for (const name of flows) console.log(name);
+  });
+
+const agentCmd = program.command("agent").description("参与者");
+
+agentCmd
+  .command("add <name>")
+  .option("--ref <id>", "平台标识;不给表示由人承担")
+  .option("--local", "写进项目而不是 ~/.rivo/settings.json")
+  .action((name: string, opts: { ref?: string; local?: boolean }) => {
+    addAgent(ws(), name, opts.ref, !!opts.local);
+    console.log(`已声明 ${name}${opts.ref ? ` → ${opts.ref}` : "(未绑定,由人承担)"}`);
+  });
+
+agentCmd
+  .command("list")
+  .option("--json", "输出 JSON")
+  .action((opts: { json?: boolean }) => {
+    const { agents } = loadSettings(ws());
+    if (opts.json) {
+      console.log(JSON.stringify(agents, null, 2));
+      return;
+    }
+    for (const [name, a] of Object.entries(agents)) {
+      console.log(`${name}\t${a.ref ?? "(未绑定)"}`);
+    }
+  });
+
+agentCmd
+  .command("remove <name>")
+  .option("--local", "从项目设置中移除")
+  .action((name: string, opts: { local?: boolean }) => {
+    removeAgent(ws(), name, !!opts.local);
+    console.log(`已移除 ${name}`);
+  });
+
+program
+  .command("doctor")
+  .option("--json", "输出 JSON")
+  .action((opts: { json?: boolean }) => {
+    const problems = doctor(ws());
+    if (opts.json) {
+      console.log(JSON.stringify(problems, null, 2));
+      if (problems.length > 0) process.exit(1);
+      return;
+    }
+    if (problems.length === 0) {
+      console.log("一切正常");
+      return;
+    }
+    for (const p of problems) console.log(`${p.where}: ${p.message}`);
+    process.exit(1);
+  });
 
 try {
   program.parse();
