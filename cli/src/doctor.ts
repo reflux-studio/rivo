@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { checkFlowAgents, parseFlow } from "./flow.js";
 import { issuePaths, paths } from "./paths.js";
 import { readLog } from "./log.js";
-import { SCRIPT_EVENTS } from "./schema.js";
+import { SCRIPT_EVENTS, type Settings, SettingsSchema } from "./schema.js";
 import { unknownVars } from "./scripts.js";
 import { loadSettings } from "./settings.js";
 import { foldLog } from "./state.js";
@@ -12,7 +12,17 @@ export type Problem = { where: string; message: string };
 
 export function doctor(ws: string): Problem[] {
   const problems: Problem[] = [];
-  const settings = loadSettings(ws);
+  // A corrupt settings file must not abort the run — doctor is what people
+  // reach for when something is broken, and a bad settings file is exactly
+  // the kind of broken they're running it for. Fall back to empty settings
+  // so every later check still runs.
+  let settings: Settings;
+  try {
+    settings = loadSettings(ws);
+  } catch (e) {
+    problems.push({ where: "settings", message: e instanceof Error ? e.message : String(e) });
+    settings = SettingsSchema.parse({});
+  }
   const { flowsDir, issuesDir } = paths(ws);
 
   if (Object.keys(settings.agents).length === 0) {

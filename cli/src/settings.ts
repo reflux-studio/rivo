@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { type Settings, SettingsSchema } from "./schema.js";
 import { globalSettingsPath, paths } from "./paths.js";
 
-function readOne(path: string): Settings {
+export function readSettingsFile(path: string): Settings {
   if (!existsSync(path)) return SettingsSchema.parse({});
   let raw: unknown;
   try {
@@ -27,7 +27,7 @@ export function mergeSettings(global: Settings, local: Settings): Settings {
 
 export function loadSettings(workspaceDir: string): Settings {
   return mergeSettings(
-    readOne(globalSettingsPath()),
-    readOne(paths(workspaceDir).localSettings),
+    readSettingsFile(globalSettingsPath()),
+    readSettingsFile(paths(workspaceDir).localSettings),
   );
 }

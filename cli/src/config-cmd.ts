@@ -1,15 +1,10 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { SettingsSchema } from "./schema.js";
 import { globalSettingsPath, paths } from "./paths.js";
+import { readSettingsFile } from "./settings.js";
 
 function targetPath(ws: string, local: boolean): string {
   return local ? paths(ws).localSettings : globalSettingsPath();
-}
-
-function readRaw(path: string) {
-  if (!existsSync(path)) return SettingsSchema.parse({});
-  return SettingsSchema.parse(JSON.parse(readFileSync(path, "utf8")));
 }
 
 function writeRaw(path: string, data: unknown) {
@@ -29,15 +24,17 @@ function ensureGitignore(ws: string) {
 
 export function addAgent(ws: string, name: string, ref: string | undefined, local: boolean): void {
   const path = targetPath(ws, local);
-  const settings = readRaw(path);
+  const settings = readSettingsFile(path);
   settings.agents[name] = ref ? { ref } : {};
-  writeRaw(path, settings);
+  // Gitignore the local settings file before it exists, so there is no window
+  // where settings.local.json is on disk but untracked-by-git status isn't guaranteed yet.
   if (local) ensureGitignore(ws);
+  writeRaw(path, settings);
 }
 
 export function removeAgent(ws: string, name: string, local: boolean): void {
   const path = targetPath(ws, local);
-  const settings = readRaw(path);
+  const settings = readSettingsFile(path);
   if (!(name in settings.agents)) throw new Error(`${path} 中没有 agent ${name}`);
   delete settings.agents[name];
   writeRaw(path, settings);
