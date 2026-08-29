@@ -4,7 +4,12 @@ import { globalSettingsPath, paths } from "./paths.js";
 
 function readOne(path: string): Settings {
   if (!existsSync(path)) return SettingsSchema.parse({});
-  const raw = JSON.parse(readFileSync(path, "utf8"));
+  let raw: unknown;
+  try {
+    raw = JSON.parse(readFileSync(path, "utf8"));
+  } catch (e) {
+    throw new Error(`${path} 不是合法的 JSON:${e instanceof Error ? e.message : String(e)}`);
+  }
   const parsed = SettingsSchema.safeParse(raw);
   if (!parsed.success) {
     throw new Error(`${path} 格式错误:\n${parsed.error.issues.map((i) => `  ${i.path.join(".")}: ${i.message}`).join("\n")}`);

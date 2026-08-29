@@ -1,9 +1,10 @@
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
-import { findWorkspace, issuePaths } from "../src/paths.js";
-import { mergeSettings } from "../src/settings.js";
+import { describe, expect, it, vi } from "vitest";
+import { findWorkspace, issuePaths, globalSettingsPath as origGlobalSettingsPath } from "../src/paths.js";
+import { mergeSettings, loadSettings } from "../src/settings.js";
+import * as pathsModule from "../src/paths.js";
 
 function fixture() {
   const root = mkdtempSync(join(tmpdir(), "rivo-"));
@@ -59,5 +60,88 @@ describe("mergeSettings", () => {
     );
     expect(merged.scripts.transition).toBe("l");
     expect(merged.scripts.close).toBe("gc");
+  });
+});
+
+describe("loadSettings with file I/O", () => {
+  it("两个文件都不存在时返回空 settings", () => {
+    const tempGlobalPath = join(mkdtempSync(join(tmpdir(), "global-")), "settings.json");
+    const workspaceDir = mkdtempSync(join(tmpdir(), "ws-"));
+    mkdirSync(join(workspaceDir, ".rivo"), { recursive: true });
+
+    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+
+    const result = loadSettings(workspaceDir);
+    expect(result).toEqual({ agents: {}, scripts: {} });
+
+    vi.restoreAllMocks();
+  });
+
+  it("只有全局文件时使用其值", () => {
+    const tempGlobalPath = join(mkdtempSync(join(tmpdir(), "global-")), "settings.json");
+    const workspaceDir = mkdtempSync(join(tmpdir(), "ws-"));
+    mkdirSync(join(workspaceDir, ".rivo"), { recursive: true });
+
+    writeFileSync(tempGlobalPath, JSON.stringify({
+      agents: { engineer: { ref: "global-eng" } },
+      scripts: { transition: "g-trans" },
+    }));
+
+    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+
+    const result = loadSettings(workspaceDir);
+    expect(result.agents.engineer.ref).toBe("global-eng");
+    expect(result.scripts.transition).toBe("g-trans");
+
+    vi.restoreAllMocks();
+  });
+
+  it("两个文件都存在时项目覆盖全局", () => {
+    const tempGlobalPath = join(mkdtempSync(join(tmpdir(), "global-")), "settings.json");
+    const workspaceDir = mkdtempSync(join(tmpdir(), "ws-"));
+    mkdirSync(join(workspaceDir, ".rivo"), { recursive: true });
+
+    writeFileSync(tempGlobalPath, JSON.stringify({
+      agents: { product: { ref: "p-global" }, engineer: { ref: "e-global" } },
+      scripts: { transition: "g-trans", close: "g-close" },
+    }));
+
+    writeFileSync(join(workspaceDir, ".rivo", "settings.local.json"), JSON.stringify({
+      agents: { engineer: { ref: "e-local" } },
+      scripts: { transition: "l-trans" },
+    }));
+
+    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+
+    const result = loadSettings(workspaceDir);
+    expect(result.agents.engineer.ref).toBe("e-local");
+    expect(result.agents.product.ref).toBe("p-global");
+    expect(result.scripts.transition).toBe("l-trans");
+    expect(result.scripts.close).toBe("g-close");
+
+    vi.restoreAllMocks();
+  });
+
+  it("未知 script key 时抛错并包含文件路径", () => {
+    const tempGlobalPath = join(mkdtempSync(join(tmpdir(), "global-")), "settings.json");
+    const workspaceDir = mkdtempSync(join(tmpdir(), "ws-"));
+    mkdirSync(join(workspaceDir, ".rivo"), { recursive: true });
+
+    writeFileSync(join(workspaceDir, ".rivo", "settings.local.json"), JSON.stringify({
+      agents: {},
+      scripts: { transitoin: "x" },
+    }));
+
+    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+
+    const localSettingsPath = join(workspaceDir, ".rivo", "settings.local.json");
+    expect(() => loadSettings(workspaceDir)).toThrow();
+    try {
+      loadSettings(workspaceDir);
+    } catch (e) {
+      expect((e as Error).message).toContain(localSettingsPath);
+    }
+
+    vi.restoreAllMocks();
   });
 });
