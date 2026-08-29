@@ -112,6 +112,18 @@ function isCompleted(flow: Flow | null, node: FlowNode | null, verdicts: Verdict
 }
 
 /**
+ * Every reason recorded on the node, joined. Spec §2.5: the author gets all
+ * the opinions in one go, so `{reason}` carries all of them rather than
+ * picking one arbitrarily. Approve reasons are the handoff notes.
+ */
+function joinReasons(node: FlowNode, verdicts: Verdict[], kind: "approve" | "reject"): string {
+  return verdicts
+    .filter((v) => v.verdict === kind && node.assignees.includes(v.by))
+    .map((v) => v.reason)
+    .join("; ");
+}
+
+/**
  * Fire one script per assignee of the node just entered. Best effort: by the
  * time this runs the transition is already committed to the log, so nothing
  * in here — including the flow/settings the caller already loaded — may
@@ -125,6 +137,7 @@ function notifyEntered(
   state: State,
   nodeId: string,
   cause: "approve" | "reject" | "recall",
+  reason: string,
 ): void {
   try {
     const event = cause === "approve" ? "transition" : cause;
@@ -152,6 +165,7 @@ function notifyEntered(
           node: nodeId,
           agent,
           agent_ref: ref,
+          reason,
         }),
       );
       if (result.error) {
@@ -178,7 +192,7 @@ export function newIssue(ws: string, slug: string, flowName: string): void {
   mkdirSync(issueDir, { recursive: true });
   const first = flow.nodes[0].id;
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: first, flow: flowName });
-  notifyEntered(ws, slug, flow, settings, foldLog(readLog(logPath).events), first, "approve");
+  notifyEntered(ws, slug, flow, settings, foldLog(readLog(logPath).events), first, "approve", "");
 }
 
 export function showIssue(ws: string, slug: string): IssueView {
@@ -271,12 +285,14 @@ export function recordVerdict(
   if (decision.kind === "advance") {
     if (decision.to === null) return; // last node passed; wait for close
     appendEvent(logPath, { t: "transition", ts: nowIso(), node: decision.to, cause: "approve" });
-    notifyEntered(ws, slug, flow, settings, after, decision.to, "approve");
+    const notes = joinReasons(node, after.verdicts, "approve");
+    notifyEntered(ws, slug, flow, settings, after, decision.to, "approve", notes);
     return;
   }
 
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: decision.to, cause: "reject" });
-  notifyEntered(ws, slug, flow, settings, after, decision.to, "reject");
+  const objections = joinReasons(node, after.verdicts, "reject");
+  notifyEntered(ws, slug, flow, settings, after, decision.to, "reject", objections);
 }
 
 export function recallIssue(
@@ -299,7 +315,7 @@ export function recallIssue(
 
   appendEvent(logPath, { t: "recall", ts: nowIso(), from: state.node, to, by, reason });
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: to, cause: "recall" });
-  notifyEntered(ws, slug, flow, settings, foldLog(readLog(logPath).events), to, "recall");
+  notifyEntered(ws, slug, flow, settings, foldLog(readLog(logPath).events), to, "recall", reason);
 }
 
 export function closeIssue(ws: string, slug: string, by: string, reason?: string): void {

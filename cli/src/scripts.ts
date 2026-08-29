@@ -34,6 +34,13 @@ export function unknownVars(template: string): string[] {
 }
 
 /**
+ * Unattended agents drive this, so a hang is worse than a failure: a script
+ * that waits on stdin or never returns would block the CLI forever with the
+ * transition already committed. Bounded and stdin-less instead.
+ */
+const TIMEOUT_MS = 30_000;
+
+/**
  * Notification is best effort: the log is the source of truth, so a failing
  * script never rolls anything back. The transition is already committed by
  * the time this runs; on failure the caller warns and recovery is manual.
@@ -50,9 +57,12 @@ export function runScript(
   if (!cmd) return { ran: false, error: `scripts.${event} 模板为空` };
 
   try {
-    execFileSync(cmd, args, { stdio: "inherit" });
+    execFileSync(cmd, args, { stdio: ["ignore", "inherit", "inherit"], timeout: TIMEOUT_MS });
     return { ran: true };
   } catch (e) {
+    if ((e as NodeJS.ErrnoException)?.code === "ETIMEDOUT") {
+      return { ran: false, error: `scripts.${event} 超过 ${TIMEOUT_MS / 1000} 秒未结束,已终止` };
+    }
     return { ran: false, error: e instanceof Error ? e.message : String(e) };
   }
 }

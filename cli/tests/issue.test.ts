@@ -10,7 +10,7 @@ const { settingsState, runScriptCalls } = vi.hoisted(() => ({
     agents: { product: {}, designer: {}, engineer: {} } as Record<string, { ref?: string }>,
     scripts: {} as Record<string, string>,
   },
-  runScriptCalls: [] as { event: string; agent: string; agentRef: string }[],
+  runScriptCalls: [] as { event: string; vars: Record<string, string | undefined> }[],
 }));
 
 vi.mock("../src/settings.js", async (orig) => {
@@ -32,7 +32,7 @@ vi.mock("../src/scripts.js", async (orig) => {
       event: Parameters<typeof actual.runScript>[1],
       vars: Parameters<typeof actual.runScript>[2],
     ) => {
-      runScriptCalls.push({ event, agent: vars.agent ?? "", agentRef: vars.agent_ref ?? "" });
+      runScriptCalls.push({ event, vars: { ...vars } });
       return actual.runScript(settings, event, vars);
     },
   };
@@ -87,15 +87,15 @@ describe("newIssue", () => {
   it("assignee 声明了 ref 时触发通知脚本", () => {
     settingsState.agents.product = { ref: "product-bot" };
     newIssue(ws, "i", "demo");
-    const call = runScriptCalls.find((c) => c.agent === "product");
+    const call = runScriptCalls.find((c) => c.vars.agent === "product");
     expect(call).toBeDefined();
-    expect(call?.agentRef).toBe("product-bot");
+    expect(call?.vars.agent_ref).toBe("product-bot");
   });
 
   it("assignee 没有 ref 时不触发通知脚本(人工节点),但流转仍然发生", () => {
     // fixture 里 product 没有声明 ref
     newIssue(ws, "i", "demo");
-    const call = runScriptCalls.find((c) => c.agent === "product");
+    const call = runScriptCalls.find((c) => c.vars.agent === "product");
     expect(call).toBeUndefined();
     const view = showIssue(ws, "i");
     expect(view.node).toBe("plan");
@@ -237,6 +237,49 @@ describe("recordVerdict", () => {
     expect(() => recordVerdict(ws, "i", "product", "approve", "ok")).not.toThrow();
     const view = showIssue(ws, "i");
     expect(view.node).toBe("review");
+  });
+});
+
+describe("脚本变量", () => {
+  beforeEach(() => {
+    for (const a of ["product", "designer", "engineer"]) {
+      settingsState.agents[a] = { ref: `${a}-bot` };
+    }
+  });
+
+  it("transition 拿到进入节点的 assignee 和上游的 approve 交接说明", () => {
+    newIssue(ws, "i", "demo");
+    recordVerdict(ws, "i", "product", "approve", "方案在 plan.md");
+    const calls = runScriptCalls.filter((c) => c.event === "transition" && c.vars.node === "review");
+    expect(calls.map((c) => c.vars.agent).sort()).toEqual(["designer", "engineer"]);
+    for (const c of calls) {
+      expect(c.vars.reason).toBe("方案在 plan.md");
+      expect(c.vars.issue_slug).toBe("i");
+      expect(c.vars.flow).toBe("demo");
+      expect(c.vars.agent_ref).toBe(`${c.vars.agent}-bot`);
+      expect(c.vars.workspace_dir).toBe(ws);
+    }
+  });
+
+  it("reject 拿到全部打回理由,用 ; 拼接", () => {
+    newIssue(ws, "i", "demo");
+    recordVerdict(ws, "i", "product", "approve", "ok");
+    recordVerdict(ws, "i", "designer", "reject", "间距不对");
+    recordVerdict(ws, "i", "engineer", "reject", "成本低估");
+    const call = runScriptCalls.find((c) => c.event === "reject");
+    expect(call).toBeDefined();
+    expect(call?.vars.node).toBe("plan");
+    expect(call?.vars.agent).toBe("product");
+    expect(call?.vars.reason).toBe("间距不对; 成本低估");
+  });
+
+  it("recall 拿到 recall 的理由", () => {
+    newIssue(ws, "i", "demo");
+    recordVerdict(ws, "i", "product", "approve", "ok");
+    recallIssue(ws, "i", "human", "plan", "需求变更");
+    const call = runScriptCalls.find((c) => c.event === "recall");
+    expect(call?.vars.reason).toBe("需求变更");
+    expect(call?.vars.node).toBe("plan");
   });
 });
 

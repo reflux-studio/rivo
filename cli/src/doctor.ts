@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { checkFlowAgents, parseFlow } from "./flow.js";
 import { issuePaths, paths } from "./paths.js";
 import { readLog } from "./log.js";
-import { SCRIPT_EVENTS, type Settings, SettingsSchema } from "./schema.js";
+import { type Flow, SCRIPT_EVENTS, type Settings, SettingsSchema } from "./schema.js";
 import { unknownVars } from "./scripts.js";
 import { loadSettings } from "./settings.js";
 import { foldLog } from "./state.js";
@@ -44,11 +44,13 @@ export function doctor(ws: string): Problem[] {
   const flowFiles = existsSync(flowsDir)
     ? readdirSync(flowsDir).filter((f) => f.endsWith(".yaml"))
     : [];
+  const flows = new Map<string, Flow>();
   for (const file of flowFiles) {
     const where = `flows/${file}`;
     const name = file.replace(/\.yaml$/, "");
     try {
       const flow = parseFlow(readFileSync(join(flowsDir, file), "utf8"), name);
+      flows.set(name, flow);
       const missing = checkFlowAgents(flow, settings);
       if (missing.length) {
         problems.push({ where, message: `引用了未声明的 agent:${missing.join(", ")}` });
@@ -62,13 +64,23 @@ export function doctor(ws: string): Problem[] {
   for (const slug of slugs) {
     const { logPath } = issuePaths(ws, slug);
     if (!existsSync(logPath)) continue;
+    const where = `issues/${slug}`;
     const { events, malformed } = readLog(logPath);
-    if (malformed) {
-      problems.push({ where: `issues/${slug}`, message: `${malformed} 行 log 无法解析` });
+    if (malformed) problems.push({ where, message: `${malformed} 行 log 无法解析` });
+
+    // Spec §9: changing a flow takes effect immediately on in-flight issues,
+    // and doctor is what catches the node ids that no longer line up.
+    const base = foldLog(events);
+    const flow = flows.get(base.flow);
+    const state = flow ? foldLog(events, flow) : base;
+    if (state.stale) problems.push({ where, message: `${state.stale} 条陈旧事件被忽略` });
+    if (state.closed) continue;
+    if (!flow) {
+      problems.push({ where, message: `流程 ${state.flow} 不存在或无法解析,交付看不了也推不动` });
+      continue;
     }
-    const state = foldLog(events);
-    if (state.stale) {
-      problems.push({ where: `issues/${slug}`, message: `${state.stale} 条陈旧事件被忽略` });
+    if (state.node && !flow.nodes.some((n) => n.id === state.node)) {
+      problems.push({ where, message: `当前节点 ${state.node} 不在流程 ${state.flow} 中` });
     }
   }
 
