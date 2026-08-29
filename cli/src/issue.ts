@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync } from "node:fs";
-import { loadFlow, nodeById, nodeIndex, prevNode } from "./flow.js";
+import { checkFlowAgents, loadFlow, nodeById, nodeIndex, prevNode } from "./flow.js";
 import { appendEvent, nowIso, readLog } from "./log.js";
 import { issuePaths } from "./paths.js";
 import type { Flow, FlowNode, Settings, Verdict } from "./schema.js";
@@ -23,13 +23,23 @@ export type IssueView = {
   instruction?: string;
 };
 
+/** A flow naming an agent absent from settings is a misconfiguration; fail loudly rather than notifying nobody. */
+function assertKnownAgents(flow: Flow, flowName: string, settings: Settings): void {
+  const missing = checkFlowAgents(flow, settings);
+  if (missing.length) {
+    throw new Error(`流程 ${flowName} 引用了未声明的 agent:${missing.join(", ")};先用 rivo agent add 声明`);
+  }
+}
+
 function load(ws: string, slug: string) {
   const { issueDir, logPath } = issuePaths(ws, slug);
   if (!existsSync(logPath)) throw new Error(`交付 ${slug} 不存在`);
   const { events } = readLog(logPath);
   const state = foldLog(events);
   const flow = loadFlow(ws, state.flow);
-  return { issueDir, logPath, state, flow, settings: loadSettings(ws) };
+  const settings = loadSettings(ws);
+  assertKnownAgents(flow, state.flow, settings);
+  return { issueDir, logPath, state, flow, settings };
 }
 
 function vars(ws: string, slug: string, state: State, extra: Vars): Vars {
@@ -78,13 +88,18 @@ function notifyEntered(
   try {
     const event = cause === "approve" ? "transition" : cause;
     for (const agent of nodeById(flow, nodeId).assignees) {
+      const ref = settings.agents[agent]?.ref;
+      // No ref means a human does this node: nothing to wake, they advance
+      // by hand. Skip silently rather than calling the script with an empty
+      // {agent_ref}.
+      if (!ref) continue;
       const result = runScript(
         settings,
         event,
         vars(ws, slug, state, {
           node: nodeId,
           agent,
-          agent_ref: settings.agents[agent]?.ref ?? "",
+          agent_ref: ref,
         }),
       );
       if (result.error) {
@@ -107,6 +122,7 @@ export function newIssue(ws: string, slug: string, flowName: string): void {
   if (existsSync(logPath)) throw new Error(`交付 ${slug} 已存在`);
   const flow = loadFlow(ws, flowName);
   const settings = loadSettings(ws);
+  assertKnownAgents(flow, flowName, settings);
   mkdirSync(issueDir, { recursive: true });
   const first = flow.nodes[0].id;
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: first, flow: flowName });

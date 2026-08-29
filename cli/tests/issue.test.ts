@@ -3,13 +3,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// A mutable object so individual tests can configure notification scripts
-// without affecting the rest of the suite.
-const { settingsState } = vi.hoisted(() => ({
+// A mutable object so individual tests can configure agent declarations and
+// notification scripts without affecting the rest of the suite.
+const { settingsState, runScriptCalls } = vi.hoisted(() => ({
   settingsState: {
-    agents: { product: {}, designer: {}, engineer: {} },
+    agents: { product: {}, designer: {}, engineer: {} } as Record<string, { ref?: string }>,
     scripts: {} as Record<string, string>,
   },
+  runScriptCalls: [] as { event: string; agent: string; agentRef: string }[],
 }));
 
 vi.mock("../src/settings.js", async (orig) => {
@@ -20,6 +21,23 @@ vi.mock("../src/settings.js", async (orig) => {
   };
 });
 
+// Records who notifyEntered actually called runScript for, then delegates to
+// the real implementation (a no-op when no script template is configured).
+vi.mock("../src/scripts.js", async (orig) => {
+  const actual = await orig<typeof import("../src/scripts.js")>();
+  return {
+    ...actual,
+    runScript: (
+      settings: Parameters<typeof actual.runScript>[0],
+      event: Parameters<typeof actual.runScript>[1],
+      vars: Parameters<typeof actual.runScript>[2],
+    ) => {
+      runScriptCalls.push({ event, agent: vars.agent ?? "", agentRef: vars.agent_ref ?? "" });
+      return actual.runScript(settings, event, vars);
+    },
+  };
+});
+
 const { closeIssue, newIssue, recallIssue, recordVerdict, showIssue } = await import(
   "../src/issue.js"
 );
@@ -27,7 +45,9 @@ const { closeIssue, newIssue, recallIssue, recordVerdict, showIssue } = await im
 let ws: string;
 
 beforeEach(() => {
+  settingsState.agents = { product: {}, designer: {}, engineer: {} };
   settingsState.scripts = {};
+  runScriptCalls.length = 0;
   ws = mkdtempSync(join(tmpdir(), "rivo-issue-"));
   mkdirSync(join(ws, ".rivo", "flows"), { recursive: true });
   writeFileSync(
@@ -62,6 +82,46 @@ describe("newIssue", () => {
 
   it("流程不存在时报错", () => {
     expect(() => newIssue(ws, "x", "nope")).toThrow(/nope/);
+  });
+
+  it("assignee 声明了 ref 时触发通知脚本", () => {
+    settingsState.agents.product = { ref: "product-bot" };
+    newIssue(ws, "i", "demo");
+    const call = runScriptCalls.find((c) => c.agent === "product");
+    expect(call).toBeDefined();
+    expect(call?.agentRef).toBe("product-bot");
+  });
+
+  it("assignee 没有 ref 时不触发通知脚本(人工节点),但流转仍然发生", () => {
+    // fixture 里 product 没有声明 ref
+    newIssue(ws, "i", "demo");
+    const call = runScriptCalls.find((c) => c.agent === "product");
+    expect(call).toBeUndefined();
+    const view = showIssue(ws, "i");
+    expect(view.node).toBe("plan");
+  });
+});
+
+describe("未声明的 agent", () => {
+  it("流程引用了未声明的 agent 时,new 与流转都报错", () => {
+    writeFileSync(
+      join(ws, ".rivo", "flows", "orphan.yaml"),
+      `
+nodes:
+  - id: plan
+    assignees: [ghost]
+  - id: review
+    assignees: [product]
+`,
+    );
+    expect(() => newIssue(ws, "o", "orphan")).toThrow(/ghost/);
+
+    // Declare ghost so the issue can be created, then let the declaration
+    // drift away again — every later load re-validates, not just creation.
+    settingsState.agents.ghost = {};
+    newIssue(ws, "o2", "orphan");
+    delete settingsState.agents.ghost;
+    expect(() => recordVerdict(ws, "o2", "ghost", "approve", "ok")).toThrow(/ghost/);
   });
 });
 
@@ -135,6 +195,10 @@ describe("recordVerdict", () => {
   });
 
   it("通知脚本执行失败不影响流转,且不抛出", () => {
+    // review's assignees need a ref, otherwise notifyEntered skips them
+    // entirely (they're human) and never calls the failing script.
+    settingsState.agents.designer = { ref: "designer-bot" };
+    settingsState.agents.engineer = { ref: "engineer-bot" };
     newIssue(ws, "i", "demo");
     settingsState.scripts.transition = "/no/such/rivo-notify-script-xyz";
     expect(() => recordVerdict(ws, "i", "product", "approve", "ok")).not.toThrow();
