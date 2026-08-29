@@ -31,6 +31,12 @@ function assertKnownAgents(flow: Flow, flowName: string, settings: Settings): vo
   }
 }
 
+// Deliberately does NOT call assertKnownAgents: this is the entry point for
+// show/approve/reject/recall/close on an issue already in flight. Settings
+// drifting after creation (someone edits ~/.rivo/settings.json) must never
+// brick a delivery — close in particular is the escape hatch when a delivery
+// is stuck, and it must keep working even then. notifyEntered warns loudly
+// about an undeclared agent instead; newIssue still refuses to create one.
 function load(ws: string, slug: string) {
   const { issueDir, logPath } = issuePaths(ws, slug);
   if (!existsSync(logPath)) throw new Error(`交付 ${slug} 不存在`);
@@ -38,7 +44,6 @@ function load(ws: string, slug: string) {
   const state = foldLog(events);
   const flow = loadFlow(ws, state.flow);
   const settings = loadSettings(ws);
-  assertKnownAgents(flow, state.flow, settings);
   return { issueDir, logPath, state, flow, settings };
 }
 
@@ -88,7 +93,18 @@ function notifyEntered(
   try {
     const event = cause === "approve" ? "transition" : cause;
     for (const agent of nodeById(flow, nodeId).assignees) {
-      const ref = settings.agents[agent]?.ref;
+      const declared = settings.agents[agent];
+      if (!declared) {
+        // Not declared at all is a misconfiguration, not a human node. It
+        // must not look identical to the ref-less case below — warn loudly
+        // naming the agent, but don't block the transition over it.
+        console.warn(
+          `[rivo] 节点 ${nodeId} 的 assignee ${agent} 未在 settings 中声明,已跳过通知;` +
+            `请用 rivo agent add 声明,或检查流程配置。`,
+        );
+        continue;
+      }
+      const ref = declared.ref;
       // No ref means a human does this node: nothing to wake, they advance
       // by hand. Skip silently rather than calling the script with an empty
       // {agent_ref}.

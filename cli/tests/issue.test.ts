@@ -103,7 +103,19 @@ describe("newIssue", () => {
 });
 
 describe("未声明的 agent", () => {
-  it("流程引用了未声明的 agent 时,new 与流转都报错", () => {
+  it("new 时仍然拒绝引用了未声明 agent 的流程", () => {
+    writeFileSync(
+      join(ws, ".rivo", "flows", "orphan.yaml"),
+      `
+nodes:
+  - id: plan
+    assignees: [ghost]
+`,
+    );
+    expect(() => newIssue(ws, "o", "orphan")).toThrow(/ghost/);
+  });
+
+  it("settings 中途撤掉声明后不能把交付变砖:show/推进/close 都不报错,只是警告", () => {
     writeFileSync(
       join(ws, ".rivo", "flows", "orphan.yaml"),
       `
@@ -111,17 +123,38 @@ nodes:
   - id: plan
     assignees: [ghost]
   - id: review
-    assignees: [product]
+    assignees: [ghost]
 `,
     );
-    expect(() => newIssue(ws, "o", "orphan")).toThrow(/ghost/);
+    settingsState.agents.ghost = {}; // 声明够用,先把 issue 建出来
+    newIssue(ws, "o", "orphan");
+    delete settingsState.agents.ghost; // 创建之后 settings 漂移:撤掉声明
 
-    // Declare ghost so the issue can be created, then let the declaration
-    // drift away again — every later load re-validates, not just creation.
-    settingsState.agents.ghost = {};
-    newIssue(ws, "o2", "orphan");
-    delete settingsState.agents.ghost;
-    expect(() => recordVerdict(ws, "o2", "ghost", "approve", "ok")).toThrow(/ghost/);
+    expect(() => showIssue(ws, "o")).not.toThrow();
+
+    // vi.spyOn(console, "warn") gets clobbered mid-test by vitest's own
+    // console interception in this setup, so capture calls with a plain
+    // monkey-patch instead — the smallest thing that reliably works.
+    const originalWarn = console.warn;
+    const warnCalls: unknown[][] = [];
+    console.warn = (...args: unknown[]) => {
+      warnCalls.push(args);
+    };
+    let threw: unknown;
+    try {
+      recordVerdict(ws, "o", "ghost", "approve", "ok");
+    } catch (e) {
+      threw = e;
+    } finally {
+      console.warn = originalWarn;
+    }
+    expect(threw).toBeUndefined();
+    expect(warnCalls.some((c) => String(c[0]).includes("ghost"))).toBe(true);
+
+    const view = showIssue(ws, "o");
+    expect(view.node).toBe("review");
+
+    expect(() => closeIssue(ws, "o", "human", "结束")).not.toThrow();
   });
 });
 
