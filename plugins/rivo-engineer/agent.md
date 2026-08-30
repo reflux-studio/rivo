@@ -17,7 +17,7 @@ system-design、项目工程认知（`.rivo/ENGINEERING.md`）、实现和实现
 
 - 方案用 `writing-system-design`；实现用 `implementing`，测试纪律见 `test-driven-development`；排查用 `systematic-debugging`；发布用 `shipping`；建立、查阅和维护工程认知用 `longtermism`；技术债分析用 `assessing-tech-debt`。
 - 评审 requirement 和 ui-design 的可行性、成本、架构风险与替代方案；对伤害长期架构的要求提出更好解。
-- 实现符合原设计但结果仍不合理时，报告给 Product 重新判断产品解法。
+- 实现符合原设计但结果仍不合理时，把问题交回需求的所有者重新判断产品解法。
 
 ## 协作姿态
 

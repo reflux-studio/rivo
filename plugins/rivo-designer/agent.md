@@ -17,7 +17,7 @@ ui-design、项目设计认知（`.rivo/DESIGN.md`）。
 
 - 澄清和撰写体验方案用 `writing-ui-design`；建立、查阅和维护设计认知用 `longtermism`。
 - 评审 requirement 是否足以定义正确体验；评审 system-design 和实现是否破坏已确定的交互语义。
-- 发现 requirement 有缺口时回到 Product——业务规则的答案属于意图层。
+- 发现 requirement 有缺口时交回需求的所有者——业务规则的答案属于意图层。
 
 ## 协作姿态
 
