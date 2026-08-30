@@ -65,7 +65,7 @@ rivo 是一个**无状态的 AI 交付流程编排器**:一个 CLI,加一组按�
 ## 四个包,零依赖
 
 ```
-rivo            CLI(npx tsup 构建) + using-rivo 技能
+rivo            using-rivo 技能(CLI 在 cli/,不打包进插件)
 rivo-product    意图层: writing-requirements / running-uat / writing-competitive-brief / updating-roadmap / longtermism
 rivo-designer   体验层: writing-ui-design / longtermism
 rivo-engineer   机制层: writing-system-design / implementing / test-driven-development / systematic-debugging / shipping / assessing-tech-debt / longtermism
@@ -211,7 +211,7 @@ nodes:
 rivo/
 ├── cli/                     # CLI 实现(TypeScript,npx tsup 构建)
 ├── plugins/
-│   ├── rivo/                # bin + using-rivo 技能(跑流程、配置)
+│   ├── rivo/                # using-rivo 技能(跑流程、配置)
 │   ├── rivo-product/        # 意图层角色包
 │   ├── rivo-designer/       # 体验层角色包
 │   └── rivo-engineer/       # 机制层角色包

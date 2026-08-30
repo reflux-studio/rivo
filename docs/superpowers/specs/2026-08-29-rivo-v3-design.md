@@ -124,8 +124,7 @@ Agent 可以撒谎,但这里本来就没有信任边界——**人类终审是�
 ### 3.1 四个包,互不依赖
 
 ```
-  rivo                bin(npm)
-                      using-rivo/            主文件:跑流程
+  rivo                using-rivo/            主文件:跑流程
                         references/setup.md  配置:agent add / flow new / doctor
 
   rivo-product        agent.md
