@@ -49,7 +49,7 @@ describe("裸目录里的引导流程", () => {
     expect(again.code).toBe(0);
     expect(again.out).toMatch(/已存在/);
 
-    expect(run(["agent", "add", "product"], proj, home).code).toBe(0);
+    expect(run(["agent", "add", "<role>"], proj, home).code).toBe(0);
     expect(run(["flow", "new", "demo"], proj, home).code).toBe(0);
 
     const created = run(["issue", "new", "fix-login", "--flow", "demo"], proj, home);

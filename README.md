@@ -24,7 +24,7 @@ rivo 是一个**无状态的 AI 交付流程编排器**:一个 CLI,加一组按�
 
 公司里 PRD 已经有真的产品经理在写,那就只装 `rivo-engineer`——工程师消化外部 PRD、出方案、实现、交付,全程不需要 rivo 认识"产品"这个角色。如果你团队确实没有专职设计师,也不必为了凑齐一整套角色包去装一个用不上的包。
 
-反过来,只装 `rivo` 本身也能跑完整流程——把 flow 里的 `agent` 字段指向你自己在某个平台建的 Agent 即可,rivo 不关心那个 Agent 是用什么角色包提示词跑出来的。
+反过来,只装 `rivo` 本身也能跑完整流程——flow 的节点里 `assignees` 写你自己起的名字,`rivo agent add <name> --ref <id>` 把这个名字绑定到你自己在某个平台建的 Agent 即可,rivo 不关心那个 Agent 是用什么角色包提示词跑出来的。
 
 ## 核心模型
 
@@ -76,7 +76,7 @@ rivo-engineer   机制层: writing-system-design / implementing / test-driven-de
 **零依赖不是一句口号,是三条可验证的事实:**
 
 - 公司电脑只装 `rivo-engineer`,不装 `rivo`,能完整工作——消化外部 PRD、写方案、实现、交付,角色包本身不依赖 CLI。
-- 只装 `rivo`,把 flow 里的 `agent` 指向自己在某平台建的 Agent,能完整跑通一次流程——CLI 不内置任何角色定义或现成流程。
+- 只装 `rivo`,`assignees` 里写自己起的名字、用 `rivo agent add <name> --ref <id>` 绑到自己在某平台建的 Agent,能完整跑通一次流程——CLI 不内置任何角色定义或现成流程。
 - `rivo agent add <name>` 接受任意名字,不知道也不需要知道你装了哪些角色包。
 
 `rivo` 本身不内置任何现成流程,`rivo flow new` 生成的是一份带注释的空骨架——真实流程会引用 `product` / `engineer` 这些名字,内置一份就等于让 CLI 依赖角色包了。示例见下文。

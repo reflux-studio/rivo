@@ -161,7 +161,7 @@ Agent 可以撒谎,但这里本来就没有信任边界——**人类终审是�
 
 ```
   插件名 rivo-engineer  →  agent.md 的 name: engineer
-                        →  flow.yaml 里 agent: engineer
+                        →  flow.yaml 节点的 assignees: [engineer]
                         →  平台上创建的 Agent 名 engineer
                         →  settings.json 的 agents.engineer
 ```

@@ -63,7 +63,7 @@ description: |
 
 nodes:
   - id: first-node
-    assignees: [product]     # 必须先 rivo agent add 声明;不绑 ref 表示人来做
+    assignees: [<role>]      # 换成你的角色名,必须先 rivo agent add 声明;不绑 ref 表示人来做
     approve: all             # all | any | <数字>,默认 all
     instruction: |
       产出什么、输入在哪、什么时候可以 approve。三五行说清即可。
