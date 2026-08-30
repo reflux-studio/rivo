@@ -64,4 +64,4 @@ requirement 缺少关键产品行为时，向需求的所有者提问——业�
 
 ## 9. 发布
 
-确认 requirement 中所有相关场景都有体验答案、状态和边界足够完整、实现者无需猜测用户行为，然后把 ui-design 写进 `rivo issue show` 返回的 `issue_dir`，并注明对应的 requirement 修订。
+确认 requirement 中所有相关场景都有体验答案、状态和边界足够完整、实现者无需猜测用户行为，然后把 ui-design 写进 `rivo issue show` 返回的 `issue_dir`（未安装 rivo 时，发布到项目惯用的设计文档位置，或直接返回给用户），并注明对应的 requirement 修订。

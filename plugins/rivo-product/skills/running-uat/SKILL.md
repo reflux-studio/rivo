@@ -90,4 +90,4 @@ UAT 判断的是“这是不是用户真正要的”，不是第二遍工程测�
 [可做可不做、不影响放行的新想法；没有则写无]
 ```
 
-把 UAT 结论写进 `rivo issue show` 返回的 `issue_dir`（文件名 `uat.md`），并返回结论。
+把 UAT 结论写进 `rivo issue show` 返回的 `issue_dir`（文件名 `uat.md`；未安装 rivo 时，发布到项目惯用的验收记录位置），并返回结论。

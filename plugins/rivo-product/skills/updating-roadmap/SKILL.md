@@ -1,5 +1,5 @@
 ---
-name: roadmap-update
+name: updating-roadmap
 description: 创建或更新产品路线图，处理新增事项、状态变化、优先级、时间线、容量、依赖和取舍。适用于 Now/Next/Later、季度规划和路线图重排。
 argument-hint: "<要新增、调整或重排的事项>"
 ---

@@ -1,5 +1,5 @@
 ---
-name: tech-debt
+name: assessing-tech-debt
 description: 识别、验证、分类和排序技术债，形成有证据的治理建议。适用于代码健康、架构风险、测试缺口、依赖老化、基础设施和工程效率问题。
 argument-hint: "<代码库、模块或技术债问题>"
 ---

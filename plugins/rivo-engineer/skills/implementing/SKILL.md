@@ -1,5 +1,5 @@
 ---
-name: implementing-changes
+name: implementing
 description: 按已评审的技术方案或明确改动目标实现代码和自动化测试，控制改动范围，在方案失效时回到设计，并交付可验证的实现修订。
 argument-hint: "<技术方案、改动目标或修订>"
 ---
@@ -64,4 +64,4 @@ argument-hint: "<技术方案、改动目标或修订>"
 - 独立验证需要准备的环境、账号和数据；
 - 实现中发现但未纳入本次范围的问题。
 
-把这份实现交接写进 `rivo issue show` 返回的 `issue_dir`（文件名 `implementation.md`）；代码本身仍以源码仓库中的实现为事实源。
+rivo 可用时，把这份实现交接写进 `rivo issue show` 返回的 `issue_dir`（文件名 `implementation.md`）；未安装 rivo 时，发布到项目惯用的交接文档位置，或直接返回给用户。代码本身仍以源码仓库中的实现为事实源。

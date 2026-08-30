@@ -1,5 +1,5 @@
 ---
-name: competitive-brief
+name: writing-competitive-brief
 description: 调研一个或多个竞争对手，形成有来源的产品能力、定位、定价、优势、弱点、机会、威胁和战略启示。适用于产品决策、差异化分析、竞品动态和销售支持。
 argument-hint: "<竞争对手、市场或功能领域>"
 ---
