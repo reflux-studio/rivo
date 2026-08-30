@@ -431,7 +431,7 @@ else                               → transition(rejectTarget)
 
 key 是事件,value 是命令,rivo 不解释内容。事件面只有四个:`transition`(唤起新节点的 assignees)、`reject`(通知被打回方)、`recall`、`close`。
 
-script 不必是"唤起 Agent":发飞书、打 webhook、触发 CI、`echo` 什么都不做,rivo 一概不关心。
+script 不必是"唤起 Agent":发消息、打 webhook、触发 CI、`echo` 什么都不做,rivo 一概不关心。
 
 ### 6.2 模板切 argv,不经 shell
 

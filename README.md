@@ -115,7 +115,7 @@ rivo issue approve <slug> --as <角色名> --reason "..."   # 或 reject
 流程走完最后一个节点后不会自动结束,收尾是显式动作:
 
 ```bash
-rivo issue close <slug> --reason "已发布"
+rivo issue close <slug> --reason "已发布" [--as <角色名>]
 ```
 
 ## 一个真实的 flow.yaml
