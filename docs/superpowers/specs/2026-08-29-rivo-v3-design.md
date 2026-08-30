@@ -152,7 +152,7 @@ Agent 可以撒谎,但这里本来就没有信任边界——**人类终审是�
 **零依赖是硬约束。** 三条验证:
 
 - 公司电脑只装 `rivo-engineer`,不装 `rivo`,能完整工作(消化外部 PRD、写方案、交付)
-- 只装 `rivo`,把 flow 里的 agent 指向自己建的平台 Agent,能完整跑流程
+- 只装 `rivo`,flow 节点的 `assignees` 写自己起的名字,`rivo agent add <name> --ref <id>` 把这个名字绑定到自己建的平台 Agent,能完整跑流程
 - setup 不需要知道装了哪些角色包——`rivo agent add` 接受任意 agent
 
 `rivo` **不内置任何现成流程**。`rivo flow new <name>` 生成带注释的空骨架;真实流程会引用 `product` / `engineer` 这些名字,内置它就等于 core 依赖角色包。示例流程放 README。
