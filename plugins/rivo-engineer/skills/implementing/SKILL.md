@@ -64,4 +64,4 @@ argument-hint: "<技术方案、改动目标或修订>"
 - 独立验证需要准备的环境、账号和数据；
 - 实现中发现但未纳入本次范围的问题。
 
-按 `collaborating` 的产物发布约定发布这份实现交接。未指定后端时写入当前交付目录的 `implementation.md`；代码本身仍以源码仓库中的实现为事实源。
+把这份实现交接写进 `rivo issue show` 返回的 `issue_dir`（文件名 `implementation.md`）；代码本身仍以源码仓库中的实现为事实源。

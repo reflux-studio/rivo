@@ -8,7 +8,7 @@ argument-hint: "<requirement、设计稿或设计问题>"
 
 ui-design 的读者是 Engineer 和评审者。它可以以 Figma、原型、HTML、图片或文档为主，但必须让下游知道哪个来源是事实、当前修订是什么，以及设计源没有表达的行为约束。先把体验决定收敛完整，再发布交接。
 
-向用户或 Product 澄清决策时使用 `frontier-questioning`：分轮批量提问，每题附推荐答案；能从设计源和代码查证的事实自行查证。
+向用户或 Product 澄清决策时，沿决策依赖分轮提问、把默认假设摆到台面，每题附推荐答案；能从设计源和代码查证的事实自行查证。
 
 ## 1. 读取依据
 
@@ -30,7 +30,7 @@ requirement 缺少关键产品行为时，向 Product 提问——业务规则�
 
 各类设计来源的处理方式见 [references/design-sources.md](references/design-sources.md)。
 
-如果用户只要求评价一份现成设计，而不是产出或补全 ui-design，交给 Verifier 使用设计视角独立审阅。
+如果用户只要求评价一份现成设计，而不是产出或补全 ui-design，直接以设计视角独立审阅并给出评论，不必产出新的 ui-design。
 
 ## 3. 建立用户任务
 
@@ -64,4 +64,4 @@ requirement 缺少关键产品行为时，向 Product 提问——业务规则�
 
 ## 9. 发布
 
-确认 requirement 中所有相关场景都有体验答案、状态和边界足够完整、Engineer 无需猜测用户行为，然后按 `collaborating` 的产物发布约定发布，并注明对应的 requirement 修订。
+确认 requirement 中所有相关场景都有体验答案、状态和边界足够完整、Engineer 无需猜测用户行为，然后把 ui-design 写进 `rivo issue show` 返回的 `issue_dir`，并注明对应的 requirement 修订。

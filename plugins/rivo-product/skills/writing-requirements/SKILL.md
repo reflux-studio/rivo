@@ -34,7 +34,7 @@ requirement 是 Product 对下一层作出的承诺：为什么做、要达成�
 6. **约束**：期限、法规、兼容、商业承诺或不可改变条件；
 7. **依赖与风险**：哪些答案需要设计、工程、法务、数据或用户本人提供。
 
-提问节奏使用 `frontier-questioning`：按决策依赖分轮，每题附推荐答案；能自行查证的事实不问用户。详细提问框架见 [references/question-guide.md](references/question-guide.md)。
+提问节奏按决策依赖分轮、把默认假设摆到台面，每题附推荐答案；能自行查证的事实不问用户。详细提问框架见 [references/question-guide.md](references/question-guide.md)。
 
 ## 4. 挑战方案假设
 
@@ -74,4 +74,4 @@ requirement 是 Product 对下一层作出的承诺：为什么做、要达成�
 
 ## 9. 发布
 
-按 `collaborating` 的产物发布约定发布。开放问题标明负责人和是否必须在当前版本发布前解决；任何会迫使下游猜测产品决定的问题，解决前不得发布。重要决定能追溯到用户、文档、数据或会议记录。
+把 requirement 写进 `rivo issue show` 返回的 `issue_dir`。开放问题标明负责人和是否必须在当前版本发布前解决；任何会迫使下游猜测产品决定的问题，解决前不得发布。重要决定能追溯到用户、文档、数据或会议记录。
