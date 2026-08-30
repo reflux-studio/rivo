@@ -139,4 +139,4 @@ argument-hint: "<竞争对手、市场或功能领域>"
 [下一次复查时间和信号]
 ```
 
-rivo 可用时，把简报写进 `rivo issue show` 返回的 `issue_dir`（文件名 `competitive-brief.md`）；未安装 rivo 或不在某个 issue 范围内时，发布到项目惯用的竞品研究位置，或直接返回给用户。需要进入路线图、长期规范或实际交付的结论，由相应负责人另行处理。
+本次研究属于某个正式交付节点时，把简报写进 `rivo issue show` 返回的 `issue_dir`（文件名 `competitive-brief.md`）；独立执行时，发布到项目惯用的竞品研究位置，或直接返回给用户，并把结论回写进 `.rivo/PRODUCT.md`。需要进入路线图、长期规范或实际交付的结论，由相应负责人另行处理。

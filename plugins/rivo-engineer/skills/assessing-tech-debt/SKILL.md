@@ -103,4 +103,4 @@ Priority = (Impact + Risk + Frequency) × Confidence ÷ Effort
 [每项完成后如何证明风险已经降低]
 ```
 
-rivo 可用时，把评估写进 `rivo issue show` 返回的 `issue_dir`（文件名 `tech-debt.md`）；未安装 rivo 或不在某个 issue 范围内时，发布到项目惯用的技术债记录位置，或直接返回给用户。需要落地时，同时返回目标、证据、优先级和建议验证方式。
+本次评估属于某个正式交付节点时，把评估写进 `rivo issue show` 返回的 `issue_dir`（文件名 `tech-debt.md`）；独立执行时，发布到项目惯用的技术债记录位置，或直接返回给用户，并把结论回写进 `.rivo/ENGINEERING.md`。需要落地时，同时返回目标、证据、优先级和建议验证方式。
