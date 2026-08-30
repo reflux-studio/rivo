@@ -464,7 +464,7 @@ execFile("multica", ["issue", "comment", "add", issue, "--content", reason])
 | `using-rivo` 主文件 | **零**。只讲流程语义 |
 | settings | 有,但在用户目录,根本不进仓库 |
 
-**rivo 仓库里不出现任何平台名。** 不做 `references/<platform>.md`——那种文件 90% 是"怎么在某平台建 Agent",属于那个平台自己的文档;在 rivo 里养一份必然失同步,而且没人会发现。
+**rivo 不内置任何平台知识:CLI 代码里没有平台名、没有平台枚举;用户自己的配置(如 `settings.json`)里出现具体平台名不算违反,那正是配置该长的样子。** 不做 `references/<platform>.md`——那种文件 90% 是"怎么在某平台建 Agent",属于那个平台自己的文档;在 rivo 里养一份必然失同步,而且没人会发现。
 
 rivo 唯一需要规定的是 §6.3 那张变量表和"script 是一条命令模板"这个契约。具体命令怎么写,setup 时问 AI——它能读那个平台的 `--help` 和文档,不需要 rivo 教。
 
