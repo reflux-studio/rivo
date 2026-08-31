@@ -233,17 +233,21 @@ rivo issue close   <slug> [--reason "..."]
 
 # 流程定义
 rivo flow show <name> [--node <node>] [--json]
-rivo flow new  <name>
-rivo flow list
+rivo flow new  <name> [--scope user|project]     # 默认 project
+rivo flow list [--json]
 
 # 参与者
-rivo agent add <name> [--ref <id>]
-rivo agent list
-rivo agent remove <name>
+rivo agent add <name> [--ref <id>] [--scope user|project]   # 默认 user
+rivo agent list [--json]
+rivo agent remove <name> [--scope user|project]
 
 # 检查
 rivo doctor
 ```
+
+**没有 `init`。** `.rivo/` 不存在时,`issue new` 与 `flow new --scope=project` 就地建它——一个只为让别的命令不报错而存在的命令,不该存在。唯一的例外是用户主目录:那里会被拒绝,因为 `~/.rivo` 是 user 层配置的位置,交付日志必须待在仓库里。
+
+**没有 `notify`。** script 失败时流转已经写进 log、状态是对的,告警会点名该通知谁,手工通知即可。重放要还原"当时被唤起的是哪几个 assignee",三四十行代码换掉五秒钟的人工动作,不划算。人工兜底本来就是 ref-less assignee 的设计内主路径,script 失败只是掉进同一条路。
 
 **没有 `push`。** 流转是条件满足的后果,不是命令。
 
@@ -272,7 +276,7 @@ log 里 `recall` 事件一眼看得出这不是正常打回,是人工干预。**
 
 ### 4.6 `doctor` 检查清单
 
-- 每份 `flow.yaml` 通过 schema
+- 两层作用域里的每份 `flow.yaml` 都通过 schema
 - flow 引用的 agent 都在 settings 中已声明(**声明即可,不要求已绑定 `ref`**)
 - 节点图连通,`reject` / `recall` 的目标节点存在
 - `scripts` 模板里的变量都在变量表内(拼错的 `{agnet_ref}` 当场抓出)
@@ -376,9 +380,13 @@ else                               → transition(rejectTarget)
 配置是**机器局部**的:公司电脑和私人电脑接的不是同一个工作区,agent id 也不一样。它不该躺在项目目录里等着被误提交,所以主位置在用户目录:
 
 ```
-  ~/.rivo/settings.json                默认位置,agent add / setup 默认写这里
-  <repo>/.rivo/settings.local.json     可选的项目覆盖,gitignore
+  ~/.rivo/settings.json                user 层,agent add 默认写这里
+  ~/.rivo/flows/                       user 层的个人流程模板
+  <repo>/.rivo/settings.local.json     project 层的覆盖,gitignore
+  <repo>/.rivo/flows/                  project 层,flow new 默认写这里
 ```
+
+**flow 定义和 settings 同构**,同样两层、同样按名字查找、同样项目覆盖 user。写操作用 `--scope user|project` 选层。两者默认层不同,因为自然作用域不同:`scripts` 取决于你用哪个平台的 CLI,一台机器上都一样,所以默认 user;流程定义是团队约定,要进 git 跟着代码演进,所以默认 project。
 
 **加载 = 两份浅合并,项目覆盖全局**(`agents` 与 `scripts` 各自合并),和 git config、`.npmrc`、VS Code settings 是同一个模式,不需要额外解释。加载逻辑本身只有几行。
 
@@ -405,7 +413,7 @@ else                               → transition(rejectTarget)
 
 **为什么默认全局而不是每项目一份:** 两类配置的自然作用域不同——`scripts` 模板取决于你用哪个平台的 CLI,同一台机器上对所有项目都一样;`agents` 的 `ref` 是工作区级的,多数人只有一个工作区。所以绝大多数情况下**只需要那一个全局文件**。
 
-`rivo agent add` 默认写全局,`--local` 才写项目文件。项目文件只在这个项目确实要偏离时才出现(接了另一个工作区、临时换平台),不是每个项目都要建的样板。
+`rivo agent add` 默认写 user 层,`--scope project` 才写项目文件。项目文件只在这个项目确实要偏离时才出现(接了另一个工作区、临时换平台),不是每个项目都要建的样板。
 
 `.local.json` 这个后缀让"不进 git"一眼可见,不靠记忆。项目文件出现时,`rivo` 顺手写 `.gitignore`。
 
@@ -415,7 +423,7 @@ else                               → transition(rejectTarget)
 
 | 路径 | 进 git | 理由 |
 | --- | --- | --- |
-| `.rivo/flows/*.yaml` | ✅ | 流程定义是团队约定,跟着代码演进 |
+| `.rivo/flows/*.yaml` | ✅ | 流程定义是团队约定,跟着代码演进(user 层的 `~/.rivo/flows/` 是个人模板,不在任何仓库里) |
 | `.rivo/issues/<slug>/log.jsonl` | ✅ | **这是 rivo 存在的理由**:交付过程是代码的一部分,可 diff、可 review、可回溯 |
 | `.rivo/issues/<slug>/*.md` | ✅ | 产物同上 |
 | `.rivo/PRODUCT.md` `DESIGN.md` `ENGINEERING.md` | ✅ | 跟着装了哪个角色包走,没装就没有 |
