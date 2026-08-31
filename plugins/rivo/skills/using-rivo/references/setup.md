@@ -2,11 +2,11 @@
 
 ## 安装
 
-从源码构建并链接：
-
 ```bash
-cd cli && npm install && npx tsup && npm link
+npm i -g rivo-cli
 ```
+
+命令名是 `rivo`，需要 Node 22+。从源码跑的话：`cd cli && npm install && npx tsup && npm link`。
 
 ## 两层作用域
 

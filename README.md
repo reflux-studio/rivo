@@ -86,8 +86,10 @@ rivo-engineer   机制层：writing-system-design / implementing / test-driven-d
 装 CLI：
 
 ```bash
-cd cli && npm install && npx tsup && npm link
+npm i -g rivo-cli
 ```
+
+命令名是 `rivo`，需要 Node 22+。想从源码跑：`cd cli && npm install && npx tsup && npm link`。
 
 装角色包（在 Claude Code 里）：
 
