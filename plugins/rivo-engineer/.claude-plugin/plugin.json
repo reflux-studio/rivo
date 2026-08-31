@@ -1,5 +1,8 @@
 {
   "name": "rivo-engineer",
   "version": "0.1.0",
-  "description": "rivo 机制层角色:设计系统方案、实现、发布并系统化调查问题"
+  "description": "机制层角色：设计系统方案、实现、发布并系统化调查问题。",
+  "author": {
+    "name": "suziming"
+  }
 }

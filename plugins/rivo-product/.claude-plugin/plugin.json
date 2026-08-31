@@ -1,5 +1,8 @@
 {
   "name": "rivo-product",
   "version": "0.1.0",
-  "description": "rivo 意图层角色:澄清产品问题、持有 requirement 与产品认知、组织用户验收"
+  "description": "意图层角色：澄清产品问题、持有 requirement 与产品认知、组织用户验收。",
+  "author": {
+    "name": "suziming"
+  }
 }

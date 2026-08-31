@@ -1,5 +1,8 @@
 {
   "name": "rivo",
   "version": "0.1.0",
-  "description": "无状态的 AI 交付流程编排器:流程定义、状态流转与平台接入"
+  "description": "交付流程编排器：流程定义、状态流转与平台接入，以及 rivo CLI 的操作指引。",
+  "author": {
+    "name": "suziming"
+  }
 }

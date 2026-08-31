@@ -1,0 +1,36 @@
+{
+  "name": "rivo",
+  "owner": {
+    "name": "suziming"
+  },
+  "plugins": [
+    {
+      "name": "rivo",
+      "displayName": "rivo",
+      "source": "./plugins/rivo",
+      "category": "productivity",
+      "description": "交付流程编排器。装了它才有 rivo CLI 的操作指引：怎么配流程、怎么在节点上表态、流程怎么自动往前走。角色包可以单独装，不装它也能用。"
+    },
+    {
+      "name": "rivo-product",
+      "displayName": "rivo Product",
+      "source": "./plugins/rivo-product",
+      "category": "productivity",
+      "description": "意图层角色。澄清要解决的产品问题、写需求、盯竞品与路线图、组织用户验收，并持有一份跟着项目长期演进的产品认知。"
+    },
+    {
+      "name": "rivo-designer",
+      "displayName": "rivo Designer",
+      "source": "./plugins/rivo-designer",
+      "category": "productivity",
+      "description": "体验层角色。设计用户如何理解和操作产品，产出界面设计与交互说明，并持有设计系统与设计认知。"
+    },
+    {
+      "name": "rivo-engineer",
+      "displayName": "rivo Engineer",
+      "source": "./plugins/rivo-engineer",
+      "category": "productivity",
+      "description": "机制层角色。设计系统方案、测试驱动地实现、系统化排查缺陷、评估技术债并发布，持有一份工程认知。"
+    }
+  ]
+}
