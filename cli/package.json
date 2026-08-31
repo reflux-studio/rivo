@@ -1,11 +1,41 @@
 {
-  "name": "rivo",
+  "name": "rivo-cli",
   "version": "0.1.0",
-  "description": "无状态的 AI 交付流程编排器",
+  "description": "无状态的 AI 交付流程编排器：流程定义、状态流转与平台接入",
+  "keywords": [
+    "ai",
+    "agent",
+    "workflow",
+    "orchestration",
+    "delivery",
+    "cli",
+    "claude"
+  ],
+  "license": "MIT",
+  "author": "Reflux Studio",
+  "homepage": "https://github.com/reflux-studio/rivo#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reflux-studio/rivo.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/reflux-studio/rivo/issues"
+  },
   "type": "module",
-  "bin": { "rivo": "./dist/cli.js" },
-  "files": ["dist"],
-  "engines": { "node": ">=22" },
+  "bin": {
+    "rivo": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
