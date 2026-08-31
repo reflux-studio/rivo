@@ -1,26 +1,32 @@
-import { Command } from "commander";
-import { addAgent, initWorkspace, listFlows, newFlow, removeAgent } from "./config-cmd.js";
+import { Command, Option } from "commander";
+import { addAgent, listFlows, newFlow, removeAgent } from "./config-cmd.js";
 import { doctor } from "./doctor.js";
 import { loadFlow, nodeById } from "./flow.js";
 import { closeIssue, newIssue, recallIssue, recordVerdict, showIssue } from "./issue.js";
 import { readLog } from "./log.js";
-import { findWorkspace, issuePaths } from "./paths.js";
+import { type Scope, ensureWorkspace, findWorkspace, issuePaths, requireWorkspace } from "./paths.js";
 import { loadSettings } from "./settings.js";
 
 const program = new Command();
 program.name("rivo").description("无状态的 AI 交付流程编排器").version("0.1.0");
 
+/** Reads or advances an existing delivery: the workspace must already be there. */
 function ws(): string {
+  return requireWorkspace(process.cwd());
+}
+
+/** Starts a delivery: builds the workspace in place rather than demanding a setup step. */
+function newWs(): string {
+  return ensureWorkspace(process.cwd());
+}
+
+/** For commands that fall back to user scope and work fine outside a project. */
+function optionalWs(): string | null {
   return findWorkspace(process.cwd());
 }
 
-/** For commands that read global settings and work fine outside a project. */
-function optionalWs(): string | null {
-  try {
-    return findWorkspace(process.cwd());
-  } catch {
-    return null;
-  }
+function scopeOption(description: string) {
+  return new Option("--scope <scope>", description).choices(["user", "project"]);
 }
 
 function who(opt?: string): string {
@@ -29,22 +35,15 @@ function who(opt?: string): string {
   return name;
 }
 
-program
-  .command("init")
-  .description("在当前目录初始化 .rivo 工作区")
-  .action(() => {
-    const { rivoDir, created } = initWorkspace(process.cwd());
-    console.log(created ? `已初始化 ${rivoDir}` : `${rivoDir} 已存在,无需重复初始化`);
-  });
-
 const issue = program.command("issue").description("交付");
 
 issue
   .command("new <slug>")
   .requiredOption("--flow <name>", "使用哪个流程")
   .action((slug: string, opts: { flow: string }) => {
-    newIssue(ws(), slug, opts.flow);
-    console.log(showIssue(ws(), slug).node);
+    const dir = newWs();
+    newIssue(dir, slug, opts.flow);
+    console.log(showIssue(dir, slug).node);
   });
 
 issue
@@ -111,7 +110,7 @@ flowCmd
   .option("--node <id>", "只看某个节点")
   .option("--json", "输出 JSON")
   .action((name: string, opts: { node?: string; json?: boolean }) => {
-    const flow = loadFlow(ws(), name);
+    const flow = loadFlow(optionalWs(), name);
     const payload = opts.node ? nodeById(flow, opts.node) : flow;
     if (opts.json) {
       console.log(JSON.stringify(payload, null, 2));
@@ -130,20 +129,23 @@ flowCmd
     }
   });
 
-flowCmd.command("new <name>").action((name: string) => {
-  console.log(newFlow(ws(), name));
-});
+flowCmd
+  .command("new <name>")
+  .addOption(scopeOption("写到哪一层,默认 project").default("project"))
+  .action((name: string, opts: { scope: Scope }) => {
+    console.log(newFlow(opts.scope === "user" ? null : newWs(), name, opts.scope));
+  });
 
 flowCmd
   .command("list")
   .option("--json", "输出 JSON")
   .action((opts: { json?: boolean }) => {
-    const flows = listFlows(ws());
+    const flows = listFlows(optionalWs());
     if (opts.json) {
       console.log(JSON.stringify(flows, null, 2));
       return;
     }
-    for (const name of flows) console.log(name);
+    for (const f of flows) console.log(`${f.name}\t${f.scope}`);
   });
 
 const agentCmd = program.command("agent").description("参与者");
@@ -151,9 +153,9 @@ const agentCmd = program.command("agent").description("参与者");
 agentCmd
   .command("add <name>")
   .option("--ref <id>", "平台标识;不给表示由人承担")
-  .option("--local", "写进项目而不是 ~/.rivo/settings.json")
-  .action((name: string, opts: { ref?: string; local?: boolean }) => {
-    addAgent(opts.local ? ws() : null, name, opts.ref, !!opts.local);
+  .addOption(scopeOption("写到哪一层,默认 user").default("user"))
+  .action((name: string, opts: { ref?: string; scope: Scope }) => {
+    addAgent(optionalWs(), name, opts.ref, opts.scope);
     console.log(`已声明 ${name}${opts.ref ? ` → ${opts.ref}` : "(未绑定,由人承担)"}`);
   });
 
@@ -173,9 +175,9 @@ agentCmd
 
 agentCmd
   .command("remove <name>")
-  .option("--local", "从项目设置中移除")
-  .action((name: string, opts: { local?: boolean }) => {
-    removeAgent(opts.local ? ws() : null, name, !!opts.local);
+  .addOption(scopeOption("从哪一层移除,默认 user").default("user"))
+  .action((name: string, opts: { scope: Scope }) => {
+    removeAgent(optionalWs(), name, opts.scope);
     console.log(`已移除 ${name}`);
   });
 
@@ -183,7 +185,7 @@ program
   .command("doctor")
   .option("--json", "输出 JSON")
   .action((opts: { json?: boolean }) => {
-    const problems = doctor(ws());
+    const problems = doctor(optionalWs());
     if (opts.json) {
       console.log(JSON.stringify(problems, null, 2));
       if (problems.length > 0) process.exit(1);

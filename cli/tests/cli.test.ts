@@ -34,23 +34,14 @@ beforeAll(() => {
 }, 120_000);
 
 describe("裸目录里的引导流程", () => {
-  it("init 之前报错点名 rivo init,init 之后 flow new / issue new 都能跑", () => {
+  it("不需要任何初始化命令:flow new 就地建工作区,issue new 直接能跑", () => {
     const { home, proj } = fixture();
 
-    const before = run(["issue", "new", "fix-login", "--flow", "demo"], proj, home);
-    expect(before.code).toBe(1);
-    expect(before.err).toMatch(/rivo init/);
-
-    const init = run(["init"], proj, home);
-    expect(init.code).toBe(0);
-    expect(existsSync(join(proj, ".rivo", "flows"))).toBe(true);
-
-    const again = run(["init"], proj, home);
-    expect(again.code).toBe(0);
-    expect(again.out).toMatch(/已存在/);
-
     expect(run(["agent", "add", "<role>"], proj, home).code).toBe(0);
-    expect(run(["flow", "new", "demo"], proj, home).code).toBe(0);
+
+    const flow = run(["flow", "new", "demo"], proj, home);
+    expect(flow.code).toBe(0);
+    expect(existsSync(join(proj, ".rivo", "flows", "demo.yaml"))).toBe(true);
 
     const created = run(["issue", "new", "fix-login", "--flow", "demo"], proj, home);
     expect(created.code).toBe(0);
@@ -58,7 +49,17 @@ describe("裸目录里的引导流程", () => {
     expect(existsSync(join(proj, ".rivo", "issues", "fix-login", "log.jsonl"))).toBe(true);
   });
 
-  it("全局作用域的 agent 命令不需要工作区", () => {
+  it("issue new 在裸目录里自己建工作区", () => {
+    const { home, proj } = fixture();
+    run(["agent", "add", "<role>"], proj, home);
+    run(["flow", "new", "demo", "--scope", "user"], proj, home);
+
+    const created = run(["issue", "new", "fix-login", "--flow", "demo"], proj, home);
+    expect(created.code).toBe(0);
+    expect(existsSync(join(proj, ".rivo", "issues", "fix-login", "log.jsonl"))).toBe(true);
+  });
+
+  it("user 作用域的 agent 命令不需要工作区", () => {
     const { home, proj } = fixture();
 
     expect(run(["agent", "add", "product", "--ref", "p1"], proj, home).code).toBe(0);
@@ -71,16 +72,37 @@ describe("裸目录里的引导流程", () => {
 });
 
 describe("工作区不会落到主目录", () => {
-  it("主目录有 .rivo 时,主目录下没初始化的项目仍然报错,不写进 ~/.rivo", () => {
+  it("主目录有 .rivo 时,主目录下的项目就地建自己的,不写进 ~/.rivo", () => {
     const { home } = fixture();
     // ~/.rivo exists the moment anyone runs `agent add`, i.e. always after setup.
     mkdirSync(join(home, ".rivo"), { recursive: true });
     const proj = join(home, "code", "app");
     mkdirSync(proj, { recursive: true });
+    run(["agent", "add", "product"], proj, home);
+    run(["flow", "new", "demo", "--scope", "user"], proj, home);
+    writeFileSync(
+      join(home, ".rivo", "flows", "demo.yaml"),
+      "nodes:\n  - id: plan\n    assignees: [product]\n",
+    );
 
     const r = run(["issue", "new", "fix-login", "--flow", "demo"], proj, home);
+    expect(r.code).toBe(0);
+    expect(existsSync(join(proj, ".rivo", "issues", "fix-login", "log.jsonl"))).toBe(true);
+    expect(existsSync(join(home, ".rivo", "issues"))).toBe(false);
+  });
+
+  it("直接在主目录里开交付被拒绝", () => {
+    const { home } = fixture();
+    run(["agent", "add", "product"], home, home);
+    mkdirSync(join(home, ".rivo", "flows"), { recursive: true });
+    writeFileSync(
+      join(home, ".rivo", "flows", "demo.yaml"),
+      "nodes:\n  - id: plan\n    assignees: [product]\n",
+    );
+
+    const r = run(["issue", "new", "fix-login", "--flow", "demo"], home, home);
     expect(r.code).toBe(1);
-    expect(r.err).toMatch(/rivo init/);
+    expect(r.err).toMatch(/主目录/);
     expect(existsSync(join(home, ".rivo", "issues"))).toBe(false);
   });
 });
@@ -88,8 +110,8 @@ describe("工作区不会落到主目录", () => {
 /** A workspace with one delivery in flight, built entirely through the CLI. */
 function bootstrapped() {
   const { home, proj } = fixture();
-  run(["init"], proj, home);
   run(["agent", "add", "product"], proj, home);
+  mkdirSync(join(proj, ".rivo", "flows"), { recursive: true });
   writeFileSync(
     join(proj, ".rivo", "flows", "demo.yaml"),
     "nodes:\n  - id: plan\n    assignees: [product]\n  - id: ship\n    assignees: [product]\n",

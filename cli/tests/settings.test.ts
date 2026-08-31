@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { findWorkspace, issuePaths, globalSettingsPath as origGlobalSettingsPath } from "../src/paths.js";
+import { findWorkspace, issuePaths, userSettingsPath as origUserSettingsPath } from "../src/paths.js";
 import { mergeSettings, loadSettings } from "../src/settings.js";
 import * as pathsModule from "../src/paths.js";
 
@@ -20,9 +20,9 @@ describe("findWorkspace", () => {
     expect(findWorkspace(deep)).toBe(root);
   });
 
-  it("找不到就抛错", () => {
+  it("找不到就返回 null,由调用方决定是建还是报错", () => {
     const bare = mkdtempSync(join(tmpdir(), "bare-"));
-    expect(() => findWorkspace(bare)).toThrow(/未找到 \.rivo/);
+    expect(findWorkspace(bare)).toBeNull();
   });
 });
 
@@ -69,7 +69,7 @@ describe("loadSettings with file I/O", () => {
     const workspaceDir = mkdtempSync(join(tmpdir(), "ws-"));
     mkdirSync(join(workspaceDir, ".rivo"), { recursive: true });
 
-    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+    vi.spyOn(pathsModule, "userSettingsPath").mockReturnValue(tempGlobalPath);
 
     const result = loadSettings(workspaceDir);
     expect(result).toEqual({ agents: {}, scripts: {} });
@@ -87,7 +87,7 @@ describe("loadSettings with file I/O", () => {
       scripts: { transition: "g-trans" },
     }));
 
-    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+    vi.spyOn(pathsModule, "userSettingsPath").mockReturnValue(tempGlobalPath);
 
     const result = loadSettings(workspaceDir);
     expect(result.agents.engineer.ref).toBe("global-eng");
@@ -111,7 +111,7 @@ describe("loadSettings with file I/O", () => {
       scripts: { transition: "l-trans" },
     }));
 
-    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+    vi.spyOn(pathsModule, "userSettingsPath").mockReturnValue(tempGlobalPath);
 
     const result = loadSettings(workspaceDir);
     expect(result.agents.engineer.ref).toBe("e-local");
@@ -132,7 +132,7 @@ describe("loadSettings with file I/O", () => {
       scripts: { transitoin: "x" },
     }));
 
-    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+    vi.spyOn(pathsModule, "userSettingsPath").mockReturnValue(tempGlobalPath);
 
     const localSettingsPath = join(workspaceDir, ".rivo", "settings.local.json");
     expect(() => loadSettings(workspaceDir)).toThrow();

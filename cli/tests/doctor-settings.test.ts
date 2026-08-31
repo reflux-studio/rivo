@@ -20,7 +20,7 @@ describe("doctor 遇到损坏的 settings 文件", () => {
       "nodes:\n  - id: plan\n    assignees: [product]\n",
     );
 
-    vi.spyOn(pathsModule, "globalSettingsPath").mockReturnValue(tempGlobalPath);
+    vi.spyOn(pathsModule, "userSettingsPath").mockReturnValue(tempGlobalPath);
 
     const problems = doctor(ws);
 

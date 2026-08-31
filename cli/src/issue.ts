@@ -171,7 +171,7 @@ function notifyEntered(
       if (result.error) {
         console.warn(
           `[rivo] scripts.${event} 执行失败:${result.error}\n` +
-            `       流转已写入 log,状态是对的;请手工通知 ${agent},或修好脚本后重新触发。`,
+            `       流转已写入 log,状态是对的;请手工通知 ${agent}。`,
         );
       }
     }

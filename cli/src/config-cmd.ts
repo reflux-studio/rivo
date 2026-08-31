@@ -1,26 +1,13 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { globalSettingsPath, isHomeDir, paths } from "./paths.js";
+import { type Scope, paths, userFlowsDir, userSettingsPath } from "./paths.js";
+import { flowSearchPath } from "./flow.js";
 import { readSettingsFile } from "./settings.js";
 
-function targetPath(ws: string | null, local: boolean): string {
-  if (!local) return globalSettingsPath();
-  if (!ws) throw new Error("--local 需要在已初始化的项目里执行,先跑 rivo init");
+function settingsPath(ws: string | null, scope: Scope): string {
+  if (scope === "user") return userSettingsPath();
+  if (!ws) throw new Error("--scope=project 需要在项目里执行,当前目录向上没有 .rivo 工作区");
   return paths(ws).localSettings;
-}
-
-/**
- * Explicit initialisation, like `git init`. Without it every command failed in
- * a fresh repo, including the one the missing-workspace error used to name.
- */
-export function initWorkspace(dir: string): { rivoDir: string; created: boolean } {
-  const { rivoDir, flowsDir } = paths(dir);
-  if (isHomeDir(dir)) {
-    throw new Error("不能在用户主目录初始化工作区:~/.rivo 是全局设置目录,交付日志必须待在仓库里");
-  }
-  const created = !existsSync(rivoDir);
-  mkdirSync(flowsDir, { recursive: true });
-  return { rivoDir, created };
 }
 
 function writeRaw(path: string, data: unknown) {
@@ -38,18 +25,23 @@ function ensureGitignore(ws: string) {
   writeFileSync(file, existing ? `${existing.replace(/\n*$/, "\n")}${line}\n` : `${line}\n`);
 }
 
-export function addAgent(ws: string | null, name: string, ref: string | undefined, local: boolean): void {
-  const path = targetPath(ws, local);
+export function addAgent(
+  ws: string | null,
+  name: string,
+  ref: string | undefined,
+  scope: Scope,
+): void {
+  const path = settingsPath(ws, scope);
   const settings = readSettingsFile(path);
   settings.agents[name] = ref ? { ref } : {};
   // Gitignore the local settings file before it exists, so there is no window
   // where settings.local.json is on disk but untracked-by-git status isn't guaranteed yet.
-  if (local && ws) ensureGitignore(ws);
+  if (scope === "project" && ws) ensureGitignore(ws);
   writeRaw(path, settings);
 }
 
-export function removeAgent(ws: string | null, name: string, local: boolean): void {
-  const path = targetPath(ws, local);
+export function removeAgent(ws: string | null, name: string, scope: Scope): void {
+  const path = settingsPath(ws, scope);
   const settings = readSettingsFile(path);
   if (!(name in settings.agents)) throw new Error(`${path} 中没有 agent ${name}`);
   delete settings.agents[name];
@@ -69,18 +61,41 @@ nodes:
       产出什么、输入在哪、什么时候可以 approve。三五行说清即可。
 `;
 
-export function newFlow(ws: string, name: string): string {
-  const file = join(paths(ws).flowsDir, `${name}.yaml`);
+export function newFlow(ws: string | null, name: string, scope: Scope): string {
+  const dir = scope === "user" ? userFlowsDir() : flowsDirOf(ws);
+  const file = join(dir, `${name}.yaml`);
   if (existsSync(file)) throw new Error(`流程 ${name} 已存在:${file}`);
-  mkdirSync(paths(ws).flowsDir, { recursive: true });
+  mkdirSync(dir, { recursive: true });
   writeFileSync(file, FLOW_SKELETON, "utf8");
   return file;
 }
 
-export function listFlows(ws: string): string[] {
-  const dir = paths(ws).flowsDir;
+function flowsDirOf(ws: string | null): string {
+  if (!ws) throw new Error("--scope=project 需要在项目里执行,当前目录向上没有 .rivo 工作区");
+  return paths(ws).flowsDir;
+}
+
+function namesIn(dir: string): string[] {
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
     .filter((f) => f.endsWith(".yaml"))
     .map((f) => f.replace(/\.yaml$/, ""));
+}
+
+/**
+ * Union of both scopes, project first. A name present in both is listed once as
+ * `project` — that is the one `loadFlow` will pick, and seeing which scope won
+ * is the whole point of listing.
+ */
+export function listFlows(ws: string | null): { name: string; scope: Scope }[] {
+  const out: { name: string; scope: Scope }[] = [];
+  const seen = new Set<string>();
+  for (const { scope, dir } of flowSearchPath(ws)) {
+    for (const name of namesIn(dir)) {
+      if (seen.has(name)) continue;
+      seen.add(name);
+      out.push({ name, scope });
+    }
+  }
+  return out.sort((a, b) => a.name.localeCompare(b.name));
 }

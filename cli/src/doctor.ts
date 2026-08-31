@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { checkFlowAgents, parseFlow } from "./flow.js";
+import { checkFlowAgents, flowSearchPath, parseFlow } from "./flow.js";
 import { issuePaths, paths } from "./paths.js";
 import { readLog } from "./log.js";
 import { type Flow, SCRIPT_EVENTS, type Settings, SettingsSchema } from "./schema.js";
@@ -10,7 +10,7 @@ import { foldLog } from "./state.js";
 
 export type Problem = { where: string; message: string };
 
-export function doctor(ws: string): Problem[] {
+export function doctor(ws: string | null): Problem[] {
   const problems: Problem[] = [];
   // A corrupt settings file must not abort the run — doctor is what people
   // reach for when something is broken, and a bad settings file is exactly
@@ -23,7 +23,6 @@ export function doctor(ws: string): Problem[] {
     problems.push({ where: "settings", message: e instanceof Error ? e.message : String(e) });
     settings = SettingsSchema.parse({});
   }
-  const { flowsDir, issuesDir } = paths(ws);
 
   if (Object.keys(settings.agents).length === 0) {
     problems.push({ where: "settings", message: "没有声明任何 agent,先跑 rivo agent add" });
@@ -41,25 +40,29 @@ export function doctor(ws: string): Problem[] {
     }
   }
 
-  const flowFiles = existsSync(flowsDir)
-    ? readdirSync(flowsDir).filter((f) => f.endsWith(".yaml"))
-    : [];
+  // Both scopes get checked, but only the winning definition of each name goes
+  // into `flows` — that is the one in-flight issues actually resolve against.
   const flows = new Map<string, Flow>();
-  for (const file of flowFiles) {
-    const where = `flows/${file}`;
-    const name = file.replace(/\.yaml$/, "");
-    try {
-      const flow = parseFlow(readFileSync(join(flowsDir, file), "utf8"), name);
-      flows.set(name, flow);
-      const missing = checkFlowAgents(flow, settings);
-      if (missing.length) {
-        problems.push({ where, message: `引用了未声明的 agent:${missing.join(", ")}` });
+  for (const { scope, dir } of flowSearchPath(ws)) {
+    const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".yaml")) : [];
+    for (const file of files) {
+      const name = file.replace(/\.yaml$/, "");
+      const where = `${scope === "user" ? "~/.rivo/flows" : "flows"}/${file}`;
+      try {
+        const flow = parseFlow(readFileSync(join(dir, file), "utf8"), name);
+        if (!flows.has(name)) flows.set(name, flow);
+        const missing = checkFlowAgents(flow, settings);
+        if (missing.length) {
+          problems.push({ where, message: `引用了未声明的 agent:${missing.join(", ")}` });
+        }
+      } catch (e) {
+        problems.push({ where, message: e instanceof Error ? e.message : String(e) });
       }
-    } catch (e) {
-      problems.push({ where, message: e instanceof Error ? e.message : String(e) });
     }
   }
 
+  if (!ws) return problems;
+  const { issuesDir } = paths(ws);
   const slugs = existsSync(issuesDir) ? readdirSync(issuesDir) : [];
   for (const slug of slugs) {
     const { logPath } = issuePaths(ws, slug);

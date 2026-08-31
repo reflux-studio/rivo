@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { type Flow, type FlowNode, FlowSchema, type Settings } from "./schema.js";
-import { paths } from "./paths.js";
+import { type Scope, paths, userFlowsDir } from "./paths.js";
 
 export function parseFlow(text: string, name: string): Flow {
   let raw: unknown;
@@ -21,12 +21,34 @@ export function parseFlow(text: string, name: string): Flow {
   return parsed.data;
 }
 
-export function loadFlow(workspaceDir: string, name: string): Flow {
-  const file = join(paths(workspaceDir).flowsDir, `${name}.yaml`);
-  if (!existsSync(file)) {
-    throw new Error(`流程 ${name} 不存在: ${file}`);
+/** Lookup order for flow definitions: a repo's own definition beats the personal template. */
+export function flowSearchPath(workspaceDir: string | null): { scope: Scope; dir: string }[] {
+  const dirs: { scope: Scope; dir: string }[] = [];
+  if (workspaceDir) dirs.push({ scope: "project", dir: paths(workspaceDir).flowsDir });
+  dirs.push({ scope: "user", dir: userFlowsDir() });
+  return dirs;
+}
+
+export function resolveFlow(
+  workspaceDir: string | null,
+  name: string,
+): { file: string; scope: Scope } | null {
+  for (const { scope, dir } of flowSearchPath(workspaceDir)) {
+    const file = join(dir, `${name}.yaml`);
+    if (existsSync(file)) return { file, scope };
   }
-  return parseFlow(readFileSync(file, "utf8"), name);
+  return null;
+}
+
+export function loadFlow(workspaceDir: string | null, name: string): Flow {
+  const hit = resolveFlow(workspaceDir, name);
+  if (!hit) {
+    const tried = flowSearchPath(workspaceDir)
+      .map((s) => `  ${join(s.dir, `${name}.yaml`)}`)
+      .join("\n");
+    throw new Error(`流程 ${name} 不存在,已找过:\n${tried}`);
+  }
+  return parseFlow(readFileSync(hit.file, "utf8"), name);
 }
 
 /** Flow has no name field, so callers that know it pass it in for the message. */

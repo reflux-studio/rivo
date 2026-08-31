@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { type Settings, SettingsSchema } from "./schema.js";
-import { globalSettingsPath, paths } from "./paths.js";
+import { paths, userSettingsPath } from "./paths.js";
 
 export function readSettingsFile(path: string): Settings {
   if (!existsSync(path)) return SettingsSchema.parse({});
@@ -18,16 +18,16 @@ export function readSettingsFile(path: string): Settings {
 }
 
 /** Shallow merge; project values win per key, same as git config / .npmrc. */
-export function mergeSettings(global: Settings, local: Settings): Settings {
+export function mergeSettings(user: Settings, project: Settings): Settings {
   return {
-    agents: { ...global.agents, ...local.agents },
-    scripts: { ...global.scripts, ...local.scripts },
+    agents: { ...user.agents, ...project.agents },
+    scripts: { ...user.scripts, ...project.scripts },
   };
 }
 
-/** `null` workspace = global settings only, for commands that run outside a project. */
+/** `null` workspace = user settings only, for commands that run outside a project. */
 export function loadSettings(workspaceDir: string | null): Settings {
-  const global = readSettingsFile(globalSettingsPath());
-  if (!workspaceDir) return global;
-  return mergeSettings(global, readSettingsFile(paths(workspaceDir).localSettings));
+  const user = readSettingsFile(userSettingsPath());
+  if (!workspaceDir) return user;
+  return mergeSettings(user, readSettingsFile(paths(workspaceDir).localSettings));
 }
