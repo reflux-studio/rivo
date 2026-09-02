@@ -1,7 +1,7 @@
 {
   "name": "rivo-designer",
   "version": "0.1.0",
-  "description": "体验层角色：设计用户如何理解和操作产品，持有 ui-design 与设计系统。",
+  "description": "一套体验设计技能：设计用户如何理解和操作产品，产出界面设计与交互说明，并维护设计系统与设计认知。",
   "author": {
     "name": "suziming"
   }

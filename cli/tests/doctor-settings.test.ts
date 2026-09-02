@@ -15,17 +15,14 @@ describe("doctor 遇到损坏的 settings 文件", () => {
     mkdirSync(join(ws, ".rivo", "flows"), { recursive: true });
 
     writeFileSync(join(ws, ".rivo", "settings.local.json"), "{not valid json");
-    writeFileSync(
-      join(ws, ".rivo", "flows", "demo.yaml"),
-      "nodes:\n  - id: plan\n    assignees: [product]\n",
-    );
+    writeFileSync(join(ws, ".rivo", "flows", "bad.yaml"), "nodes: []\n");
 
     vi.spyOn(pathsModule, "userSettingsPath").mockReturnValue(tempGlobalPath);
 
     const problems = doctor(ws);
 
     expect(problems.some((p) => p.where === "settings")).toBe(true);
-    expect(problems.some((p) => p.message.includes("product"))).toBe(true);
+    expect(problems.some((p) => p.where === "flows/bad.yaml")).toBe(true);
     expect(problems.length).toBeGreaterThanOrEqual(2);
 
     vi.restoreAllMocks();

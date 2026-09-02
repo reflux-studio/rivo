@@ -16,21 +16,21 @@
       "displayName": "rivo Product",
       "source": "./plugins/rivo-product",
       "category": "productivity",
-      "description": "意图层角色。澄清要解决的产品问题、写需求、盯竞品与路线图、组织用户验收，并持有一份跟着项目长期演进的产品认知。"
+      "description": "一套产品交付技能。澄清要解决的问题、写需求、盯竞品与路线图、组织用户验收，并维护一份跟着项目长期演进的产品认知。单装即可用，不依赖其他包。"
     },
     {
       "name": "rivo-designer",
       "displayName": "rivo Designer",
       "source": "./plugins/rivo-designer",
       "category": "productivity",
-      "description": "体验层角色。设计用户如何理解和操作产品，产出界面设计与交互说明，并持有设计系统与设计认知。"
+      "description": "一套体验设计技能。设计用户如何理解和操作产品，产出界面设计与交互说明，并维护设计系统与设计认知。单装即可用，不依赖其他包。"
     },
     {
       "name": "rivo-engineer",
       "displayName": "rivo Engineer",
       "source": "./plugins/rivo-engineer",
       "category": "productivity",
-      "description": "机制层角色。设计系统方案、测试驱动地实现、系统化排查缺陷、评估技术债并发布，持有一份工程认知。"
+      "description": "一套工程交付技能。对齐需求、承接人给的方向、写方案并拆任务，然后跑「实施 ⇄ 人类 CR」的敏捷循环；系统化排查缺陷、评估技术债并发布，维护一份项目工程认知。单装即可用，不依赖其他包。"
     }
   ]
 }

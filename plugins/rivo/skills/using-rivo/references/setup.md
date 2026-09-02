@@ -23,20 +23,26 @@ npm i -g rivo-cli
 
 写操作用 `--scope user|project` 选层，读操作不用管——找不到就自动回退到 user。
 
-`agent add` / `agent remove` 默认 `user`：`scripts` 模板取决于你用哪个平台的 CLI，同一台机器上对所有项目都一样；`ref` 是工作区级的，多数人只有一个工作区。绝大多数情况下只需要那一个全局文件。
+`agents` 和 `scripts` 一般都写 user 层：`scripts` 模板取决于你用哪个平台的 CLI，同一台机器上对所有项目都一样；`ref` 也基本是一台机器一份。绝大多数情况下只需要那一个全局文件。
 
 `flow new` 默认 `project`：流程定义是团队约定，要跟着代码进 git 一起演进。写个人模板时才加 `--scope user`。
 
 **没有初始化命令。** `.rivo/` 不存在时，`rivo issue new` 和 `rivo flow new` 会在当前目录就地建。唯一的例外是用户主目录——那里会被拒绝，因为 `~/.rivo` 是 user 层的配置目录，交付日志必须待在仓库里。
 
-## 声明参与者
+## 把 assignee 绑到平台上
 
-```bash
-rivo agent add engineer --ref <平台上的 agent 标识>
-rivo agent add qa                    # 不绑 ref：这个节点由人接手，rivo 不会为这个 assignee 调用脚本
+`flow.yaml` 里的 `assignees` 是你自己起的名字。想让 rivo 唤起它，就在 `settings.json` 的 `agents` 里给这个名字配一个 `ref`：
+
+```json
+{
+  "agents": {
+    "engineer": { "ref": "<平台上的 agent 标识>" },
+    "qa": {}
+  }
+}
 ```
 
-`rivo agent list [--json]` 看已声明的参与者，`rivo agent remove <name> [--scope <层>]` 移除。
+**rivo 不校验这张表。** 它只是回调参数的查找表：查得到 `ref` 就带着它调脚本，查不到就跳过——不管是因为这个节点本来就由人接手，还是因为名字打错了。rivo 分辨不出这两种情况，也不去猜：猜错了不是骚扰配置正确的人，就是把真错误埋进一条没人看的告警里。名字打错时，`rivo issue show` 打出来的 assignee 就是你发现它的地方。
 
 ## 配置平台接入
 
@@ -79,9 +85,9 @@ rivo doctor                          # 一次性体检，见下
 
 `rivo doctor` 检查这些：
 
-- `settings` 能不能解析，合并之后 `agents` 是不是空的
+- `settings` 能不能解析
 - `scripts` 模板里的变量是不是都在变量表内（拼错的 `{agnet_ref}`、`{agentRef}` 当场抓出）
-- 两层的每份 `flow.yaml` 过不过 schema、有没有引用未声明的 agent
+- 两层的每份 `flow.yaml` 过不过 schema
 - 每个 issue 的 log 有没有无法解析的行、有没有被忽略的陈旧事件
 - 每个**在途** issue 的流程还在不在、当前节点还在不在那个流程里（改流程会立刻对在途交付生效）
 
@@ -89,12 +95,7 @@ rivo doctor                          # 一次性体检，见下
 
 其中模板变量拼写这一类不会在 `rivo issue new` / `approve` 等命令里被自动拦下——拼错时不报错，只会静默渲染成空字符串。提前跑 `rivo doctor` 能在配置阶段一次性发现，而不是等流转出了怪现象才回头查。
 
-**flow 引用了未声明的 agent 时，不同命令的态度不一样，不要指望统一报错：**
-
-- `rivo issue new` 会直接拒绝创建。
-- 交付一旦开始，`show` / `approve` / `reject` / `recall` / `close` 不会再因为这个原因报错——settings 是事后可能被编辑的，不能让一次配置改动就让正在跑的交付看不了、关不掉。取而代之的是：进入下一个节点时，rivo 会为每个未声明的 assignee 打印告警，点名是谁、在哪个节点，流转本身照常写入 log。
-
-所以"没人被唤起"要先分清楚是哪种：没配 `scripts`、assignee 没绑 `ref`（设计如此，人来接手）、还是 assignee 压根没声明（配置错了，看告警里点的名）。
+**它不检查 `agents`。** flow 里的 assignee 有没有对应的 `ref`，rivo 一概不管——见上面「把 assignee 绑到平台上」。所以"没人被唤起"只有两种原因：没配 `scripts`，或者这个 assignee 没有 `ref`。
 
 ## 开一次交付
 

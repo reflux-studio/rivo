@@ -91,4 +91,4 @@ argument-hint: "<发布对象、实现修订和验证证据>"
 - 回滚状态；
 - 尚需继续观察的事项。
 
-未指定后端时，发布记录写进 `rivo issue show` 返回的 `issue_dir`（文件名 `release.md`）。按项目惯例更新发布说明或变更记录。
+未指定后端时，发布记录写到 `docs/rivo/<需求名>/release.md`（rivo 流程里用 `issue_dir`，用户指定的位置优先）。按项目惯例更新发布说明或变更记录。

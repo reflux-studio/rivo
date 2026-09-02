@@ -34,10 +34,9 @@ function writeIssue(slug: string, events: object[]) {
 }
 
 describe("doctor", () => {
-  it("报出未声明的 agent", () => {
+  it("不因为 assignee 没在 settings 里就报问题", () => {
     writeFlow("demo", "nodes:\n  - id: plan\n    assignees: [product]\n");
-    const problems = doctor(ws);
-    expect(problems.some((p) => p.message.includes("product"))).toBe(true);
+    expect(doctor(ws)).toEqual([]);
   });
 
   it("报出 schema 非法的流程", () => {
@@ -50,10 +49,6 @@ describe("doctor", () => {
     settings.scripts = { transition: "mycli --id={agnet_ref}" };
     writeFlow("demo", "nodes:\n  - id: plan\n    assignees: [product]\n");
     expect(doctor(ws).some((p) => p.message.includes("agnet_ref"))).toBe(true);
-  });
-
-  it("agents 为空时报出来", () => {
-    expect(doctor(ws).some((p) => p.message.includes("没有声明任何 agent"))).toBe(true);
   });
 
   it("在途 issue 的当前节点不在流程里时报出来", () => {

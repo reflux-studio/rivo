@@ -24,7 +24,7 @@ rivo 是一个**无状态的 AI 交付流程编排器**：一个 CLI，加一组
 
 公司里 PRD 已经有真的产品经理在写，那就只装 `rivo-engineer`——工程师消化外部 PRD、出方案、实现、交付，全程不需要 rivo 认识"产品"这个角色。如果你团队确实没有专职设计师，也不必为了凑齐一整套角色包去装一个用不上的包。
 
-反过来，只装 `rivo` 本身也能跑完整流程——flow 的节点里 `assignees` 写你自己起的名字，`rivo agent add <name> --ref <id>` 把这个名字绑定到你自己在某个平台建的 Agent 即可，rivo 不关心那个 Agent 是用什么角色包提示词跑出来的。
+反过来，只装 `rivo` 本身也能跑完整流程——flow 的节点里 `assignees` 写你自己起的名字，在 `settings.json` 的 `agents` 里把这个名字配一个 `ref`，指向你在某个平台建的 Agent 即可，rivo 不关心那个 Agent 是用什么角色包提示词跑出来的。
 
 ## 核心模型
 
@@ -66,18 +66,22 @@ rivo 是一个**无状态的 AI 交付流程编排器**：一个 CLI，加一组
 
 ```
 rivo            using-rivo 技能（CLI 在 cli/，不打包进插件）
-rivo-product    意图层：writing-requirements / running-uat / writing-competitive-brief / updating-roadmap / longtermism
-rivo-designer   体验层：writing-ui-design / longtermism
-rivo-engineer   机制层：writing-system-design / implementing / test-driven-development / systematic-debugging / shipping / assessing-tech-debt / longtermism
+rivo-product    意图层：product-principles / writing-requirements / running-uat / writing-competitive-brief / updating-roadmap / longtermism
+rivo-designer   体验层：design-principles / writing-ui-design / longtermism
+rivo-engineer   机制层：engineering-principles / aligning-on-requirement / setting-direction / writing-system-design / agile-development / test-driven-development / systematic-debugging / shipping / assessing-tech-debt / longtermism
 ```
 
-每个角色包各带一份 `longtermism`——建立、遵循、维护一份跨交付的长期认知（`.rivo/PRODUCT.md` / `DESIGN.md` / `ENGINEERING.md`，随装了哪个包出现）。三个角色包互不引用，`agent.md` 里不出现别的角色名作为协作对象，只讲自己的职责和技能。
+每个包各带一份 `longtermism`——建立、遵循、维护一份跨交付的长期认知（`.rivo/PRODUCT.md` / `DESIGN.md` / `ENGINEERING.md`，随装了哪个包出现），和一份 `*-principles`——这套技能共同遵循的判断与边界，其他技能在开头点名引用它。
+
+**三个包互不引用，技能正文里不出现别的角色名。** 单装一个包的人没有 multi-agent 的概念："requirement 由 Product 持有"这种话他读不懂，AI 也理解不了——对它而言它孑然一身。同一件事要写成两种场景下都成立的说法："拍板权在提出需求的人手里，可能是产品经理，可能是你的搭档，也可能是戴着另一顶帽子的你自己"。"上游""下游"同理，它们假设了一条有上下游的流水线。
+
+编排是 `rivo` 主包（CLI + `using-rivo`）的事，技能包不承担。
 
 **零依赖不是一句口号，是三条可验证的事实：**
 
 - 公司电脑只装 `rivo-engineer`，不装 `rivo`，能完整工作——消化外部 PRD、写方案、实现、交付，角色包本身不依赖 CLI。
-- 只装 `rivo`，`assignees` 里写自己起的名字、用 `rivo agent add <name> --ref <id>` 绑到自己在某平台建的 Agent，能完整跑通一次流程——CLI 不内置任何角色定义或现成流程。
-- `rivo agent add <name>` 接受任意名字，不知道也不需要知道你装了哪些角色包。
+- 只装 `rivo`，`assignees` 里写自己起的名字、在 `settings.json` 里给它配一个 `ref` 指向自己在某平台建的 Agent，能完整跑通一次流程——CLI 不内置任何角色定义或现成流程。
+- 名字是什么由你定，rivo 不校验、也不需要知道你装了哪些角色包。
 
 `rivo` 本身不内置任何现成流程，`rivo flow new` 生成的是一份带注释的空骨架——真实流程会引用 `product` / `engineer` 这些名字，内置一份就等于让 CLI 依赖角色包了。示例见下文。
 
@@ -103,11 +107,8 @@ npm i -g rivo-cli
 ```bash
 cd your-project
 
-rivo agent add product  --ref <平台上的 agent 标识>
-rivo agent add engineer --ref <平台上的 agent 标识>
-
 rivo flow new product-feature                # 生成带注释的骨架，自己编辑
-rivo doctor                                  # 校验 flow / agent 引用 / scripts 变量
+rivo doctor                                  # 校验 flow / scripts 变量
 
 rivo issue new fix-login --flow product-feature
 rivo issue approve fix-login --as product --reason "方案完成，requirement.md 在 issue_dir 里"
@@ -204,7 +205,7 @@ nodes:
 配置和流程定义都有两层，按名字查找、项目覆盖 user，和 git config 是同一个模式：
 
 ```
-~/.rivo/settings.json              参与者与平台接入，agent add 默认写这里
+~/.rivo/settings.json              agents 与 scripts，手写
 ~/.rivo/flows/                     个人流程模板，跨项目复用
 
 <repo>/.rivo/settings.local.json   项目覆盖，自动 gitignore
@@ -244,7 +245,9 @@ rivo/
 └── docs/                    # 设计文档
 ```
 
-每个角色包结构一致：`agent.md`（角色定义）+ `skills/`（该角色的方法技能，各自带 `references/` 存放按需加载的模板）。
+三个包结构一致，只有 `skills/`，没有 `agent.md`。技能是唯一可移植的单元：装了包就能直接在会话里调用，不需要 harness 支持 agent 定义，也不需要先建立"角色"的概念——大多数人只装其中一个，直接起会话用。
+
+每个技能各自带 `references/` 存放按需加载的模板。
 
 ## License
 

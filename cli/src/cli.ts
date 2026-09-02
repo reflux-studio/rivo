@@ -1,5 +1,5 @@
 import { Command, Option } from "commander";
-import { addAgent, listFlows, newFlow, removeAgent } from "./config-cmd.js";
+import { listFlows, newFlow } from "./config-cmd.js";
 import { doctor } from "./doctor.js";
 import { loadFlow, nodeById } from "./flow.js";
 import { closeIssue, newIssue, recallIssue, recordVerdict, showIssue } from "./issue.js";
@@ -146,39 +146,6 @@ flowCmd
       return;
     }
     for (const f of flows) console.log(`${f.name}\t${f.scope}`);
-  });
-
-const agentCmd = program.command("agent").description("参与者");
-
-agentCmd
-  .command("add <name>")
-  .option("--ref <id>", "平台标识;不给表示由人承担")
-  .addOption(scopeOption("写到哪一层,默认 user").default("user"))
-  .action((name: string, opts: { ref?: string; scope: Scope }) => {
-    addAgent(optionalWs(), name, opts.ref, opts.scope);
-    console.log(`已声明 ${name}${opts.ref ? ` → ${opts.ref}` : "(未绑定,由人承担)"}`);
-  });
-
-agentCmd
-  .command("list")
-  .option("--json", "输出 JSON")
-  .action((opts: { json?: boolean }) => {
-    const { agents } = loadSettings(optionalWs());
-    if (opts.json) {
-      console.log(JSON.stringify(agents, null, 2));
-      return;
-    }
-    for (const [name, a] of Object.entries(agents)) {
-      console.log(`${name}\t${a.ref ?? "(未绑定)"}`);
-    }
-  });
-
-agentCmd
-  .command("remove <name>")
-  .addOption(scopeOption("从哪一层移除,默认 user").default("user"))
-  .action((name: string, opts: { scope: Scope }) => {
-    removeAgent(optionalWs(), name, opts.scope);
-    console.log(`已移除 ${name}`);
   });
 
 program

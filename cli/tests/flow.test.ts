@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkFlowAgents, nextNode, nodeById, parseFlow, prevNode } from "../src/flow.js";
-import { SettingsSchema } from "../src/schema.js";
+import { nextNode, nodeById, parseFlow, prevNode } from "../src/flow.js";
 
 const yaml = `
 mode: manual
@@ -45,22 +44,5 @@ describe("导航", () => {
 
   it("nodeById 找不到就抛错", () => {
     expect(() => nodeById(flow, "nope")).toThrow(/nope/);
-  });
-});
-
-describe("checkFlowAgents", () => {
-  it("列出未声明的 agent", () => {
-    const settings = SettingsSchema.parse({ agents: { product: { ref: "x" } } });
-    expect(checkFlowAgents(parseFlow(yaml, "demo"), settings).sort()).toEqual([
-      "designer",
-      "engineer",
-    ]);
-  });
-
-  it("声明但未绑定 ref 也算已声明", () => {
-    const settings = SettingsSchema.parse({
-      agents: { product: {}, designer: {}, engineer: {} },
-    });
-    expect(checkFlowAgents(parseFlow(yaml, "demo"), settings)).toEqual([]);
   });
 });

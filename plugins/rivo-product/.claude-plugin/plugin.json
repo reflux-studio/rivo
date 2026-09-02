@@ -1,7 +1,7 @@
 {
   "name": "rivo-product",
   "version": "0.1.0",
-  "description": "意图层角色：澄清产品问题、持有 requirement 与产品认知、组织用户验收。",
+  "description": "一套产品交付技能：澄清要解决的问题、写需求、盯竞品与路线图、组织用户验收，并维护一份跟着项目长期演进的产品认知。",
   "author": {
     "name": "suziming"
   }

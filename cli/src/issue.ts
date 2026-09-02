@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync } from "node:fs";
-import { checkFlowAgents, loadFlow, nodeById, nodeIndex, prevNode } from "./flow.js";
+import { loadFlow, nodeById, nodeIndex, prevNode } from "./flow.js";
 import { appendEvent, nowIso, readLog } from "./log.js";
 import { issuePaths } from "./paths.js";
 import { type Flow, type FlowNode, type Settings, SettingsSchema, type Verdict } from "./schema.js";
@@ -27,20 +27,6 @@ export type IssueView = {
   instruction?: string;
 };
 
-/** A flow naming an agent absent from settings is a misconfiguration; fail loudly rather than notifying nobody. */
-function assertKnownAgents(flow: Flow, flowName: string, settings: Settings): void {
-  const missing = checkFlowAgents(flow, settings);
-  if (missing.length) {
-    throw new Error(`流程 ${flowName} 引用了未声明的 agent:${missing.join(", ")};先用 rivo agent add 声明`);
-  }
-}
-
-// Deliberately does NOT call assertKnownAgents: this is the entry point for
-// show/approve/reject/recall/close on an issue already in flight. Settings
-// drifting after creation (someone edits ~/.rivo/settings.json) must never
-// brick a delivery — close in particular is the escape hatch when a delivery
-// is stuck, and it must keep working even then. notifyEntered warns loudly
-// about an undeclared agent instead; newIssue still refuses to create one.
 function load(ws: string, slug: string) {
   const { issueDir, logPath } = issuePaths(ws, slug);
   if (!existsSync(logPath)) throw new Error(`交付 ${slug} 不存在`);
@@ -142,21 +128,13 @@ function notifyEntered(
   try {
     const event = cause === "approve" ? "transition" : cause;
     for (const agent of nodeById(flow, nodeId).assignees) {
-      const declared = settings.agents[agent];
-      if (!declared) {
-        // Not declared at all is a misconfiguration, not a human node. It
-        // must not look identical to the ref-less case below — warn loudly
-        // naming the agent, but don't block the transition over it.
-        console.warn(
-          `[rivo] 节点 ${nodeId} 的 assignee ${agent} 未在 settings 中声明,已跳过通知;` +
-            `请用 rivo agent add 声明,或检查流程配置。`,
-        );
-        continue;
-      }
-      const ref = declared.ref;
-      // No ref means a human does this node: nothing to wake, they advance
-      // by hand. Skip silently rather than calling the script with an empty
-      // {agent_ref}.
+      // `agents` is a lookup table for the callback's arguments, nothing more.
+      // No entry means there is nothing to dispatch to — a human handles this
+      // node, or the name is a typo. rivo cannot tell those apart, so it does
+      // not try: guessing wrong either nags correct setups or buries real
+      // mistakes in a warning nobody reads. `issue show` prints the current
+      // assignees, which is where a typo actually surfaces.
+      const ref = settings.agents[agent]?.ref;
       if (!ref) continue;
       const result = runScript(
         settings,
@@ -188,7 +166,6 @@ export function newIssue(ws: string, slug: string, flowName: string): void {
   if (existsSync(logPath)) throw new Error(`交付 ${slug} 已存在`);
   const flow = loadFlow(ws, flowName);
   const settings = loadSettings(ws);
-  assertKnownAgents(flow, flowName, settings);
   mkdirSync(issueDir, { recursive: true });
   const first = flow.nodes[0].id;
   appendEvent(logPath, { t: "transition", ts: nowIso(), node: first, flow: flowName });

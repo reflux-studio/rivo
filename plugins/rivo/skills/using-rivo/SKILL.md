@@ -7,7 +7,7 @@ description: 用 rivo 跑一次交付流程，或配置 rivo 的参与者、流�
 
 先确认 CLI 可用：`rivo --version`。没装的话见 [references/setup.md](references/setup.md) 的安装说明。
 
-配置相关的操作（声明参与者、接入平台、建流程）也见 [references/setup.md](references/setup.md)。
+配置相关的操作（把 assignee 绑到平台、接入平台、建流程）也见 [references/setup.md](references/setup.md)。
 
 ## 你被唤起时
 
@@ -76,14 +76,13 @@ rivo issue log <slug>
 
 ## 没有人被唤起时
 
-`rivo issue approve` 之后如果没人被唤起，原因有四种，不要混为一谈：
+`rivo issue approve` 之后如果没人被唤起，原因有三种：
 
 - 根本没配 `scripts`——手工模式，预期如此。
-- 下个节点的 assignee 声明时没绑 `--ref`——设计如此，这个节点本来就该由人接手，rivo 不会调用脚本。
-- 下个节点的 assignee 压根没声明——是错误，rivo 会打印告警点名是谁、在哪个节点。
+- 下个节点的 assignee 在 `settings.json` 的 `agents` 里没有 `ref`——可能是这个节点本来就该由人接手，也可能是名字打错了。**rivo 不区分这两种，你得自己看 `show` 打出来的 assignee 对不对。**
 - 脚本跑了但失败了——告警里有失败原因和该通知谁。**rivo 没有重放机制**，手工通知那个人即可，流转本身已经写进 log，状态是对的。
 
-不管是哪一种，**把下一步是谁告诉用户**，由人去开对应的会话或去补上缺失的声明。
+不管是哪一种，**把下一步是谁告诉用户**，由人去开对应的会话或去把 `ref` 补上。
 
 ## 流程设计原则
 

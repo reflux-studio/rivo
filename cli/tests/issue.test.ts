@@ -102,58 +102,51 @@ describe("newIssue", () => {
   });
 });
 
-describe("未声明的 agent", () => {
-  it("new 时仍然拒绝引用了未声明 agent 的流程", () => {
-    writeFileSync(
-      join(ws, ".rivo", "flows", "orphan.yaml"),
-      `
-nodes:
-  - id: plan
-    assignees: [ghost]
-`,
-    );
-    expect(() => newIssue(ws, "o", "orphan")).toThrow(/ghost/);
-  });
-
-  it("settings 中途撤掉声明后不能把交付变砖:show/推进/close 都不报错,只是警告", () => {
-    writeFileSync(
-      join(ws, ".rivo", "flows", "orphan.yaml"),
-      `
+describe("settings 里没有的 assignee", () => {
+  const orphanFlow = `
 nodes:
   - id: plan
     assignees: [ghost]
   - id: review
     assignees: [ghost]
-`,
-    );
-    settingsState.agents.ghost = {}; // 声明够用,先把 issue 建出来
-    newIssue(ws, "o", "orphan");
-    delete settingsState.agents.ghost; // 创建之后 settings 漂移:撤掉声明
+`;
 
+  // rivo does not police who the assignees are: `agents` is a lookup table for
+  // the callback's arguments, and a name with no entry simply has nothing to
+  // dispatch to. Creating, advancing and closing all work; the script is not
+  // called; nothing is warned about.
+  it("能建、能推进、能 close,不报错", () => {
+    writeFileSync(join(ws, ".rivo", "flows", "orphan.yaml"), orphanFlow);
+    settingsState.scripts = { transition: "true {agent_ref}" };
+
+    expect(() => newIssue(ws, "o", "orphan")).not.toThrow();
     expect(() => showIssue(ws, "o")).not.toThrow();
 
-    // vi.spyOn(console, "warn") gets clobbered mid-test by vitest's own
-    // console interception in this setup, so capture calls with a plain
-    // monkey-patch instead — the smallest thing that reliably works.
     const originalWarn = console.warn;
     const warnCalls: unknown[][] = [];
     console.warn = (...args: unknown[]) => {
       warnCalls.push(args);
     };
-    let threw: unknown;
     try {
-      recordVerdict(ws, "o", "ghost", "approve", "ok");
-    } catch (e) {
-      threw = e;
+      expect(() => recordVerdict(ws, "o", "ghost", "approve", "ok")).not.toThrow();
     } finally {
       console.warn = originalWarn;
     }
-    expect(threw).toBeUndefined();
-    expect(warnCalls.some((c) => String(c[0]).includes("ghost"))).toBe(true);
 
-    const view = showIssue(ws, "o");
-    expect(view.node).toBe("review");
+    expect(warnCalls).toEqual([]);
+    expect(runScriptCalls).toEqual([]);
+    expect(showIssue(ws, "o").node).toBe("review");
+    expect(() => closeIssue(ws, "o", "human", "结束")).not.toThrow();
+  });
 
+  it("settings 中途撤掉 ref 不会把交付变砖", () => {
+    writeFileSync(join(ws, ".rivo", "flows", "orphan.yaml"), orphanFlow);
+    settingsState.agents.ghost = { ref: "ghost-bot" };
+    newIssue(ws, "o", "orphan");
+    delete settingsState.agents.ghost;
+
+    expect(() => recordVerdict(ws, "o", "ghost", "approve", "ok")).not.toThrow();
+    expect(showIssue(ws, "o").node).toBe("review");
     expect(() => closeIssue(ws, "o", "human", "结束")).not.toThrow();
   });
 });

@@ -103,4 +103,10 @@ Priority = (Impact + Risk + Frequency) × Confidence ÷ Effort
 [每项完成后如何证明风险已经降低]
 ```
 
-本次评估属于某个正式交付节点时，把评估写进 `rivo issue show` 返回的 `issue_dir`（文件名 `tech-debt.md`）；独立执行时，发布到项目惯用的技术债记录位置，或直接返回给用户，并把结论回写进 `.rivo/ENGINEERING.md`。需要落地时，同时返回目标、证据、优先级和建议验证方式。
+**写到哪：** `docs/rivo/<需求名>/tech-debt.md`
+- 跑在 rivo 流程里时，用 `rivo issue show` 返回的 `issue_dir`
+- 用户指定的位置优先——本地路径、Notion、语雀都行
+
+结论回写进 `.rivo/ENGINEERING.md`。
+
+需要落地时，同时返回目标、证据、优先级和建议验证方式。

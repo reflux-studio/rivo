@@ -21,11 +21,8 @@ npm i -g rivo-cli
 ```bash
 cd your-project
 
-rivo agent add product  --ref <平台上的 agent 标识>
-rivo agent add engineer --ref <平台上的 agent 标识>
-
 rivo flow new product-feature      # 生成带注释的骨架，自己编辑
-rivo doctor                        # 校验 flow / agent 引用 / scripts 变量
+rivo doctor                        # 校验 flow / scripts 变量
 
 rivo issue new fix-login --flow product-feature
 rivo issue approve fix-login --as product --reason "方案完成，requirement.md 在 issue_dir 里"
@@ -68,11 +65,6 @@ rivo flow show <name> [--node <node>] [--json]
 rivo flow new  <name> [--scope user|project]              # 默认 project
 rivo flow list [--json]
 
-# 参与者
-rivo agent add    <name> [--ref <id>] [--scope user|project]   # 默认 user
-rivo agent list   [--json]
-rivo agent remove <name> [--scope user|project]
-
 # 检查
 rivo doctor [--json]
 ```
@@ -86,7 +78,7 @@ rivo doctor [--json]
 配置和流程定义都有两层，按名字查找、项目覆盖 user，和 git config 是同一个模式：
 
 ```
-~/.rivo/settings.json              参与者与平台接入，agent add 默认写这里
+~/.rivo/settings.json              agents 与 scripts，手写
 ~/.rivo/flows/                     个人流程模板，跨项目复用
 
 <repo>/.rivo/settings.local.json   项目覆盖，自动 gitignore

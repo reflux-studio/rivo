@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, realpathSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 
@@ -63,7 +63,21 @@ export function ensureWorkspace(from: string): string {
     throw new Error("不能在用户主目录建立工作区:~/.rivo 是 user 作用域的配置目录,交付日志必须待在仓库里");
   }
   mkdirSync(join(dir, ".rivo"), { recursive: true });
+  ensureGitignore(dir);
   return dir;
+}
+
+/**
+ * `settings.local.json` holds machine-local overrides and must never reach git.
+ * Written when the workspace is created, so there is no window where the file
+ * exists untracked-by-intent but not by .gitignore.
+ */
+function ensureGitignore(workspaceDir: string): void {
+  const file = paths(workspaceDir).gitignore;
+  const line = "settings.local.json";
+  const existing = existsSync(file) ? readFileSync(file, "utf8") : "";
+  if (existing.split("\n").includes(line)) return;
+  writeFileSync(file, existing ? `${existing.replace(/\n*$/, "\n")}${line}\n` : `${line}\n`);
 }
 
 export function paths(workspaceDir: string) {

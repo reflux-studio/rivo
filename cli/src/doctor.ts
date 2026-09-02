@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { checkFlowAgents, flowSearchPath, parseFlow } from "./flow.js";
+import { flowSearchPath, parseFlow } from "./flow.js";
 import { issuePaths, paths } from "./paths.js";
 import { readLog } from "./log.js";
 import { type Flow, SCRIPT_EVENTS, type Settings, SettingsSchema } from "./schema.js";
@@ -22,10 +22,6 @@ export function doctor(ws: string | null): Problem[] {
   } catch (e) {
     problems.push({ where: "settings", message: e instanceof Error ? e.message : String(e) });
     settings = SettingsSchema.parse({});
-  }
-
-  if (Object.keys(settings.agents).length === 0) {
-    problems.push({ where: "settings", message: "没有声明任何 agent,先跑 rivo agent add" });
   }
 
   for (const event of SCRIPT_EVENTS) {
@@ -51,10 +47,6 @@ export function doctor(ws: string | null): Problem[] {
       try {
         const flow = parseFlow(readFileSync(join(dir, file), "utf8"), name);
         if (!flows.has(name)) flows.set(name, flow);
-        const missing = checkFlowAgents(flow, settings);
-        if (missing.length) {
-          problems.push({ where, message: `引用了未声明的 agent:${missing.join(", ")}` });
-        }
       } catch (e) {
         problems.push({ where, message: e instanceof Error ? e.message : String(e) });
       }
