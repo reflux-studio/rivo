@@ -10,8 +10,9 @@ description: |
 
 nodes:
   - id: first-node
-    assignees: [<role>]      # 换成你的角色名。想让 rivo 唤起它,就在 settings.json
-                             # 的 agents 里给这个名字配一个 ref;不配就是人来做
+    assignees: [<name>]      # 你自己起的名字,rivo 不校验。想让 rivo 唤起它,就在
+                             # settings.json 的 agents 里给这个名字配一个 ref;
+                             # 不配就是没东西可唤起,停在这里等人
     approve: all             # all | any | <数字>,默认 all
     instruction: |
       产出什么、输入在哪、什么时候可以 approve。三五行说清即可。
