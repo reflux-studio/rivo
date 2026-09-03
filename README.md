@@ -14,17 +14,17 @@
 
 ## 这是什么
 
-rivo 是一个**无状态的 AI 交付流程编排器**：一个 CLI，加一组按角色划分的技能包。
+rivo 是一个**无状态的 AI 交付流程编排器**：一个 CLI，加一组按领域划分的技能包。
 
 一次交付要经过哪些角色、什么时候轮到谁、多少人同意才算过——这些是数据（`flow.yaml`），不是某个 Agent 现场判断出来的。CLI 只做记账：谁在什么时候表了什么态，条件满不满足，该不该往下走。它不懂产品、不懂代码、不懂平台，也不需要懂。
 
 ## 为什么不是"五个 Agent 演人类岗位"
 
-装哪些角色包 = 你实际持有哪些决定权。
+装哪些包 = 你实际持有哪些决定权。
 
-公司里 PRD 已经有真的产品经理在写，那就只装 `rivo-engineer`——工程师消化外部 PRD、出方案、实现、交付，全程不需要 rivo 认识"产品"这个角色。如果你团队确实没有专职设计师，也不必为了凑齐一整套角色包去装一个用不上的包。
+公司里 PRD 已经有真的产品经理在写，那就只装 `rivo-engineering`——工程师消化外部 PRD、出方案、实现、交付，全程不需要 rivo 认识"产品"这个角色。如果你团队确实没有专职设计师，也不必为了凑齐一整套去装一个用不上的包。
 
-反过来，只装 `rivo` 本身也能跑完整流程——flow 的节点里 `assignees` 写你自己起的名字，在 `settings.json` 的 `agents` 里把这个名字配一个 `ref`，指向你在某个平台建的 Agent 即可，rivo 不关心那个 Agent 是用什么角色包提示词跑出来的。
+反过来，只装 `rivo` 本身也能跑完整流程——flow 的节点里 `assignees` 写你自己起的名字，在 `settings.json` 的 `agents` 里把这个名字配一个 `ref`，指向你在某个平台建的 Agent 即可，rivo 不关心那个 Agent 是用什么技能包跑出来的。
 
 ## 核心模型
 
@@ -65,10 +65,10 @@ rivo 是一个**无状态的 AI 交付流程编排器**：一个 CLI，加一组
 ## 四个包，零依赖
 
 ```
-rivo            using-rivo 技能（CLI 在 cli/，不打包进插件）
-rivo-product    意图层：product-principles / writing-requirements / running-uat / writing-competitive-brief / updating-roadmap / longtermism
-rivo-designer   体验层：design-principles / writing-ui-design / longtermism
-rivo-engineer   机制层：engineering-principles / aligning-on-requirement / setting-direction / writing-system-design / agile-development / test-driven-development / systematic-debugging / shipping / assessing-tech-debt / longtermism
+rivo              using-rivo 技能（CLI 在 cli/，不打包进插件）
+rivo-product      意图层：product-principles / writing-requirements / running-uat / writing-competitive-brief / updating-roadmap / longtermism
+rivo-design       体验层：design-principles / writing-ui-design / longtermism
+rivo-engineering  机制层：engineering-principles / aligning-on-requirement / setting-direction / writing-system-design / agile-development / test-driven-development / systematic-debugging / shipping / assessing-tech-debt / longtermism
 ```
 
 每个包各带一份 `longtermism`——建立、遵循、维护一份跨交付的长期认知（`.rivo/PRODUCT.md` / `DESIGN.md` / `ENGINEERING.md`，随装了哪个包出现），和一份 `*-principles`——这套技能共同遵循的判断与边界，其他技能在开头点名引用它。
@@ -79,11 +79,11 @@ rivo-engineer   机制层：engineering-principles / aligning-on-requirement / s
 
 **零依赖不是一句口号，是三条可验证的事实：**
 
-- 公司电脑只装 `rivo-engineer`，不装 `rivo`，能完整工作——消化外部 PRD、写方案、实现、交付，角色包本身不依赖 CLI。
+- 公司电脑只装 `rivo-engineering`，不装 `rivo`，能完整工作——消化外部 PRD、写方案、实现、交付，技能包本身不依赖 CLI。
 - 只装 `rivo`，`assignees` 里写自己起的名字、在 `settings.json` 里给它配一个 `ref` 指向自己在某平台建的 Agent，能完整跑通一次流程——CLI 不内置任何角色定义或现成流程。
-- 名字是什么由你定，rivo 不校验、也不需要知道你装了哪些角色包。
+- 名字是什么由你定，rivo 不校验、也不需要知道你装了哪些技能包。
 
-`rivo` 本身不内置任何现成流程，`rivo flow new` 生成的是一份带注释的空骨架——真实流程会引用 `product` / `engineer` 这些名字，内置一份就等于让 CLI 依赖角色包了。示例见下文。
+`rivo` 本身不内置任何现成流程，`rivo flow new` 生成的是一份带注释的空骨架——真实流程会引用 `product` / `engineer` 这些名字，内置一份就等于让 CLI 依赖技能包了。示例见下文。
 
 ## 五分钟跑通
 
@@ -95,11 +95,11 @@ npm i -g rivo-cli
 
 命令名是 `rivo`，需要 Node 22+。想从源码跑：`cd cli && npm install && npx tsup && npm link`。
 
-装角色包（在 Claude Code 里）：
+装技能包（在 Claude Code 里）：
 
 ```
 /plugin marketplace add <这个仓库>
-/plugin install rivo-engineer
+/plugin install rivo-engineering
 ```
 
 跑一次交付：
@@ -229,7 +229,7 @@ nodes:
 
 **`recall` 不允许向前跳。** 向前跳等于跳过节点，目前没有用例；收窄是破坏性变更，放宽随时可以做。
 
-**`rivo` 不内置任何现成流程。** 内置一份就等于让 CLI 依赖某个角色包的角色名。
+**`rivo` 不内置任何现成流程。** 内置一份就等于让 CLI 依赖某个技能包里的名字。
 
 ## 仓库结构
 
@@ -239,9 +239,9 @@ rivo/
 ├── cli/                     # CLI 实现（TypeScript，npx tsup 构建）
 ├── plugins/
 │   ├── rivo/                # using-rivo 技能（跑流程、配置）
-│   ├── rivo-product/        # 意图层角色包
-│   ├── rivo-designer/       # 体验层角色包
-│   └── rivo-engineer/       # 机制层角色包
+│   ├── rivo-product/        # 意图层技能包
+│   ├── rivo-design/         # 体验层技能包
+│   └── rivo-engineering/    # 机制层技能包
 └── docs/                    # 设计文档
 ```
 

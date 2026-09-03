@@ -1,4 +1,4 @@
-# rivo-engineer 重构:把人放回循环的交付范式
+# rivo-engineering 重构:把人放回循环的交付范式
 
 状态:设计待评审
 日期:2026-09-01
@@ -7,7 +7,7 @@
 
 ## 1. 为什么改
 
-现在的 rivo-engineer 是一条线性 SDD:`writing-system-design` 一次性产出完整方案(含实施步骤、测试与发布),`implementing` 照方案施工,`shipping` 发布。`agent.md` 把七个技能列成一份菜单,没有任何东西约束它们的调用顺序和终止条件。
+现在的 rivo-engineering 是一条线性 SDD:`writing-system-design` 一次性产出完整方案(含实施步骤、测试与发布),`implementing` 照方案施工,`shipping` 发布。`agent.md` 把七个技能列成一份菜单,没有任何东西约束它们的调用顺序和终止条件。
 
 这条路径有三个真实问题,它们都不是执行不到位,而是范式本身导致的。
 
@@ -435,7 +435,7 @@ superpowers 的 `writing-plans` 是这个反例的教科书,而它内部是自�
 **新增 3 个技能**
 
 ```
-plugins/rivo-engineer/skills/
+plugins/rivo-engineering/skills/
   aligning-on-requirement/SKILL.md
   setting-direction/SKILL.md
   agile-development/
@@ -461,7 +461,7 @@ plugins/rivo-engineer/skills/
 
 **新增 `engineering-principles`**
 
-`plugins/rivo-engineer/skills/engineering-principles/SKILL.md`。四个阶段技能开头点名 `**必读前置：**` 引用它。
+`plugins/rivo-engineering/skills/engineering-principles/SKILL.md`。四个阶段技能开头点名 `**必读前置：**` 引用它。
 
 它解决的是真实的重复:"用最少的代码解决当前问题"原本在 `agent.md`、`implementer-prompt.md`、`task-reviewer-prompt.md` 各一份,"防御强度匹配部署场景"在两份 prompt 里各一份。三份会漂移。
 
@@ -484,7 +484,7 @@ plugins/rivo-engineer/skills/
 **不动**
 
 - `shipping`(理由见第 4 节)、`test-driven-development`、`systematic-debugging`、`assessing-tech-debt`、`longtermism`
-- rivo CLI、flow 机制、`rivo-product`、`rivo-designer`
+- rivo CLI、flow 机制、`rivo-product`、`rivo-design`
 
 ---
 

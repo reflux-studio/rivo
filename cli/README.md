@@ -6,7 +6,7 @@
 
 状态全部落在仓库里的 `.rivo/issues/<slug>/log.jsonl`，append-only，进 git。**这是 rivo 存在的理由**：交付过程是可 diff、可在 PR 里 review、跟着分支走的文本，而不是宿主平台里查不到历史的一段状态。
 
-完整设计、角色包和使用说明见 [github.com/reflux-studio/rivo](https://github.com/reflux-studio/rivo)。
+完整设计、技能包和使用说明见 [github.com/reflux-studio/rivo](https://github.com/reflux-studio/rivo)。
 
 ## 安装
 
