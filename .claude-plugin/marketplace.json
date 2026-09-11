@@ -1,0 +1,15 @@
+{
+  "name": "rivo",
+  "owner": {
+    "name": "Xav1erSue"
+  },
+  "plugins": [
+    {
+      "name": "rivo",
+      "displayName": "rivo",
+      "source": ".",
+      "category": "productivity",
+      "description": "通过共同建模、架构决策、契约设计和增量交付完成 AI 协作软件交付。"
+    }
+  ]
+}

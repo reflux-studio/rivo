@@ -1,0 +1,34 @@
+{
+  "name": "rivo",
+  "version": "0.1.0",
+  "description": "通过共同建模、架构决策、契约设计和增量交付完成 AI 协作软件交付。",
+  "author": {
+    "name": "Xav1erSue"
+  },
+  "keywords": [
+    "delivery",
+    "modeling",
+    "architecture",
+    "design",
+    "tdd",
+    "debugging"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Rivo",
+    "shortDescription": "让软件交付与人的理解共同演进",
+    "longDescription": "可独立使用的建模、架构决策、技术设计、增量交付、TDD、调试与知识沉淀技能，由 using-rivo 按任务需要组织。",
+    "developerName": "Xav1erSue",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "用 Rivo 完成这个需求，从理解业务和现有系统开始。",
+      "用 collaborative-modeling 和我一起梳理这个业务。",
+      "用 incremental-delivery 组织这次实施。"
+    ]
+  }
+}

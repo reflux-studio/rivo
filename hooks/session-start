@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# SessionStart hook for Rivo plugin
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+using_rivo_content=$(cat "${PLUGIN_ROOT}/skills/using-rivo/SKILL.md" 2>&1 || echo "Error reading using-rivo skill")
+
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//\"/\\\"}"
+    s="${s//$'\n'/\\n}"
+    s="${s//$'\r'/\\r}"
+    s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
+
+using_rivo_escaped=$(escape_for_json "$using_rivo_content")
+session_context="You have Rivo installed.\n\n**Below is the full content of your 'rivo:using-rivo' skill — your routing manual for AI-assisted delivery. For all other skills, use the 'Skill' tool:**\n\n${using_rivo_escaped}"
+
+# Output context injection as JSON.
+# Claude Code: hookSpecificOutput.additionalContext (nested).
+# Cursor: additional_context (snake_case).
+# Copilot CLI / SDK standard: additionalContext (top-level).
+# Claude Code reads BOTH additional_context and hookSpecificOutput without
+# deduplication, so emit only the field the current platform consumes.
+if [ -n "${CURSOR_PLUGIN_ROOT:-}" ]; then
+  printf '{\n  "additional_context": "%s"\n}\n' "$session_context" | cat
+elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
+  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context" | cat
+else
+  printf '{\n  "additionalContext": "%s"\n}\n' "$session_context" | cat
+fi
+
+exit 0
