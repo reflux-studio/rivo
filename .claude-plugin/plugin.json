@@ -1,6 +1,6 @@
 {
   "name": "rivo",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "通过需求定义、技术设计、增量交付与可独立调用的写作和方法能力组织 AI 协作，维护项目知识。",
   "author": {
     "name": "Xav1erSue"

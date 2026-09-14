@@ -6,7 +6,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-using_rivo_content="Rivo is available. For a software delivery task, load rivo:using-rivo from ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md using the host skill or file reader. Before substantive requirements discussion, design or implementation, actually load the matching stage skill routed there: requirements-definition, technical-design or incremental-delivery. For an explicit standalone capability request, load that skill directly; do not start the full workflow."
+using_rivo_content="$(cat "${PLUGIN_ROOT}/skills/using-rivo/SKILL.md")"
+entry_context="Rivo entry skill is loaded below from ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md. Resolve its relative links from that directory. Load other skills with the host skill tool or file reader before using them.
+
+${using_rivo_content}"
 
 escape_for_json() {
     local s="$1"
@@ -18,7 +21,7 @@ escape_for_json() {
     printf '%s' "$s"
 }
 
-using_rivo_escaped=$(escape_for_json "$using_rivo_content")
+using_rivo_escaped=$(escape_for_json "$entry_context")
 session_context="${using_rivo_escaped}"
 
 # Output context injection as JSON.
