@@ -50,7 +50,7 @@ description: 用执行子代理和独立审阅分段交付，用于按技术方�
 - 重要规则、设计选择或协作承诺需要改变：按既有委托处理；未获决定时暂停依赖部分，继续独立工作。
 - 无法判断：先调查或实验，不把证据不足变成用户批准猜测的问题。
 
-使用 [审阅与碰撞记录](references/review-report.md) 留下依据。需要重新讨论需求或设计时使用 [brainstorming](../brainstorming/SKILL.md)。决定变化后，通过 [writing-docs](../writing-docs/SKILL.md) 更新受影响的交付文档，并同步任务上下文，核对受影响的已完成工作；不能只改文档让实现看起来正确。
+使用 [审阅与碰撞记录](references/review-report.md) 留下依据。需求或架构方向变化时加载 [requirements-definition](../requirements-definition/SKILL.md)，具体设计问题加载 [technical-design](../technical-design/SKILL.md)。决定变化后，按材料类型加载 [write-spec](../write-spec/SKILL.md)、[write-adr](../write-adr/SKILL.md) 或 [write-design](../write-design/SKILL.md) 更新受影响的文档，并同步任务上下文，核对受影响的已完成工作；不能只改文档让实现看起来正确。
 
 连续修复没有新证据时，重新调查原因或调整任务划分，避免机械重试。
 
@@ -62,4 +62,4 @@ description: 用执行子代理和独立审阅分段交付，用于按技术方�
 
 ## 后续衔接
 
-完成审阅、适用验证与授权交接后，回到主线程复盘偏差和经验，通过 [knowledge-management](../knowledge-management/SKILL.md) 维护可复用知识，再归档交付材料。遗留事项保留状态、影响与后续安排。需要改变需求或设计的碰撞回到 brainstorming 讨论，并更新受影响的材料和任务上下文；子代理交回结果，由主线程负责交付推进。
+完成审阅、适用验证与授权交接后，回到主线程复盘偏差和经验，通过 [knowledge-management](../knowledge-management/SKILL.md) 维护可复用知识，包括对照实际实现与验证结果更新最终架构 JSON、阅读入口及导航，再归档交付材料。遗留事项保留状态、影响与后续安排。需求或架构方向的碰撞交回 requirements-definition，具体设计碰撞交回 technical-design，更新受影响材料与任务上下文；子代理交回结果，由主线程负责交付推进。
