@@ -1,15 +1,16 @@
 {
   "name": "rivo",
-  "version": "0.1.0",
-  "description": "通过共同建模、架构决策、契约设计和增量交付完成 AI 协作软件交付。",
+  "version": "0.2.0",
+  "description": "通过调研、决策、设计、增量实施与知识维护组织 AI 协作交付。",
   "author": {
     "name": "Xav1erSue"
   },
   "keywords": [
     "delivery",
-    "modeling",
+    "requirements",
     "architecture",
     "design",
+    "knowledge",
     "tdd",
     "debugging"
   ],
@@ -17,7 +18,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "可独立使用的建模、架构决策、技术设计、增量交付、TDD、调试与知识沉淀技能，由 using-rivo 按任务需要组织。",
+    "longDescription": "逐步澄清需求与交互、比较架构选择、打磨技术方案，通过子代理实施、独立审阅和碰撞处理完成交付，并维护可复用的项目知识。领域建模按需使用。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
@@ -26,9 +27,9 @@
       "Write"
     ],
     "defaultPrompt": [
-      "用 Rivo 完成这个需求，从理解业务和现有系统开始。",
-      "用 collaborative-modeling 和我一起梳理这个业务。",
-      "用 incremental-delivery 组织这次实施。"
+      "用 Rivo 完成这个需求，先调查现状并和我澄清需求。",
+      "用 requirements-clarification 评审这份 PRD 和设计稿。",
+      "用 incremental-delivery 按已确认方案实施。"
     ]
   }
 }

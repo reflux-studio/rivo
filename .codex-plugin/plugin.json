@@ -1,7 +1,7 @@
 {
   "name": "rivo",
-  "version": "0.1.0",
-  "description": "通过共同建模、架构决策、契约设计和增量交付完成 AI 协作软件交付。",
+  "version": "0.2.0",
+  "description": "通过调研、决策、设计、增量实施与知识维护组织 AI 协作交付。",
   "author": {
     "name": "Xav1erSue"
   },
