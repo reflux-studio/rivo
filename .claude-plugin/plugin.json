@@ -1,7 +1,7 @@
 {
   "name": "rivo",
-  "version": "0.2.0",
-  "description": "通过调研、决策、设计、增量实施与知识维护组织 AI 协作交付。",
+  "version": "0.3.0",
+  "description": "通过协作调研与设计、独立文档写作、增量实施和知识维护组织 AI 交付。",
   "author": {
     "name": "Xav1erSue"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "逐步澄清需求与交互、比较架构选择、打磨技术方案，通过子代理实施、独立审阅和碰撞处理完成交付，并维护可复用的项目知识。领域建模按需使用。",
+    "longDescription": "通过 brainstorming 交替推进调研、需求对齐、决策与设计，独立写作技能按模板保存 Spec、ADR 和技术方案。通过子代理实施、独立审阅和碰撞处理完成交付，并维护项目知识。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
@@ -28,7 +28,7 @@
     ],
     "defaultPrompt": [
       "用 Rivo 完成这个需求，先调查现状并和我澄清需求。",
-      "用 requirements-clarification 评审这份 PRD 和设计稿。",
+      "用 brainstorming 评审这份 PRD 和设计稿。",
       "用 incremental-delivery 按已确认方案实施。"
     ]
   }

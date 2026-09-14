@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-using_rivo_content="Rivo is available. For a software delivery task, load rivo:using-rivo from ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md using the host skill or file reader. It routes requirements discovery, decisions, design, implementation and knowledge maintenance. Load other methods only when relevant to the current task."
+using_rivo_content="Rivo is available. For a software delivery task, load rivo:using-rivo from ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md using the host skill or file reader. It routes collaborative brainstorming, document writing, implementation and knowledge maintenance. Load other methods only when relevant to the current task."
 
 escape_for_json() {
     local s="$1"
