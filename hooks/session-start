@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 using_rivo_content="$(cat "${PLUGIN_ROOT}/skills/using-rivo/SKILL.md")"
-entry_context="RIVO ACTIVE — read and follow the rules below before any response or action. Load other skills from ${PLUGIN_ROOT}/skills/ with the host skill tool or file reader.
+entry_context="Rivo delivery entrypoint is loaded below. For a Rivo task, follow its workflow and load the current execution skill from ${PLUGIN_ROOT}/skills/ with the host skill tool or file reader before starting that stage. Announce the loaded skill and its purpose.
 
 ${using_rivo_content}"
 

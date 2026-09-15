@@ -1,7 +1,7 @@
 {
   "name": "rivo",
-  "version": "0.5.2",
-  "description": "通过需求定义、技术设计和增量交付共同建模；阶段直接保存结果，按需记录架构决定并维护项目知识。",
+  "version": "0.5.3",
+  "description": "需求阶段交付 Spec，设计阶段交付 plan，两阶段完成自审后进入实施、审阅与验证。",
   "author": {
     "name": "Xav1erSue"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "需求阶段形成业务模型和 Spec，技术设计形成实现模型与 plan，增量交付实施、审阅并用新证据检验模型。重要选择通过 architecture-decisions 形成 ADR，交付后按需维护当前知识与已核实图源。",
+    "longDescription": "从场景建立业务规则和技术模型，分别写入 Spec 与 plan 并自审。增量交付逐项实施、审阅和验证；重要选择记录为 ADR，核实后的结论合入项目知识。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
