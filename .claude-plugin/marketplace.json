@@ -9,7 +9,7 @@
       "displayName": "rivo",
       "source": ".",
       "category": "productivity",
-      "description": "用需求定义、技术设计和增量交付组织 AI 协作，交付经自审的 Spec、plan 与经过审阅和验证的实现。"
+      "description": "用需求定义、技术设计和增量交付组织 AI 协作，交付经子代理审阅和用户批准的 Spec、plan 与经过审阅和验证的实现。"
     }
   ]
 }

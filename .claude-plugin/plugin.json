@@ -1,7 +1,7 @@
 {
   "name": "rivo",
-  "version": "0.5.3",
-  "description": "需求阶段交付 Spec，设计阶段交付 plan，两阶段完成自审后进入实施、审阅与验证。",
+  "version": "0.5.4",
+  "description": "需求阶段交付 Spec，设计阶段交付 plan，文档经子代理审阅和用户批准后进入实施、审阅与验证。",
   "author": {
     "name": "Xav1erSue"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "从场景建立业务规则和技术模型，分别写入 Spec 与 plan 并自审。增量交付逐项实施、审阅和验证；重要选择记录为 ADR，核实后的结论合入项目知识。",
+    "longDescription": "从场景建立业务规则和技术模型，分别写入 Spec 与 plan，经子代理审阅后交给用户批准。增量交付逐项实施、审阅和验证；重要选择记录为 ADR，核实后的结论合入项目知识。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
