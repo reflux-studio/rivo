@@ -4,7 +4,7 @@
 
 ## 产物位置
 
-沿用当前任务确定的需求目录和 slug，默认将 before、target、compare HTML 及回执放入目标项目根目录的 `.rivo/issues/<slug>/assets/architecture/`。用户指定位置或项目明确的交付目录约定优先，修订已有图源时沿用其位置。向 Archify 命令传递明确的输出路径，不沿用 PRD 目录、工具默认目录或插件安装目录；需留存的检查证据归入同一需求的 evidence/。
+沿用当前任务确定的需求目录和 slug，默认将 before、target、compare HTML 及回执放入目标项目根目录的 `.rivo/issues/<slug>/assets/architecture/`。用户指定位置或项目配置（CLAUDE.md 等）中声明的路径优先；已有文件的位置不构成约定，修订已有图源时沿用其位置。向 Archify 命令传递明确的输出路径，不沿用 PRD 目录、工具默认目录或插件安装目录；需留存的检查证据归入同一需求的 evidence/。
 
 ## 图源与展示产物
 
