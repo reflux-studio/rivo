@@ -1,6 +1,6 @@
 {
   "name": "rivo",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "通过需求定义、技术设计和增量交付共同建模；阶段直接保存结果，按需记录架构决定并维护项目知识。",
   "author": {
     "name": "Xav1erSue"
