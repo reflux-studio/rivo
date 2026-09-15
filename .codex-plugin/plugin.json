@@ -1,9 +1,28 @@
 {
   "name": "rivo",
-  "version": "0.4.1",
-  "description": "通过需求定义、技术设计、增量交付与可独立调用的写作和方法能力组织 AI 协作，维护项目知识。",
+  "version": "0.5.0",
+  "description": "通过需求定义、技术设计和增量交付共同建模；阶段直接保存结果，按需记录架构决定并维护项目知识。",
   "author": {
     "name": "Xav1erSue"
   },
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Rivo",
+    "shortDescription": "让软件交付与人的理解共同演进",
+    "longDescription": "需求阶段形成业务模型和 Spec，技术设计形成实现模型与 plan，增量交付实施、审阅并用新证据检验模型。重要选择通过 architecture-decisions 形成 ADR，交付后按需维护当前知识与已核实图源。",
+    "developerName": "Xav1erSue",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "用 Rivo 完成这个需求，先调查现状并和我澄清需求。",
+      "用 requirements-definition 评审这份 PRD 和设计稿。",
+      "用 technical-design 展开已确认需求的技术方案。",
+      "用 architecture-decisions 保存刚才的决定与理由。",
+      "用 incremental-delivery 按已确认方案实施。"
+    ]
+  }
 }

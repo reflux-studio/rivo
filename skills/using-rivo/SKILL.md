@@ -1,45 +1,32 @@
 ---
 name: using-rivo
-description: 选择并衔接需求定义、技术设计、增量交付和独立能力，用于组织完整交付或继续进行中的 Rivo 任务。
+description: Rivo 全局规约与技能路由，确保选择正确入口并遵循协作纪律。
 ---
 
 # Using Rivo
 
-负责选择技能、传递上下文和组织收尾。三个阶段流程分别形成需求与方向、技术方案和已验证的交付；按用户目标和已有依据从适当位置进入。被派发的执行者或审阅者只处理任务简报，不重新组织整项交付。
+## 规约
 
-## 选择并加载
+加载技能再动手。拿不准用哪个时先看路由表——不确定不等于不需要。
 
-**开始相应阶段的资料调查、需求讨论、技术设计或实施前，必须实际加载对应阶段技能。** 宿主有技能调用工具时调用，否则读取下表链接的完整 SKILL.md。当前上下文已加载的内容直接沿用；提到技能名称、读过路由表或照本入口概述执行，都不等于加载。
+阶段技能各自调查、协作和保存产物。无需为写文件切换技能，无需制造中间状态文件或仪式性文档。
 
-| 当前需要 | 加载技能 | 主要结果 |
+建模贯穿需求、设计与实现，不是独立阶段。重要选择可通过 architecture-decisions 记录 ADR，但不强制。
+
+只请求评审、整理或局部问题时完成该范围，不自动扩展为完整交付。已有充分依据可直接进入后续工作，小改动无需补齐所有文档。
+
+用户指令（CLAUDE.md 等）优先于技能约定。
+
+## 路由
+
+| 当前工作 | 技能 | 产物 |
 | --- | --- | --- |
-| 查清现状，定义需求及所需架构方向 | [requirements-definition](../requirements-definition/SKILL.md) | 需求约定、重要决定和方向图 |
-| 将已有需求和方向展开为技术方案 | [technical-design](../technical-design/SKILL.md) | 可评审、可实施的设计 |
-| 分段实施、独立审阅与验证 | [incremental-delivery](../incremental-delivery/SKILL.md) | 实现与验证证据 |
-| 将已有需求结论整理为 Spec | [write-spec](../write-spec/SKILL.md) | Spec |
-| 保存或修订一项重要决定 | [write-adr](../write-adr/SKILL.md) | ADR |
-| 将已有设计结论整理为技术方案 | [write-design](../write-design/SKILL.md) | 技术方案文档 |
-| 澄清业务术语、关系或规则 | [domain-modeling](../domain-modeling/SKILL.md) | 共同理解 |
-| 用失败测试驱动行为实现 | [test-driven-development](../test-driven-development/SKILL.md) | 红、绿、重构反馈 |
-| 追查异常原因 | [systematic-debugging](../systematic-debugging/SKILL.md) | 原因与修复依据 |
-| 查找、核实或维护项目知识 | [knowledge-management](../knowledge-management/SKILL.md) | 当前知识与有效导航 |
+| 核实现状、推演业务规则、定义或整理需求 | [requirements-definition](../requirements-definition/SKILL.md) | spec.md |
+| 形成或整理技术模型、契约与交付安排 | [technical-design](../technical-design/SKILL.md) | plan.md |
+| 实施、审阅、验证与处理新发现 | [incremental-delivery](../incremental-delivery/SKILL.md) | 代码、测试与审阅记录 |
+| 集中比较或记录重要选择 | [architecture-decisions](../architecture-decisions/SKILL.md) | ADR |
+| 查找、核实或维护跨需求知识 | [knowledge-management](../knowledge-management/SKILL.md) | 当前结论与有效来源 |
+| 用失败测试驱动行为实现 | [test-driven-development](../test-driven-development/SKILL.md) | 实现与回归证据 |
+| 从证据定位异常 | [systematic-debugging](../systematic-debugging/SKILL.md) | 原因与修复依据 |
 
-需求定义和技术设计按“当前问题调查 → 提问／候选展示 → 用户回应 → 收敛确认 → 写作”推进。已有确认与明确委托直接沿用；新发现的未决取舍须由负责阶段展开讨论，列出问题不能代替获得回应。
-
-独立能力同样需要加载后使用。用户只要求写 ADR、调试或维护知识时，直接进入对应能力，不启动完整流程。用户明确要求先出草稿时按请求执行。阶段内调用写作能力仍须满足该阶段的讨论条件，不能自行将流程请求改为独立写作。事实和选择尚有缺口时，交给负责该问题的阶段处理；写作技能只整理有依据的材料。
-
-## 承接与材料
-
-向被调用技能传递用户目标、已有结论和授权、来源及版本、当前问题、未决项、图源和实际材料位置。只加载当前适用的技能与参考。技能返回后继续原问题，不重新询问已决定的事项，不因切换技能或保存文档重复索要许可。
-
-三个阶段在宿主任务工具中维护当前清单，嵌入已有任务；本入口不再建立一套竞争清单。独立能力被调用时嵌入当前项。无任务工具时使用对话短清单。
-
-默认使用 `.rivo/knowledge/`、`.rivo/issues/<slug>/` 和 `.rivo/archived/<slug>/`，项目已有位置或用户指定位置优先。组织材料时读 [交付工作区约定](references/delivery-workspace.md)，将实际位置传给技能。写作按内容需要发生，不要求每次产出全部文档。
-
-## 碰撞与交接
-
-发现实现、证据与已确认约定不符时，说明原约定、发现、后果和处理建议。原要求仍有效的实现错误按原决定修复；需求或架构方向需要改变时交回 requirements-definition，具体设计问题交回 technical-design。未获决定只暂停依赖部分，继续独立工作。
-
-更新受影响的材料与任务上下文，保留旧理由。按请求深度继续：只要求分析就交付分析，已有足够设计和授权时可进入实施，不为补齐阶段而制造工作。
-
-完成实施后，由 incremental-delivery 完成组合验证、终审和授权交接，主线程组织复盘。加载 knowledge-management 更新受影响的当前知识、已核实架构 JSON 及导航，再归档交付材料。方案已确认不等于已经实现；没有新知识时不制造总结。
+独立能力（TDD、调试、ADR、知识管理）按问题使用，不作为必经环节。

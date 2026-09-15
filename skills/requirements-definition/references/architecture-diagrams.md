@@ -1,6 +1,10 @@
 # 架构图协作与留存
 
-需求定义或技术设计需要展示结构变化时读取。图的长期现状维护由 [knowledge-management](../../knowledge-management/SKILL.md) 负责。本参考约定 Rivo 的协作与材料归属；实际绘图前仍需加载已安装的 Archify 技能，按其版本读取匹配 schema、示例及校验要求。
+需求定义、技术设计或架构决策需要展示结构变化时读取。图的长期现状维护由项目知识维护负责。本参考约定 Rivo 的协作与材料归属；实际绘图前仍需加载已安装的 Archify 技能，按其版本读取匹配 schema、示例及校验要求。
+
+## 产物位置
+
+沿用当前任务确定的需求目录和 slug，默认将 before、target、compare HTML 及回执放入目标项目根目录的 `.rivo/issues/<slug>/assets/architecture/`。用户指定位置或项目明确的交付目录约定优先，修订已有图源时沿用其位置。向 Archify 命令传递明确的输出路径，不沿用 PRD 目录、工具默认目录或插件安装目录；需留存的检查证据归入同一需求的 evidence/。
 
 ## 图源与展示产物
 
