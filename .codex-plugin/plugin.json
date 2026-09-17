@@ -1,6 +1,6 @@
 {
   "name": "rivo",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "需求阶段交付 Spec，设计阶段交付 plan，文档经子代理审阅和用户批准后进入实施、审阅与验证。",
   "author": {
     "name": "Xav1erSue"
