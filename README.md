@@ -1,108 +1,130 @@
 # Rivo
 
-和 AI 一起讨论需求、设计方案、完成实现。
+用户主导，AI 辅助：把你的方案想清楚、写明白，再落实为经过验证的实现。
 
-Rivo 把软件交付分成需求定义、技术设计和增量交付三个阶段。AI 查证事实、提出方案，你决定业务规则和模型；文档与代码由独立子代理审阅。
+Rivo 面向需要方案设计、团队评审和持续维护的软件交付。你可以带着已有思路来，让 AI 查证前提、挑战薄弱处、补全细节并落实；没有确定做法时，也可以一起探索。目标和方向由你主导，AI 主动完成调查、表达、实现与验证，重要选择在讨论中形成。
+
+各技能可以单独调用。你可以从新需求开始，也可以带着评审意见改方案、重新调查一个机制，或继续已有任务。方案、任务和实现由独立子代理审阅；审阅负责发现问题，不能替你决定采用哪种设计。
 
 ## 开始使用
 
-安装插件后，在会话中提出需求：
+安装插件后，直接描述当前工作：
 
-> 用 Rivo 完成这个需求。先核实现状，和我讨论清楚，再写 Spec 和 plan。
+> 用 Rivo 完成这个需求。我打算沿用现有审批链，增加供应商发起入口。先帮我查证这个思路，讨论清楚缺口，再写方案并安排交付。
 
-AI 会先加载相关技能，说明名称和用途，再开始工作。你可以随时纠正它的理解，或指定只完成某个阶段：
+也可以调用具体技能：
 
-> 用 requirements-definition 评审这份 PRD 和设计稿。
+> 用 writing-designs 根据同事的评审意见修改这份方案。
 
-> 用 technical-design 展开已经确认的需求，比较方案和交付安排。
+> 用 investigating 查清 OA 怎样读取数组字段，更新现有 note。
 
-> 用 incremental-delivery 按已确认的方案实施。
+> 用 planning-tasks 把这份已批准方案拆成实施任务。
 
-> 用 systematic-debugging 查清这个问题的原因。
+> 用 implementing-tasks 继续这些任务；设计变化先和我讨论。
+
+AI 会先加载技能并说明用途。已有材料和批准继续沿用，不因切换技能而重跑整个流程。
 
 ## 接入
 
-仓库为两种插件格式提供了清单：
+仓库提供两种插件清单，按宿主的插件安装流程加载本仓库：
 
 | 宿主 | 插件清单 |
 | --- | --- |
 | Codex | [.codex-plugin/plugin.json](.codex-plugin/plugin.json) |
 | Claude Code | [.claude-plugin/plugin.json](.claude-plugin/plugin.json) 和 [marketplace.json](.claude-plugin/marketplace.json) |
 
-按宿主的插件安装流程加载本仓库。[启动 Hook](hooks/hooks.json)提供技能入口；Codex 中需要先信任插件 Hook。各技能也可以直接调用。修改源码后，需要另外刷新已安装的插件副本。
+[启动 Hook](hooks/hooks.json)提供入口指引，各技能也可以直接调用。修改源码后，需要另外刷新已安装的插件副本。
 
-## 一次交付怎么走
+绘图需要安装支持 `deliver --format svg` 的 Archify。Rivo 不附带或自动更新 Archify；使用时核对实际 CLI 能力。写作继续使用环境中可用的 `writing-clearly-and-concisely`。
 
-### 1. 讨论需求
+## 一次完整交付
 
-AI 先明确本期范围，沿真实场景查清实际行为、工程机制和限制，用图向你呈现并对齐理解，再讨论目标。问题按依赖关系逐轮展开，每轮带上场景、依据、候选后果和建议。最后展示完整目标及其相对现状的变化，等待你批准。
+### 方案讨论
 
-你批准完整结论后，AI 写入 `spec.md`。子代理检查需求是否清楚、模型是否成立、验收能否识别错误行为。修复并复审通过后，再请你检查文档是否准确表达了讨论结果。
+`discussing-designs` 先理解或询问你的思路。你可以一开始就讲，也可以让 AI 读完材料后再讲；明确没有方向时，再一起探索。AI 从你的目标和理由出发，用场景、证据和图示检验方案，也会指出同事评审时可能追问的问题。发现反例或更合适的做法时，讲清差异，再由你判断；不会默默换成自己的推荐。重要选择记录为 ADR。
 
-### 2. 设计方案
+交流重点是你尚未参与的判断和真正需要决定的事情。已经明确的内容不反复询问，AI 能查明的事实主动查证。方案收敛时讲清完整做法、理由和不确定性，给你纠正的机会，不能只交一篇长文求批准。
 
-AI 沿用需求阶段查清的现状，根据 Spec 设计职责、接口、数据、状态和交付切片，与你比较重要选择。设计中的调查围绕具体事实缺口或候选方案展开，不重新全面调研。方案写清改动位置、输入输出、字段含义、关键机制和验证安排，配图解释结构与运行过程。你批准完整方案后，AI 写入 `plan.md`。
+采用 Rivo 完成交付，就留下技术方案和实施任务，并完成相应审阅。需求简单时文档可以短，流程不另分档。只调用某个技能处理一项工作，不需要重跑整条流程。
 
-子代理检查方案能否落实需求，以及切片能否继续细化。逐步开发操作留到增量交付阶段。审阅通过后，再请你确认文档和实施安排。
+### 编写技术方案
 
-### 3. 实现与验证
+`writing-designs` 将已确认结论整理为 `plan.md`，保留你的设计意图、选择理由和明确限制，方便你向同事解释和讨论。需求分析、功能范围、整体设计、影响面、外部协同、验证、发布和回滚，在同一份文档中说明。已有 PRD 作为输入，不再单独生成一份 Spec。
 
-AI 按切片实现、验证并自查，每轮由新的子代理独立审阅，修复后再复审。最后检查各部分一起运行时的行为，是否满足已确认的验收标准，再更新相关项目知识。
+方案按功能或主题连续展开。字段一行一个；目录结构、核心伪代码、JSON、消息体、SDK 契约和部署配置保留在相关章节，方便同事评审与对接。源码查证过程进入调查笔记，逐步编码安排进入实施任务。
 
-模型决策和重大不可逆操作先请你确认。普通实现缺陷按已确认规则修复；反复审阅没有进展时，先查清争议和缺少的证据。
+文档经过自查、独立审阅和你的审阅后，才作为正式实施依据。
 
-任务小就写短，Spec、plan 和审阅仍要完成。完整顺序见[交付流程图](skills/using-rivo/SKILL.md#交付流程)。
+### 编排实施任务
 
-流程技能维护任务清单，排障、绘图、测试等方法沿用当前任务的进度。调查可以直接进行，也可以把具体问题交给子代理；发现用于讨论，获批后将必要事实和机制写入 Spec 或 plan，重要取舍写入 ADR。不要求每次调查另写报告。
+`planning-tasks` 将获批方案写成 `task.md`，明确每项工作的范围、契约、依赖、修改位置和验证要求。任务按可验证结果划分，不按文件数量拆分。
 
-## 图示与文件
+task 经过自查和独立审阅，默认不需要你逐项审批。拆任务时发现设计缺口，回到具体问题与你讨论；不能把未批准的决定藏进实施步骤。
 
-Spec、plan 和 ADR 使用 Markdown。正文连贯解释问题、做法与理由，接口和状态等关键约定写在文字与表格中；即使不看图，AI 也能据此设计和实施。链接用于查证来源，不代替正文。
+### 实施任务
 
-讨论实体关系、系统协作、流程或状态时，AI 先加载 `rivo:using-archify`，再加载原生 Archify。图在讨论中展示，并以 SVG 嵌入文档对应段落。现状与目标分别保存，重要选择独立记录 ADR，正文仍保留主要理由。
+获得实施授权后，`implementing-tasks` 派发任务，由执行者实现并自查，再由独立审阅者检查改动、约定和证据。实现缺陷由 AI 修复并复审；新发现需要改变原方案时，先带回证据和影响与你讨论。最后检查各部分一起运行时是否满足原始需求。
 
-**SVG 交付需要支持 `deliver --format svg` 的 Archify。** 该能力来自 [Archify PR #272](https://github.com/tt-a1i/archify/pull/272)；安装时核对实际 CLI 能力，不能只看版本名称。Rivo 不附带或自动更新 Archify，也不通过 HTML 提取图片。
+已有实施授权不重复询问；写好方案或 task 本身不代表获得了实施授权。单独要求代码评审或验证时，只完成这项工作。
 
-确实未安装 Archify 时，AI 会说明“当前环境未安装 Archify，使用 Mermaid 替代”，然后继续。替代格式按实际选择写 ASCII、Mermaid 或 PlantUML。已经安装但缺少 SVG 能力时，报告具体缺口，保留图源，不把图示交付标成完成。
+完整路径见[参考工作流](skills/using-rivo/SKILL.md#参考工作流)。它是常见顺序，各技能也可以从已有材料直接进入。
+
+## 调查与变化
+
+`investigating` 可以在讨论、文档评审或实施中调用，持续维护 `note.md`。笔记按机制和问题组织，说明职责、调用链、数据与配置、边界和证据，类似一份围绕当前需求的专题 Wiki。每次调查整合到已有主题，不追加工作流水。
+
+同事的意见或新的事实改变设计时，AI 重新调查、讨论决定、修改 ADR，并重写受影响的方案、任务和图。各流程技能内部都规定了修订后的复审要求，旧报告不能覆盖新内容；已完成和正在执行的相关任务也要检查。
+
+文档维护当前结论，结构不合适时可以整篇重写。历史 ADR、审阅报告和验证证据保留。只改措辞不重做设计，重要决定改变则取得你的确认；无关工作继续沿用有效约定。
+
+跨需求复用的事实通过 `knowledge-management` 整理到已有项目知识库。note 保存本需求的认识，知识库保存经过核实的项目现状，不把尚未实现的目标写成已有能力。
+
+## 图示与过程文件
+
+系统关系、流程与状态使用 Archify 绘图，直接交付 SVG 并嵌入 Markdown，保留图源和回执。正文也要说清关键规则，让读者和 AI 不看图也能理解。图和文档变化后同步检查。
+
+确实未安装 Archify 时，AI 会说明“当前环境未安装 Archify，使用 Mermaid 替代”。替代格式按实际选择写 ASCII、Mermaid 或 PlantUML。已经安装但缺少 SVG 能力时，报告具体缺口，不通过临时 HTML 提取图片绕过。
 
 默认文件位置：
 
 ```text
 .rivo/
   issues/<需求目录>/
-    spec.md
-    plan.md
-    adr/               每个重要决定独立保存
-    assets/architecture/  JSON 图源、SVG 和交付回执
-    reviews/           审阅与复审报告
-    tasks/             需要保存的任务简报
-    evidence/          验证证据
-  decisions/           不属于某项需求的独立决定
-  knowledge/           项目知识
-  archived/            已完成需求的归档
+    plan.md               面向评审与协作的完整技术方案
+    task.md               面向执行的实施任务
+    note.md               按主题维护的调查笔记
+    adr/                  独立决策记录
+    assets/architecture/  图源、SVG 与交付回执
+    reviews/              历轮审阅报告
+    evidence/             验证证据
+  decisions/              不属于某项需求的独立决定
+  knowledge/              项目知识
+  archived/               已完成需求的归档
 ```
 
-同一需求使用同一个目录。用户或项目指定了路径，就按指定路径保存；已有文件直接修改原文件。涉及多个仓库时，选一个项目集中保存文档，代码仍在各自项目中修改。
-
-已有 ADR 格式和项目文件约定继续沿用。继续任务时，AI 读取文档、审阅报告和实际改动判断下一步，用户意见从会话中核对。归档保留历史，并更新引用链接。
+用户或项目指定的位置优先。跨仓库集中保存文档，代码在各自项目中修改。恢复工作时核对文件、审阅报告、实际改动和会话决定，不另建状态台账。已有 PRD、旧 Spec 和方案都可作为输入，不自动删除历史材料。
 
 ## 技能
 
 | 技能 | 用途 |
 | --- | --- |
-| [using-rivo](skills/using-rivo/SKILL.md) | 选择相关技能，说明顺序和共同规则 |
-| [requirements-definition](skills/requirements-definition/SKILL.md) | 查证并讨论需求，完成 Spec |
-| [technical-design](skills/technical-design/SKILL.md) | 设计模型、方案和交付切片，完成 plan |
-| [incremental-delivery](skills/incremental-delivery/SKILL.md) | 实施、审阅、修复和验证 |
-| [using-archify](skills/using-archify/SKILL.md) | 核实并呈现现状与目标，交付 SVG 并嵌入 Markdown |
-| [architecture-decisions](skills/architecture-decisions/SKILL.md) | 比较重要选择，记录理由与后果 |
-| [knowledge-management](skills/knowledge-management/SKILL.md) | 查找、核实和维护项目知识 |
-| [test-driven-development](skills/test-driven-development/SKILL.md) | 先写失败测试，再实现和重构 |
-| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现问题、定位原因、验证修复 |
+| [using-rivo](skills/using-rivo/SKILL.md) | 根据当前请求选择技能，了解参考工作流。 |
+| [discussing-designs](skills/discussing-designs/SKILL.md) | 讨论需求、调查现状并形成完整方案。 |
+| [writing-designs](skills/writing-designs/SKILL.md) | 编写、修订和审阅技术方案。 |
+| [planning-tasks](skills/planning-tasks/SKILL.md) | 编写、调整和审阅实施任务。 |
+| [implementing-tasks](skills/implementing-tasks/SKILL.md) | 组织实施、审阅、修复和验证。 |
+| [investigating](skills/investigating/SKILL.md) | 查证具体问题，维护专题调查笔记。 |
+| [using-archify](skills/using-archify/SKILL.md) | 绘制和维护 SVG 图示。 |
+| [architecture-decisions](skills/architecture-decisions/SKILL.md) | 比较重要选择，记录及修订 ADR。 |
+| [knowledge-management](skills/knowledge-management/SKILL.md) | 查找、核实和维护项目知识。 |
+| [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现。 |
+| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常、查证根因并验证修复。 |
+
+四个流程技能维护当前工作清单。调查、绘图、排障等方法技能交回结果，不创建嵌套进度。入口负责路由，执行和修订规则写在各技能内部。
 
 ## 修改与验证
 
-修改技能时，同时检查阶段步骤、相关审阅提示词和宿主工具用法是否一致。用独立审阅和真实任务验证范围、批准与交接行为；文件格式或链接检查通过，不代表模型一定遵循流程。
+修改技能时同步检查模板、审阅提示词、插件入口和 README。用独立审阅和真实请求检查单独调用、修订后复审、批准与交接行为；格式检查通过不代表实际使用一定正确。
 
 ## 许可证
 
