@@ -50,7 +50,7 @@ description: 写任何要被阅读的文字时使用：技术方案、知识库�
 ## 图
 
 图是嵌入 Markdown 的 SVG：
-- 画图用 archify 技能；宿主没有 archify 时手写 SVG
+- 画图用 archify 技能；宿主没有 archify 时，按 [手写 SVG](references/hand-drawn-svg.md) 画
 - 图源和 SVG 存在一起，在对应段落用相对路径嵌入
 - 替代文字概括图的结论，例如 `![审批以模板为单位，全部通过后活动归档](assets/approval/after.svg)`
 - 结构、流程或状态有变化时，画 before 和 after 两张图，同一对象位置相近，读者只看变化的部分
