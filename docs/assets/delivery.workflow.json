@@ -20,7 +20,7 @@
           "label": "子代理"
         },
         "database": {
-          "label": "沉淀"
+          "label": "知识"
         }
       }
     }
@@ -84,8 +84,8 @@
       "lane": "human",
       "col": 0,
       "type": "external",
-      "label": "需求与蓝图",
-      "sublabel": "你脑中的方案",
+      "label": "需求与思路",
+      "sublabel": "目标与已有设想",
       "width": 156
     },
     {
@@ -112,7 +112,7 @@
       "col": 1,
       "type": "backend",
       "label": "converging",
-      "sublabel": "决策树 → ADR",
+      "sublabel": "重要取舍 → ADR",
       "width": 156
     },
     {

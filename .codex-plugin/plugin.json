@@ -1,15 +1,15 @@
 {
   "name": "rivo",
-  "version": "0.8.0",
-  "description": "用户主导、AI 辅助的软件交付：像一条河，从汇流讨论方案、勘定技术方案、顺流实施验证，到验收后沉淀知识。",
+  "version": "0.8.1",
+  "description": "由用户决定需求和重要取舍，AI 协助调查、编写方案、实施验证，并在验收后整理项目知识。",
   "author": {
     "name": "Xav1erSue"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Rivo",
-    "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：converging 逐轮讨论并边问边记 ADR，writing-plans 写出给人评审的技术方案 plan.md，implementing-plans 按粗粒度的 task.md 实施并在实施中验证方案，knowledge-management 在用户验收后把认识沉淀进项目知识库并归档。方案定稿前全量审阅一次，实施逐任务轻审、完成后整体审阅，意见分 P0 到 P2，修复交同一审阅者增量复核；任何对方案的修改都会告知用户。",
+    "shortDescription": "和 AI 讨论方案，完成实施并保留设计理由",
+    "longDescription": "从需求和已有思路开始，逐轮讨论重要取舍并记录理由，写成可供团队评审的技术方案。用户批准并授权后，AI 按任务实施、验证和审阅；发现方案问题时报告证据，交回讨论或修订。用户验收后，核对实际代码，更新项目知识库并归档需求材料。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
@@ -23,7 +23,7 @@
       "用 writing-plans 根据团队评审意见修订这份技术方案。",
       "用 implementing-plans 按已批准的方案实施。",
       "我已经验收通过，用 knowledge-management 收尾并更新知识库。",
-      "用 investigating 查清这个机制并更新 note。"
+      "用 investigating 查清这个机制并更新调查笔记。"
     ]
   }
 }

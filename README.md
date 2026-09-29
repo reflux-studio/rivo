@@ -1,77 +1,75 @@
 <h1 align="center">Rivo</h1>
 
-<p align="center"><b>方案由你主导，AI 负责查证、追问和落实。</b><br>一套面向 Claude Code 与 Codex 的软件交付技能。</p>
+<p align="center"><b>和 AI 讨论方案，完成实施，并留下设计理由。</b><br>一套面向 Claude Code 与 Codex 的软件交付技能。</p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-0.8.0-2f9e6b">
+  <img alt="version" src="https://img.shields.io/badge/version-0.8.1-2f9e6b">
   <img alt="hosts" src="https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-5f6b7a">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-5f6b7a">
 </p>
 
 ---
 
-把方案设计整个交给 AI，代码通常能跑，但团队里没人说得清它为什么这样设计。下一次改动时，没人知道哪些约束碰不得，这就是**认知债务**。
+AI 写出了能运行的代码，团队却未必清楚它为什么这样设计。等到下一次修改，大家还得重新查明哪些行为可以改、哪些约束必须保留。Rivo 在讨论、实施和验收时记录这些理由，供团队评审和后续修改时查阅。
 
-Rivo 的做法是反过来：你带着脑中的方案蓝图开始，AI 查证前提、追问缺口、补全细节；每个重要的判断都由你做出，并当场留下记录。方案写成同事读得懂的文档，实施被当作对方案的验证，交付完成后，这次得到的认识沉淀进项目知识库。
+你从需求和已有的思路开始，AI 查清现状，提出需要讨论的问题。重要取舍由你决定，也可以明确委托 AI 选择。双方确认的做法写成技术方案；实施中发现假设不成立，再带着证据回来修订。验收后，把核实过的机制和设计理由整理进项目知识库，供后续工作使用。
 
-![Rivo 一次交付：讨论、方案、实施、知识四个阶段，你在批准和验收两处做决定](docs/assets/delivery.svg)
+![交付经过讨论、方案、实施和知识整理；重要取舍、方案批准、实施授权和验收由用户确认](docs/assets/delivery.svg)
 
-## 设计原则
+## 怎样协作
 
-**人做决定。** AI 的建议在你回答之前只是建议。沉默、跳过或关闭提问都不算同意；批准方案也不等于授权实施。
+假设你要在现有审批系统里增加供应商发起入口。调查后发现，现有审批链要求发起人是内部员工，而供应商使用外部账号。接下来至少有两种做法：扩展审批链，让它识别外部账号；或者由内部员工代供应商发起，保留现有审批链。
 
-**决策树即 ADR。** 讨论按决策树逐轮推进，每个定下的分叉当场写成一份 ADR。ADR 里的"引出的问题"就是下一轮要问的内容，`adr/` 目录本身就是这棵树，不需要另外维护讨论记录。
+这两种做法改变的范围不同，业务责任也不同。AI 需要查明影响哪些接口、权限和操作，再向你说明代价。假如你决定本期由员工代发起，理由是暂不改变审批链的身份规则，这个决定及其理由就会写进 ADR（架构决策记录）。之后还要继续讨论：员工可以替哪些供应商发起，记录里怎样区分申请人与代办人。
 
-![讨论是一棵决策树：你的蓝图引出 ADR 001，它又分出 ADR 002 和 003；ADR 003 引出一个待回答的问题，成为下一轮的前沿](docs/assets/decision-tree.svg)
+下图用另一组模板审批问题展示决定之间的依赖：
 
-**实施即验证。** 方案对不对，要照着做了才知道。task.md 只写到"交付什么、守住哪些契约"，不写到文件级；执行者带着质疑去做，发现方案走不通就停下报告，而不是绕过去硬做。
+![模板审批的一个决定引出后续决定和待回答的问题](docs/assets/decision-tree.svg)
 
-**审阅要花在刀刃上。** 方向错误在第一轮审阅就会暴露，所以方案只在定稿前全量审一次；实施逐任务轻审，完成后再整体审一次。意见分 P0 到 P2，没有 P0 即通过，允许带着小瑕疵上线。修复交回同一个审阅者增量复核，不每轮从头再来。
+讨论确定的做法会写成技术方案，普通细节也一并纳入。方案经过独立审阅，交给你或团队评审；你批准并授权实施后，AI 再按任务推进。
 
-**写给人读。** 方案和知识库用连贯的段落讲清前因后果，配 before/after 图对照变化。这套写法同样用于技能文本本身：模型从人类文字中学会阅读，写不清楚的东西它也会读错。
+实施中如果发现接口不能保留申请人与代办人的区别，AI 会说明证据和影响，请你确认怎样调整方案。每项任务完成后检查验收要求，全部完成后再整体审阅。最后交付代码、验证结果和未解决的问题，由你验收。
 
 ## 开始使用
 
-安装插件后，直接描述要做的事：
+插件接入后，直接描述要做的事：
 
-> 用 Rivo 完成这个需求。我打算沿用现有审批链，增加供应商发起入口。先查清现状，再和我逐轮讨论。
+> 用 Rivo 完成这个需求。我打算沿用现有审批链，增加供应商发起入口。先查清现状，再和我讨论。
 
-也可以点名某个技能：
+没有具体方案也可以从目标开始。是否进入完整流程由你决定；普通请求按普通方式处理，明显较大的需求会先建议使用 Rivo。
+
+也可以单独使用某个技能：
 
 > 用 writing-plans 根据团队评审意见修订这份技术方案。
 >
 > 我验收通过了，用 knowledge-management 收尾。
 >
-> 用 investigating 查清 OA 怎样读取数组字段。
+> 用 investigating 查清审批系统怎样读取数组字段。
 
-是否走 Rivo 由你决定。小改动直接做就好；遇到明显较大的需求，AI 会先建议，你同意后才进入流程。
+## 一次交付会留下什么
 
-## 一次交付
-
-| 阶段 | 技能 | 产出 | 你在这里做什么 |
+| 阶段 | 技能 | 产出 | 需要你参与的事 |
 | --- | --- | --- | --- |
-| 讨论 | converging | `adr/`、`note.md`、before 图 | 给出蓝图，逐轮回答问题 |
-| 方案 | writing-plans | `plan.md` | 自审或拉团队评审，批准定稿 |
-| 实施 | implementing-plans | `task.md`、代码、审阅报告 | 授权实施，处理方案偏离，验收 |
-| 知识 | knowledge-management | 更新后的项目知识库 | 无需操作 |
+| 讨论 | converging | ADR、调查笔记、现状图 | 提供思路，决定重要取舍，确认理解一致 |
+| 方案 | writing-plans | `plan.md`、方案审阅报告 | 自审或请团队评审，批准方案 |
+| 实施 | implementing-plans | `task.md`、代码、验证证据、审阅报告 | 授权实施，确认方案变更，验收 |
+| 知识 | knowledge-management | 项目知识库、归档材料 | 通常无需额外操作；未核实事项会单独报告 |
 
-**讨论。** AI 先读需求、项目知识库和团队规约，确认你的思路，画出现状的 before 图，和你对齐"现在是什么样"。之后每轮问出当下能回答的全部问题，每个附场景、依据和建议答案；能查到的事实 AI 自己查，只把决定交给你。没有未决的分叉、主要场景和失败场景都走得通、你确认双方理解一致，讨论才结束。
+`plan.md` 说明需求、现状、设计、影响面，以及验证和发布安排。开发、联调和发布需要对照的契约留在这里，关键理由在正文中说明，完整的选项比较可在 ADR 中查阅。图帮助说明结构和流程，正文也应能独立读懂。
 
-**方案。** AI 把讨论写成 `plan.md`：需求与范围、现状与总体方案、按主题展开的设计、影响面、验证与发布。独立审阅通过后交给你，批准即定稿 v1.0。之后每次修改都升版本，并告诉你改了什么、为什么。
+`task.md` 按可验收的结果安排实施，写清任务依赖和共同约定，具体做法由执行者阅读方案和代码后确定。需要改变重要决定时重新讨论，需要改变方案约定时修订方案；未改变行为和接口约定的实现细节，由 AI 选择并记录。
 
-**实施。** 你授权后，AI 写一份粗粒度的 `task.md`，逐任务派执行者实施、派审阅者轻审。实现和方案不一致时分三种处理：推翻了某份 ADR，回到讨论由你决定；改变了方案写明的内容，修订 plan.md 请你确认；方案没写到的实现选择，AI 决定并记录。全部完成后整体审阅，再请你验收。
-
-**知识。** 你明确验收后，AI 对照最新代码，把本次的认识写进项目知识库：只改涉及的主题，写成新同事能从首页读懂的文字。需求目录随后归档。
+用户验收后，AI 对照最新代码更新知识库，只改本次涉及的主题，再归档需求目录并检查链接。
 
 ## 文件位置
 
 ```text
 .rivo/
   issues/<需求>/
-    adr/          决策树的每个分叉
+    adr/          重要决定、理由和依赖关系
     plan.md       技术方案
     task.md       实施方案与实施记录
-    note.md       按主题组织的调查笔记
+    note.md       调查笔记；成文前暂存已确认的方案细节
     assets/       图与图源
     reviews/      审阅报告
     evidence/     验证证据
@@ -79,36 +77,38 @@ Rivo 的做法是反过来：你带着脑中的方案蓝图开始，AI 查证前
   archived/       验收后归档的需求
 ```
 
-用户或项目指定的位置优先。Rivo 不维护状态文件，继续工作时从这些材料和实际改动中核对进度，所以随时可以接着上次的需求目录往下做。
+用户或项目指定的位置优先。Rivo 不另设状态文件。继续工作时，先对照这些材料和实际改动核对进度；记录不足的部分需要补查，不能仅凭某个文件存在就认定阶段已经完成。
 
 ## 技能
 
 | 技能 | 用途 |
 | --- | --- |
-| [using-rivo](skills/using-rivo/SKILL.md) | 入口：什么时候走 Rivo、交付顺序与宿主调用 |
-| [converging](skills/converging/SKILL.md) | 讨论需求与方案，边问边记 ADR |
+| [using-rivo](skills/using-rivo/SKILL.md) | 说明入口、交付顺序和宿主调用方式 |
+| [converging](skills/converging/SKILL.md) | 讨论需求与方案，记录重要取舍 |
 | [writing-plans](skills/writing-plans/SKILL.md) | 编写、审阅和修订技术方案 |
-| [implementing-plans](skills/implementing-plans/SKILL.md) | 编排实施、审阅与验收 |
-| [knowledge-management](skills/knowledge-management/SKILL.md) | 维护项目知识库，查阅项目知识 |
+| [implementing-plans](skills/implementing-plans/SKILL.md) | 安排实施、审阅与验收 |
+| [knowledge-management](skills/knowledge-management/SKILL.md) | 查阅和维护项目知识，归档交付材料 |
 | [investigating](skills/investigating/SKILL.md) | 查清具体问题，维护调查笔记 |
-| [writing-clearly](skills/writing-clearly/SKILL.md) | 写清楚文档、图和提示词，去掉 AI 腔 |
-| [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
-| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常并验证根因 |
+| [writing-clearly](skills/writing-clearly/SKILL.md) | 写清文档、图和提示词 |
+| [test-driven-development](skills/test-driven-development/SKILL.md) | 先用测试表达预期行为，再实现和验证 |
+| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常、检验原因假设并验证修复 |
 
-画图优先用 [Archify](https://github.com/tt-a1i/archify)，没有时按 writing-clearly 的模板手写 SVG。本页的两张图分别用这两种方式画成，图源在 [docs/assets](docs/assets)。
+画图优先用 [Archify](https://github.com/tt-a1i/archify)，没有时按 writing-clearly 的模板手写 SVG。本页的两张图分别用这两种方式生成，图源在 [docs/assets](docs/assets)。
 
-## 接入
+## 接入与调用
 
-| 宿主 | 插件清单 |
+| 宿主 | 插件入口 |
 | --- | --- |
 | Claude Code | [.claude-plugin/plugin.json](.claude-plugin/plugin.json)、[marketplace.json](.claude-plugin/marketplace.json) |
 | Codex | [.codex-plugin/plugin.json](.codex-plugin/plugin.json) |
 
-在 Claude Code 中，[启动 Hook](hooks/hooks.json) 只在含 `.rivo/` 的项目里注入完整入口，其他项目只注入一行提示。子代理用什么模型由宿主配置决定，Rivo 不指定。
+以上链接是仓库中的插件清单，用于宿主发现插件。完成接入后，可先让 AI 加载 `rivo:using-rivo`，说明当前可用的技能；在 Codex 中也可让它读取本仓库的 `skills/using-rivo/SKILL.md`。仅能读取技能文件，不代表插件的全部宿主能力都已配置好。
+
+Claude Code 的[启动 Hook](hooks/hooks.json)在含 `.rivo/` 的项目里注入完整入口，其他项目只注入一行提示。各技能的宿主调用方式见 [using-rivo](skills/using-rivo/SKILL.md)。子代理的模型沿用宿主配置，Rivo 不指定。
 
 ## 修改 Rivo
 
-修改技能时按 writing-clearly 写，同步检查参考文件、审阅提示词、插件清单、hook 和本 README。格式检查通过不代表实际好用，改完要在真实需求上试用。
+修改技能时按 writing-clearly 写，同步核对参考文件、审阅提示词、插件清单、hook 和 README。修改执行规则后，还要用具体需求试用，检查模型是否能按预期提问、记录、实施和收尾。格式与链接检查只能发现部分问题。
 
 ## 许可证
 

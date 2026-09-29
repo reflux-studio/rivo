@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 240" width="840" height="240" role="img" lang="zh-CN">
-  <title>讨论是一棵决策树，每个定下的分叉是一份 ADR，未回答的分叉就是下一轮要问的问题</title>
+  <title>重要决定用 ADR 记录；一个决定可能引出其他决定或待回答的问题</title>
   <style>
     text { font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2933; }
     .bg { fill: #ffffff; }
@@ -27,7 +27,7 @@
 
   <g id="n-blueprint" class="input">
     <rect class="node" x="20" y="90" width="120" height="50" rx="8"/>
-    <text class="name" x="80" y="115" text-anchor="middle" dominant-baseline="central">你的蓝图</text>
+    <text class="name" x="80" y="115" text-anchor="middle" dominant-baseline="central">你的思路</text>
   </g>
   <g id="n-001" class="adr">
     <rect class="node" x="190" y="90" width="160" height="50" rx="8"/>
@@ -73,8 +73,8 @@
 
   <g id="legend">
     <g class="adr"><rect class="node" x="20" y="218" width="14" height="10" rx="2"/></g>
-    <text class="label" x="42" y="223" dominant-baseline="central">已定下的分叉：一份 ADR</text>
+    <text class="label" x="42" y="223" dominant-baseline="central">已确认的重要取舍：ADR</text>
     <g class="open"><rect class="node" x="220" y="218" width="14" height="10" rx="2"/></g>
-    <text class="label" x="242" y="223" dominant-baseline="central">ADR 引出、尚未回答的问题：下一轮的前沿</text>
+    <text class="label" x="242" y="223" dominant-baseline="central">待回答的问题：前提确定后继续讨论</text>
   </g>
 </svg>
