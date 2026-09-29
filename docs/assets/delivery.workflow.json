@@ -1,0 +1,212 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Rivo 一次交付",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "external": {
+          "label": "输入"
+        },
+        "backend": {
+          "label": "Rivo 技能"
+        },
+        "security": {
+          "label": "你的决定"
+        },
+        "messagebus": {
+          "label": "子代理"
+        },
+        "database": {
+          "label": "沉淀"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "human",
+      "label": "你：方向与决定"
+    },
+    {
+      "id": "lead",
+      "label": "主代理"
+    },
+    {
+      "id": "agents",
+      "label": "子代理：执行与审阅"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p_converge",
+      "label": "讨论",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "p_plan",
+      "label": "方案",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "p_build",
+      "label": "实施",
+      "fromCol": 4,
+      "toCol": 4
+    },
+    {
+      "id": "p_knowledge",
+      "label": "知识",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "blueprint",
+    "converging",
+    "writing_plans",
+    "plan_review",
+    "approve",
+    "implementing",
+    "tasks",
+    "accept",
+    "knowledge"
+  ],
+  "nodes": [
+    {
+      "id": "blueprint",
+      "lane": "human",
+      "col": 0,
+      "type": "external",
+      "label": "需求与蓝图",
+      "sublabel": "你脑中的方案",
+      "width": 156
+    },
+    {
+      "id": "approve",
+      "lane": "human",
+      "col": 3,
+      "type": "security",
+      "label": "批准并授权",
+      "sublabel": "定稿 v1.0",
+      "width": 156
+    },
+    {
+      "id": "accept",
+      "lane": "human",
+      "col": 5,
+      "type": "security",
+      "label": "验收",
+      "sublabel": "明确通过",
+      "width": 156
+    },
+    {
+      "id": "converging",
+      "lane": "lead",
+      "col": 1,
+      "type": "backend",
+      "label": "converging",
+      "sublabel": "决策树 → ADR",
+      "width": 156
+    },
+    {
+      "id": "writing_plans",
+      "lane": "lead",
+      "col": 2,
+      "type": "backend",
+      "label": "writing-plans",
+      "sublabel": "plan.md",
+      "width": 156
+    },
+    {
+      "id": "implementing",
+      "lane": "lead",
+      "col": 4,
+      "type": "backend",
+      "label": "implementing-plans",
+      "sublabel": "task.md",
+      "width": 184
+    },
+    {
+      "id": "knowledge",
+      "lane": "lead",
+      "col": 5,
+      "type": "database",
+      "label": "knowledge-management",
+      "sublabel": "知识库与归档",
+      "width": 184
+    },
+    {
+      "id": "plan_review",
+      "lane": "agents",
+      "col": 2,
+      "type": "messagebus",
+      "label": "方案审阅",
+      "sublabel": "定稿前一次",
+      "width": 156
+    },
+    {
+      "id": "tasks",
+      "lane": "agents",
+      "col": 4,
+      "type": "messagebus",
+      "label": "执行与审阅",
+      "sublabel": "逐任务轻审 + 整体审阅",
+      "width": 156
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_blueprint",
+      "from": "blueprint",
+      "to": "converging",
+      "label": "逐轮提问"
+    },
+    {
+      "id": "e_exit",
+      "from": "converging",
+      "to": "writing_plans",
+      "label": "出口条件",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e_plan_review",
+      "from": "writing_plans",
+      "to": "plan_review"
+    },
+    {
+      "id": "e_to_user",
+      "from": "plan_review",
+      "to": "approve",
+      "label": "无 P0",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e_authorize",
+      "from": "approve",
+      "to": "implementing"
+    },
+    {
+      "id": "e_dispatch",
+      "from": "implementing",
+      "to": "tasks"
+    },
+    {
+      "id": "e_deliver",
+      "from": "tasks",
+      "to": "accept",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e_settle",
+      "from": "accept",
+      "to": "knowledge"
+    }
+  ]
+}
