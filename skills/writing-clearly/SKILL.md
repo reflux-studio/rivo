@@ -33,7 +33,7 @@ description: 写任何要被阅读的文字时使用：技术方案、知识库�
 
 ## 句子
 
-以下几条改编自 Strunk 的 *The Elements of Style*，只保留适用于中文的部分：
+以下几条改编自 Strunk 的 *The Elements of Style* 与 [writing-clearly-and-concisely](https://github.com/softaworks/agent-toolkit)（MIT），只保留适用于中文的部分：
 - **主动、正面地说**：写"订单超时后系统原路退款"，不写"退款操作将会被执行"
 - **只在读者确实会误入时写"不要"**：其余情况把该怎样做写清楚
 - **具体**：写"30 分钟""每分钟一次"，不写"一段时间""定期"

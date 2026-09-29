@@ -113,5 +113,3 @@ Rivo 的做法是反过来：你带着脑中的方案蓝图开始，AI 查证前
 ## 许可证
 
 [MIT](LICENSE)
-
-writing-clearly 的写法部分改编自 Strunk 的 *The Elements of Style*（公有领域）与 [writing-clearly-and-concisely](https://github.com/softaworks/agent-toolkit)（MIT），AI 腔清单改编自 [humanizer](https://github.com/blader/humanizer)（MIT）。
