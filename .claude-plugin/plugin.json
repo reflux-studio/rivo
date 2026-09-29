@@ -1,7 +1,7 @@
 {
   "name": "rivo",
-  "version": "0.7.0",
-  "description": "用户主导、AI 辅助的软件交付：讨论并编写技术方案、拆解任务、实施与验证，支持独立调用和修订复审。",
+  "version": "0.8.0",
+  "description": "用户主导、AI 辅助的软件交付：像一条河，从汇流讨论方案、勘定技术方案、顺流实施验证，到验收后沉淀知识。",
   "author": {
     "name": "Xav1erSue"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "从用户的思路出发，查证前提、讨论选择并落实交付。按当前工作调用方案讨论、技术方案写作、任务编排和实施。plan 面向评审与协作，task 指导执行，note 按主题保存调查认识；重要选择独立记录 ADR。各技能负责自身的批准与复审，任何阶段都能修订并继续。",
+    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：confluence 逐轮讨论并边问边记 ADR，course 写出给人评审的技术方案 plan.md，flow 按粗粒度的 task.md 实施并在实施中验证方案，delta 在用户验收后把认识沉淀进项目知识库并归档。独立审阅全程全量进行，意见分级，同一对象最多三轮；任何对方案的修改都会告知用户。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
@@ -27,13 +27,12 @@
       "Write"
     ],
     "defaultPrompt": [
-      "用 Rivo 完成这个需求，先查清现状并和我讨论方案。",
-      "用 discussing-designs 讨论这份 PRD 的目标和技术做法。",
-      "用 writing-designs 根据评审意见修订这份技术方案。",
-      "用 planning-tasks 将已批准方案拆成实施任务。",
-      "用 investigating 查清这个机制并更新 note。",
-      "用 architecture-decisions 保存刚才的决定与理由。",
-      "用 implementing-tasks 按已确认方案和任务实施。"
+      "用 Rivo 完成这个需求，我先讲讲我的思路，你查清现状后和我逐轮讨论。",
+      "用 confluence 讨论这份 PRD 的目标和技术做法。",
+      "用 course 根据团队评审意见修订这份技术方案。",
+      "用 flow 按已批准的方案实施。",
+      "我已经验收通过，用 delta 收尾并更新知识库。",
+      "用 investigating 查清这个机制并更新 note。"
     ]
   }
 }
