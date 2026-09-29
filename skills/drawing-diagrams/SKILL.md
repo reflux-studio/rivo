@@ -1,6 +1,6 @@
 ---
 name: drawing-diagrams
-description: 按 Rivo 的图的标准画 before/after 图：嵌入 Markdown 的 SVG 并保留图源，优先用支持 SVG 交付的 Archify，没有时手写 SVG。用户要求用 Rivo 画图、点名本技能或继续已有需求目录时使用；confluence、course、flow、delta、investigating 等 Rivo 技能需要画图时也会加载。
+description: 按 Rivo 的图的标准画 before/after 图：嵌入 Markdown 的 SVG 并保留图源，优先用支持 SVG 交付的 Archify，没有时手写 SVG。用户要求用 Rivo 画图、点名本技能或继续已有需求目录时使用；converging、writing-plans、implementing-plans、knowledge-management、investigating 等 Rivo 技能需要画图时也会加载。
 ---
 
 # 画图
@@ -86,7 +86,7 @@ node <archify-root>/bin/archify.mjs compare architecture \
 | `*.receipt.json` | Archify 交付和对照回执 |
 | `compare.html` | 需要时生成的交互式对照页 |
 
-其他图按用途命名，例如 `approval.sequence.json` 与 `approval.svg`。输出路径写明确的项目内路径，不写进插件安装目录。知识库里的图按 delta 的知识维护参考存放。
+其他图按用途命名，例如 `approval.sequence.json` 与 `approval.svg`。输出路径写明确的项目内路径，不写进插件安装目录。知识库里的图按 knowledge-management 的知识维护参考存放。
 
 在对应段落用相对路径嵌入，替代文字概括图的结论：
 
@@ -96,6 +96,6 @@ node <archify-root>/bin/archify.mjs compare architecture \
 
 ## 交回与修订
 
-画图本身不批准新的行为或技术选择。画的过程中发现图改变了已有的决定或方案里的关系、契约，停下来交回调用本技能的流程技能。讨论或写方案阶段，冲突交回当前的 confluence 或 course。方案获批后，按冲突的对象分流：违反某份 ADR 的，回到 confluence 由用户决定；改变 plan.md 写明内容的，由 course 修订 plan.md、全量重审，告诉用户改了什么、为什么，由用户确认；方案没有写到的纯实现选择，由主代理决定并记进 task.md。
+画图本身不批准新的行为或技术选择。画的过程中发现图改变了已有的决定或方案里的关系、契约，停下来交回调用本技能的流程技能。讨论或写方案阶段，冲突交回当前的 converging 或 writing-plans。方案获批后，按冲突的对象分流：违反某份 ADR 的，回到 converging 由用户决定；改变 plan.md 写明内容的，由 writing-plans 修订 plan.md、全量重审，告诉用户改了什么、为什么，由用户确认；方案没有写到的纯实现选择，由主代理决定并记进 task.md。
 
 修订图时改图源并重新交付，再核对图源、SVG 和正文三者说的是同一件事。修订后的图只表达当前的做法，读起来应当像第一次就画对了：删除错误的对象和连线，在原处重画受影响的部分，不在图上叠加删除线、"已废弃"一类的标注，也不因为一次纠正在正文旁追加"不要……""而不是……"的否定句。before/after 是有意保留的对照，不属于这种补丁。改名或批量修改后，先在图源、SVG 和正文里自查残留，再交回。

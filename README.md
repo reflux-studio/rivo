@@ -6,10 +6,10 @@
 
 | 阶段 | 技能 | 做什么 |
 | --- | --- | --- |
-| 汇流 | confluence | 从你的蓝图出发逐轮讨论，每个定下的分叉当场记成 ADR |
-| 河道 | course | 把讨论写成给人评审的技术方案 plan.md，独立审阅后交你和团队评审 |
-| 水流 | flow | 按粗粒度的实施方案 task.md 派发实施，实施本身就是对方案的验证 |
-| 三角洲 | delta | 你验收之后，把认识整理进项目知识库，归档本次材料 |
+| 汇流 | converging | 从你的蓝图出发逐轮讨论，每个定下的分叉当场记成 ADR |
+| 河道 | writing-plans | 把讨论写成给人评审的技术方案 plan.md，独立审阅后交你和团队评审 |
+| 水流 | implementing-plans | 按粗粒度的实施方案 task.md 派发实施，实施本身就是对方案的验证 |
+| 三角洲 | knowledge-management | 你验收之后，把认识整理进项目知识库，归档本次材料 |
 
 沿途的独立审阅像水文站，只观测、不替你做决定；任务像船闸一样逐级通过；评审或实施推翻了某个决定时，逆流回到上游重新勘定。
 
@@ -25,11 +25,11 @@
 
 也可以点名某个技能：
 
-> 用 course 根据团队评审意见修订这份技术方案。
+> 用 writing-plans 根据团队评审意见修订这份技术方案。
 
-> 用 flow 按已批准的方案实施。
+> 用 implementing-plans 按已批准的方案实施。
 
-> 我验收通过了，用 delta 收尾。
+> 我验收通过了，用 knowledge-management 收尾。
 
 > 用 investigating 查清 OA 怎样读取数组字段，更新 note。
 
@@ -37,13 +37,13 @@
 
 ## 一次完整交付
 
-**汇流（confluence）。** AI 先读需求、材料、项目知识库和团队规约，确认你的思路和理由，画出现状的 before 图。然后按轮提问：每轮问出所有前提已经确定的问题，附上场景、依据和建议答案；能查到的事实由 AI 自己查，只把决定交给你。每轮结束时，定下的分叉写成 ADR，`adr/` 目录就是这棵决策树。讨论要同时满足三个条件才结束：没有未决的分叉，主场景和失败场景都能走通，你确认双方理解一致。
+**汇流（converging）。** AI 先读需求、材料、项目知识库和团队规约，确认你的思路和理由，画出现状的 before 图。然后按轮提问：每轮问出所有前提已经确定的问题，附上场景、依据和建议答案；能查到的事实由 AI 自己查，只把决定交给你。每轮结束时，定下的分叉写成 ADR，`adr/` 目录就是这棵决策树。讨论要同时满足三个条件才结束：没有未决的分叉，主场景和失败场景都能走通，你确认双方理解一致。
 
-**河道（course）。** AI 把讨论写成 `plan.md`：需求与范围、现状与总体方案、按主题展开的设计、影响面、验证与发布，涉及结构或流程变化的地方配 before/after 图。写完先自查，再交给独立审阅者全量审阅。审阅意见分阻塞和非阻塞，只剩非阻塞问题即通过；同一份方案三轮仍未通过，AI 会停下来分析原因并告诉你。审阅通过后交给你自审或拉团队评审，批准后标为定稿 v1.0，此后每次修改都升版本并告诉你改了什么、为什么。
+**河道（writing-plans）。** AI 把讨论写成 `plan.md`：需求与范围、现状与总体方案、按主题展开的设计、影响面、验证与发布，涉及结构或流程变化的地方配 before/after 图。写完先自查，再交给独立审阅者全量审阅。审阅意见分阻塞和非阻塞，只剩非阻塞问题即通过；同一份方案三轮仍未通过，AI 会停下来分析原因并告诉你。审阅通过后交给你自审或拉团队评审，批准后标为定稿 v1.0，此后每次修改都升版本并告诉你改了什么、为什么。
 
-**水流（flow）。** 你授权实施后，AI 写一份粗粒度的 `task.md`：每项任务的可验证结果、依赖、契约和验收方式，不写到文件级。执行者读方案和代码自己完成任务，发现方案走不通就停下报告；每项任务都由新的审阅者检查实现效果、成本和对方案的偏离。偏离分三种处理：违反 ADR 的回到讨论由你决定，改变方案内容的修订 plan.md 并请你确认，方案没写到的实现选择由 AI 决定并记录。全部完成后做一次整体审阅，再请你验收。
+**水流（implementing-plans）。** 你授权实施后，AI 写一份粗粒度的 `task.md`：每项任务的可验证结果、依赖、契约和验收方式，不写到文件级。执行者读方案和代码自己完成任务，发现方案走不通就停下报告；每项任务都由新的审阅者检查实现效果、成本和对方案的偏离。偏离分三种处理：违反 ADR 的回到讨论由你决定，改变方案内容的修订 plan.md 并请你确认，方案没写到的实现选择由 AI 决定并记录。全部完成后做一次整体审阅，再请你验收。
 
-**三角洲（delta）。** 你明确验收通过后，AI 结合最新代码，把本次的 ADR、调查笔记、方案和图整理进项目知识库，只改本次涉及的主题，写成新同事能从头读懂的文字；然后把需求目录移入 `.rivo/archived/`。
+**三角洲（knowledge-management）。** 你明确验收通过后，AI 结合最新代码，把本次的 ADR、调查笔记、方案和图整理进项目知识库，只改本次涉及的主题，写成新同事能从头读懂的文字；然后把需求目录移入 `.rivo/archived/`。
 
 ## 图示
 
@@ -72,10 +72,10 @@
 | 技能 | 用途 |
 | --- | --- |
 | [using-rivo](skills/using-rivo/SKILL.md) | 入口：什么时候走 Rivo、交付顺序与宿主调用 |
-| [confluence](skills/confluence/SKILL.md) | 讨论需求与方案，边问边记 ADR |
-| [course](skills/course/SKILL.md) | 编写、审阅和修订技术方案 plan.md |
-| [flow](skills/flow/SKILL.md) | 编排实施方案 task.md，组织实施、审阅与验收 |
-| [delta](skills/delta/SKILL.md) | 验收后维护项目知识库并归档；查阅项目知识，整理单独调查的笔记，按你的指定重写已有知识库 |
+| [converging](skills/converging/SKILL.md) | 讨论需求与方案，边问边记 ADR |
+| [writing-plans](skills/writing-plans/SKILL.md) | 编写、审阅和修订技术方案 plan.md |
+| [implementing-plans](skills/implementing-plans/SKILL.md) | 编排实施方案 task.md，组织实施、审阅与验收 |
+| [knowledge-management](skills/knowledge-management/SKILL.md) | 验收后维护项目知识库并归档；查阅项目知识，整理单独调查的笔记，按你的指定重写已有知识库 |
 | [investigating](skills/investigating/SKILL.md) | 查清具体问题，维护调查笔记 |
 | [drawing-diagrams](skills/drawing-diagrams/SKILL.md) | 绘制 before/after 图 |
 | [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
@@ -98,10 +98,10 @@
 
 | 0.7 | 0.8 |
 | --- | --- |
-| discussing-designs、architecture-decisions | confluence |
-| writing-designs | course |
-| planning-tasks、implementing-tasks | flow |
-| knowledge-management | delta |
+| discussing-designs、architecture-decisions | converging |
+| writing-designs | writing-plans |
+| planning-tasks、implementing-tasks | implementing-plans |
+| knowledge-management | knowledge-management |
 | using-archify | drawing-diagrams |
 
 产物名不变，已有项目不需要迁移：`plan.md` 仍是技术方案，`task.md` 仍是实施方案，只是 0.8 的 task.md 更粗；方案审阅报告仍是 `reviews/plan-<n>.md`。旧目录里的 `reviews/design-*` 是 0.7 的讨论审阅，0.8 不再产生。0.7 的 `.rivo/decisions/` 不再使用，决定都记在所属需求的 `adr/` 中。

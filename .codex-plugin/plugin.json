@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：confluence 逐轮讨论并边问边记 ADR，course 写出给人评审的技术方案 plan.md，flow 按粗粒度的 task.md 实施并在实施中验证方案，delta 在用户验收后把认识沉淀进项目知识库并归档。独立审阅全程全量进行，意见分级，同一对象三轮仍未通过就停下来分析原因并交给用户；任何对方案的修改都会告知用户。",
+    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：converging 逐轮讨论并边问边记 ADR，writing-plans 写出给人评审的技术方案 plan.md，implementing-plans 按粗粒度的 task.md 实施并在实施中验证方案，knowledge-management 在用户验收后把认识沉淀进项目知识库并归档。独立审阅全程全量进行，意见分级，同一对象三轮仍未通过就停下来分析原因并交给用户；任何对方案的修改都会告知用户。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
@@ -19,10 +19,10 @@
     ],
     "defaultPrompt": [
       "用 Rivo 完成这个需求，我先讲讲我的思路，你查清现状后和我逐轮讨论。",
-      "用 confluence 讨论这份 PRD 的目标和技术做法。",
-      "用 course 根据团队评审意见修订这份技术方案。",
-      "用 flow 按已批准的方案实施。",
-      "我已经验收通过，用 delta 收尾并更新知识库。",
+      "用 converging 讨论这份 PRD 的目标和技术做法。",
+      "用 writing-plans 根据团队评审意见修订这份技术方案。",
+      "用 implementing-plans 按已批准的方案实施。",
+      "我已经验收通过，用 knowledge-management 收尾并更新知识库。",
       "用 investigating 查清这个机制并更新 note。"
     ]
   }
