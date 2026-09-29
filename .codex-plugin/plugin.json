@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：converging 逐轮讨论并边问边记 ADR，writing-plans 写出给人评审的技术方案 plan.md，implementing-plans 按粗粒度的 task.md 实施并在实施中验证方案，knowledge-management 在用户验收后把认识沉淀进项目知识库并归档。独立审阅全程全量进行，意见分级，同一对象三轮仍未通过就停下来分析原因并交给用户；任何对方案的修改都会告知用户。",
+    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：converging 逐轮讨论并边问边记 ADR，writing-plans 写出给人评审的技术方案 plan.md，implementing-plans 按粗粒度的 task.md 实施并在实施中验证方案，knowledge-management 在用户验收后把认识沉淀进项目知识库并归档。方案定稿前全量审阅一次，实施逐任务轻审、完成后整体审阅，意见分 P0 到 P2，修复交同一审阅者增量复核；任何对方案的修改都会告知用户。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
