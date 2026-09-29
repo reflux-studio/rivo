@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "让软件交付与人的理解共同演进",
-    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：confluence 逐轮讨论并边问边记 ADR，course 写出给人评审的技术方案 plan.md，flow 按粗粒度的 task.md 实施并在实施中验证方案，delta 在用户验收后把认识沉淀进项目知识库并归档。独立审阅全程全量进行，意见分级，同一对象最多三轮；任何对方案的修改都会告知用户。",
+    "longDescription": "从用户的方案蓝图出发，按一条河的顺序完成交付：confluence 逐轮讨论并边问边记 ADR，course 写出给人评审的技术方案 plan.md，flow 按粗粒度的 task.md 实施并在实施中验证方案，delta 在用户验收后把认识沉淀进项目知识库并归档。独立审阅全程全量进行，意见分级，同一对象三轮仍未通过就停下来分析原因并交给用户；任何对方案的修改都会告知用户。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
