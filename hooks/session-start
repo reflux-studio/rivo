@@ -6,10 +6,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-using_rivo_content="$(cat "${PLUGIN_ROOT}/skills/using-rivo/SKILL.md")"
-entry_context="Rivo skill entrypoint is loaded below. Select the skill for the user's current request and existing materials. Load it from ${PLUGIN_ROOT}/skills/ with the host skill tool or file reader, announce its purpose, and follow that skill's scope, approval and revision rules.
+project_dir="${CLAUDE_PROJECT_DIR:-$PWD}"
+
+if [ -d "${project_dir}/.rivo" ]; then
+    using_rivo_content="$(cat "${PLUGIN_ROOT}/skills/using-rivo/SKILL.md")"
+    entry_context="This is a Rivo project. The Rivo entry skill is loaded below. Enter a Rivo flow only when the user asks for Rivo, names a Rivo skill, or continues an existing requirement directory; handle other requests normally. Load skills from ${PLUGIN_ROOT}/skills/ with the host skill tool or file reader.
 
 ${using_rivo_content}"
+else
+    entry_context="Rivo is available: when the user asks to deliver a requirement with Rivo or names a Rivo skill, load using-rivo from ${PLUGIN_ROOT}/skills/ first."
+fi
 
 escape_for_json() {
     local s="$1"
