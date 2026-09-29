@@ -77,6 +77,7 @@
 | [implementing-plans](skills/implementing-plans/SKILL.md) | 编排实施方案 task.md，组织实施、审阅与验收 |
 | [knowledge-management](skills/knowledge-management/SKILL.md) | 验收后维护项目知识库并归档；查阅项目知识，整理单独调查的笔记，按你的指定重写已有知识库 |
 | [investigating](skills/investigating/SKILL.md) | 查清具体问题，维护调查笔记 |
+| [writing-clearly](skills/writing-clearly/SKILL.md) | 写给人读的文档和图，去掉 AI 腔 |
 | [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常并验证根因 |
 
@@ -98,3 +99,5 @@
 ## 许可证
 
 [MIT](LICENSE)
+
+writing-clearly 的写法部分改编自 Strunk 的 *The Elements of Style*（公有领域）与 [writing-clearly-and-concisely](https://github.com/softaworks/agent-toolkit)（MIT），AI 腔清单改编自 [humanizer](https://github.com/blader/humanizer)（MIT）。

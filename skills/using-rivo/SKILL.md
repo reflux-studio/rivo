@@ -31,6 +31,7 @@ Rivo 让一次软件交付由人类工程师主导：用户带着需求和脑中
 | 技能 | 用途 |
 | --- | --- |
 | investigating | 查清具体问题，维护调查笔记 note.md |
+| writing-clearly | 写给人读的文档和图，去掉 AI 腔 |
 | test-driven-development | 用失败测试驱动行为实现 |
 | systematic-debugging | 复现异常并验证根因 |
 
