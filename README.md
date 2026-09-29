@@ -75,7 +75,7 @@
 | [confluence](skills/confluence/SKILL.md) | 讨论需求与方案，边问边记 ADR |
 | [course](skills/course/SKILL.md) | 编写、审阅和修订技术方案 plan.md |
 | [flow](skills/flow/SKILL.md) | 编排实施方案 task.md，组织实施、审阅与验收 |
-| [delta](skills/delta/SKILL.md) | 验收后维护项目知识库并归档；查阅项目知识，按你的指定重写已有知识库 |
+| [delta](skills/delta/SKILL.md) | 验收后维护项目知识库并归档；查阅项目知识，整理单独调查的笔记，按你的指定重写已有知识库 |
 | [investigating](skills/investigating/SKILL.md) | 查清具体问题，维护调查笔记 |
 | [drawing-diagrams](skills/drawing-diagrams/SKILL.md) | 绘制 before/after 图 |
 | [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
