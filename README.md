@@ -92,20 +92,6 @@
 
 在 Claude Code 中，[启动 Hook](hooks/hooks.json) 只在当前目录含 `.rivo/` 的项目里注入完整入口，其他项目只注入一行提示。修改源码后，需要另外刷新已安装的插件副本。
 
-## 从 0.7 升级
-
-技能名换成了河流的名字，点名调用旧名字会找不到技能：
-
-| 0.7 | 0.8 |
-| --- | --- |
-| discussing-designs、architecture-decisions | converging |
-| writing-designs | writing-plans |
-| planning-tasks、implementing-tasks | implementing-plans |
-| knowledge-management | knowledge-management |
-| using-archify | drawing-diagrams |
-
-产物名不变，已有项目不需要迁移：`plan.md` 仍是技术方案，`task.md` 仍是实施方案，只是 0.8 的 task.md 更粗；方案审阅报告仍是 `reviews/plan-<n>.md`。旧目录里的 `reviews/design-*` 是 0.7 的讨论审阅，0.8 不再产生。0.7 的 `.rivo/decisions/` 不再使用，决定都记在所属需求的 `adr/` 中。
-
 ## 修改 Rivo
 
 修改技能时同步检查参考文件、审阅提示词、插件清单、hook 和本 README。格式检查通过不代表实际使用正确，改完要在真实需求上试用。

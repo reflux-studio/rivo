@@ -71,7 +71,7 @@ flowchart LR
 | `reviews/` | 每轮审阅报告：`plan-<n>.md`、`<任务>-<n>.md`、`final-<n>.md` |
 | `evidence/` | 验证证据 |
 
-项目知识库默认在 `.rivo/knowledge/`，验收后的需求目录移入 `.rivo/archived/`。0.7 留下的旧目录里，`reviews/design-*` 是当时的讨论审阅。继续一个已有需求目录时，先读这些材料，从当前所处的阶段接着做，不从头重来。
+项目知识库默认在 `.rivo/knowledge/`，验收后的需求目录移入 `.rivo/archived/`。继续一个已有需求目录时，先读这些材料，从当前所处的阶段接着做，不从头重来。
 
 ## 宿主调用
 
