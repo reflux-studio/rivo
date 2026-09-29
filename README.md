@@ -58,7 +58,7 @@
     plan.md       技术方案，给人读、给人评审
     task.md       粗粒度实施方案与实施记录
     note.md       按主题组织的调查笔记
-    assets/       图源、SVG 与交付回执
+    assets/       图源与 SVG
     reviews/      每轮审阅报告
     evidence/     验证证据
   knowledge/      项目知识库：首页导读和按主题的文件
@@ -77,7 +77,6 @@
 | [implementing-plans](skills/implementing-plans/SKILL.md) | 编排实施方案 task.md，组织实施、审阅与验收 |
 | [knowledge-management](skills/knowledge-management/SKILL.md) | 验收后维护项目知识库并归档；查阅项目知识，整理单独调查的笔记，按你的指定重写已有知识库 |
 | [investigating](skills/investigating/SKILL.md) | 查清具体问题，维护调查笔记 |
-| [drawing-diagrams](skills/drawing-diagrams/SKILL.md) | 绘制 before/after 图 |
 | [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常并验证根因 |
 

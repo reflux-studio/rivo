@@ -22,7 +22,7 @@ description: Rivo 的讨论阶段：从用户的方案蓝图出发，按决策�
 
 然后向用户确认蓝图：是否已有思路，思路是什么，为什么这样想。用户已经讲过的直接承接。没有蓝图时一起探索。
 
-接着加载 investigating，调查与蓝图相关的现状，再加载 drawing-diagrams 画出 before 图，和用户对"现在是什么样"达成一致，然后才开始提问。
+接着加载 investigating，调查与蓝图相关的现状，再按 writing-plans [写作标准](../writing-plans/references/writing.md)中「图」一节画出 before 图，和用户对"现在是什么样"达成一致，然后才开始提问。
 
 ## 按轮提问
 

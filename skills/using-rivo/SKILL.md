@@ -31,7 +31,6 @@ Rivo 让一次软件交付由人类工程师主导：用户带着需求和脑中
 | 技能 | 用途 |
 | --- | --- |
 | investigating | 查清具体问题，维护调查笔记 note.md |
-| drawing-diagrams | 画 before/after 图，嵌入 Markdown 的 SVG |
 | test-driven-development | 用失败测试驱动行为实现 |
 | systematic-debugging | 复现异常并验证根因 |
 
@@ -67,7 +66,7 @@ flowchart LR
 | `plan.md` | 技术方案，给人读、给人评审 |
 | `task.md` | 粗粒度实施方案与实施记录 |
 | `note.md` | 按主题组织的调查笔记 |
-| `assets/` | 图源、SVG 与交付回执 |
+| `assets/` | 图源与 SVG |
 | `reviews/` | 每轮审阅报告：`plan-<n>.md`、`<任务>-<n>.md`、`final-<n>.md` |
 | `evidence/` | 验证证据 |
 
