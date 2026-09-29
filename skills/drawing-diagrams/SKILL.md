@@ -32,7 +32,7 @@ after 从核实后的 before 复制而来，保留相同对象的 ID 和布局�
 
 ## 选择实现方式
 
-**第一选择是 Archify。** 能力以命令行实际输出为准：对每个已安装的 Archify（技能列表里的 archify 及其声明的安装位置）运行
+**第一选择是 Archify。** 能力以命令行实际输出为准：先找到 Archify 的安装位置：技能列表里名为 archify 的技能所在目录，以及 `~/.claude/skills/`、`~/.agents/skills/`、宿主插件目录下的 `archify/`，用文件系统查找 `bin/archify.mjs`。Archify 是技能，工具搜索找不到不能说明未安装；以上位置都找不到 `bin/archify.mjs`，才算没有可用的 Archify。对每个找到的 Archify 运行
 
 ```bash
 node <archify-root>/bin/archify.mjs --help
