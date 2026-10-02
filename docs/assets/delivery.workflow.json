@@ -17,7 +17,7 @@
           "label": "你的决定"
         },
         "messagebus": {
-          "label": "子代理"
+          "label": "执行与审阅"
         },
         "database": {
           "label": "知识"
@@ -36,7 +36,7 @@
     },
     {
       "id": "agents",
-      "label": "子代理：执行与审阅"
+      "label": "执行与独立审阅"
     }
   ],
   "phases": [
@@ -148,7 +148,7 @@
       "col": 2,
       "type": "messagebus",
       "label": "方案审阅",
-      "sublabel": "定稿前一次",
+      "sublabel": "首次全审，变化按影响复核",
       "width": 156
     },
     {
@@ -157,7 +157,7 @@
       "col": 4,
       "type": "messagebus",
       "label": "执行与审阅",
-      "sublabel": "逐任务轻审 + 整体审阅",
+      "sublabel": "实现、验证与独立审阅",
       "width": 156
     }
   ],
@@ -166,13 +166,13 @@
       "id": "e_blueprint",
       "from": "blueprint",
       "to": "converging",
-      "label": "逐轮提问"
+      "label": "查证与讨论"
     },
     {
       "id": "e_exit",
       "from": "converging",
       "to": "writing_plans",
-      "label": "出口条件",
+      "label": "做法确定",
       "variant": "emphasis"
     },
     {
@@ -184,7 +184,7 @@
       "id": "e_to_user",
       "from": "plan_review",
       "to": "approve",
-      "label": "无 P0",
+      "label": "当前设计通过",
       "variant": "emphasis"
     },
     {
