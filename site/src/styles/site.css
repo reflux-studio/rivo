@@ -27,9 +27,9 @@ nav.top .in{max-width:1240px;margin:0 auto;height:60px;padding:0 var(--gut);disp
 .tools{flex:none;display:flex;align-items:center;gap:10px}
 .seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;font-family:var(--mono);font-size:12px}
 .seg.dark{border-color:var(--ink);font:500 13px var(--sans)}
-.seg button{height:30px;padding:0 10px;border:none;cursor:pointer;font:inherit;background:transparent;color:var(--ink);transition:all 160ms}
+.seg button,.seg a{display:flex;align-items:center;text-decoration:none;height:30px;padding:0 10px;border:none;cursor:pointer;font:inherit;background:transparent;color:var(--ink);transition:all 160ms}
 .seg.dark button{height:32px;padding:0 14px}
-.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.seg [aria-pressed=true],.seg [aria-current=page]{background:var(--ink);color:var(--paper)}
 .gh{height:32px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:6px;background:var(--ink);color:var(--paper);font-size:13px;font-weight:500;text-decoration:none}
 .gh:hover,.btn:hover,.entry:hover{background:var(--red);color:var(--paper)}
 /* hero */
@@ -223,3 +223,4 @@ footer .links2 span{margin-left:auto;font-family:var(--mono)}
 .js [data-reveal]:not(.shown){opacity:0;transform:translateY(26px)}
 @media (max-width:760px){.links{display:none}.tools{margin-left:auto}.row>span:first-child{flex-basis:72px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.js [data-reveal]:not(.shown){opacity:1;transform:none}}
+.seg a[aria-current=page]:hover{color:var(--paper)}
