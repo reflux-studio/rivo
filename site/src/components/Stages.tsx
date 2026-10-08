@@ -5,6 +5,8 @@ import type { site } from '../i18n/site'
 
 type T = typeof site.zh
 
+const NAV = 60 // 顶部导航高度，与 .stick 的 top 一致
+
 // 四阶段：宽屏时固定在屏幕上，随滚动推进 01 → 04；窄屏或矮屏退回手动切换
 export default function Stages({ t }: { t: T }) {
   const n = t.stages.length
@@ -12,13 +14,14 @@ export default function Stages({ t }: { t: T }) {
   const [pinned, setPinned] = useState(false)
   const outer = useRef<HTMLDivElement>(null)
   const stick = useRef<HTMLDivElement>(null)
+  const inner = useRef<HTMLDivElement>(null)
 
+  // 整块（标题 + 标签 + 面板）放得进视口才固定，否则按普通文档流排版
   useEffect(() => {
-    const mq = matchMedia('(min-width: 900px) and (min-height: 720px)')
-    const sync = () => setPinned(mq.matches)
+    const sync = () => setPinned(innerWidth >= 900 && !!inner.current && inner.current.offsetHeight + 40 <= innerHeight - NAV)
     sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
+    addEventListener('resize', sync)
+    return () => removeEventListener('resize', sync)
   }, [])
 
   // 滚动进度 → 当前阶段与阶段内进度（驱动进度条）
@@ -31,8 +34,7 @@ export default function Stages({ t }: { t: T }) {
     return onScroll(() => {
       const o = outer.current
       if (!o) return
-      const top = parseFloat(getComputedStyle(s).top) || 0
-      const x = clamp((top - o.getBoundingClientRect().top) / (o.offsetHeight - s.offsetHeight)) * n
+      const x = clamp((NAV - o.getBoundingClientRect().top) / (o.offsetHeight - s.offsetHeight)) * n
       const i = Math.min(n - 1, Math.floor(x))
       s.style.setProperty('--w', (x - i).toFixed(3))
       setStage(i)
@@ -43,16 +45,23 @@ export default function Stages({ t }: { t: T }) {
     const o = outer.current
     const s = stick.current
     if (!pinned || !o || !s) return setStage(i)
-    const top = parseFloat(getComputedStyle(s).top) || 0
     const range = o.offsetHeight - s.offsetHeight
-    scrollTo({ top: o.getBoundingClientRect().top + scrollY - top + ((i + 0.5) / n) * range, behavior: 'smooth' })
+    scrollTo({ top: o.getBoundingClientRect().top + scrollY - NAV + ((i + 0.5) / n) * range, behavior: 'smooth' })
   }
 
   const c = t.stages[stage]
   const skill = STAGE_SKILLS[stage]
   return (
-    <div className="pin" ref={outer} data-reveal style={pinned ? { height: `${n * 45 + 40}vh` } : undefined}>
-      <div className={pinned ? 'stick' : 'stage-flow'} ref={stick}>
+    <div className="pin" ref={outer} style={pinned ? { height: `calc(100vh - ${NAV}px + ${n * 45}vh)` } : undefined}>
+      <div className={pinned ? 'stick' : undefined} ref={stick}>
+        <div className="stick-in" ref={inner}>
+        <div className="sec">
+          <div className="lab"><b>§ 02</b><span>{t.navHow}</span></div>
+          <div className="hd2">
+            <h2>{t.howTitle}</h2>
+            <p className="lead">{t.howSub}</p>
+          </div>
+        </div>
         <div className="track">
           <div className="dash" aria-hidden="true" />
           <div className="g" role="tablist">
@@ -105,6 +114,7 @@ export default function Stages({ t }: { t: T }) {
               ))}
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

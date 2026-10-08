@@ -93,17 +93,13 @@ const nav = [['why', t.navWhy], ['how', t.navHow], ['principles', t.navPrin], ['
     </section>
 
     <section id="how" class="alt">
-      <div class="wrap stack" style="gap:56px">
-        <div class="sec">
-          <div class="lab" data-reveal><b>§ 02</b><span>{t.navHow}</span></div>
-          <div class="hd2" data-reveal><h2>{t.howTitle}</h2><p class="lead">{t.howSub}</p></div>
-        </div>
+      <div class="wrap">
         <Stages client:visible t={t} />
       </div>
     </section>
 
     <section>
-      <div class="wrap stack">
+      <div class="wrap">
         <Sequence client:visible t={t} />
       </div>
     </section>

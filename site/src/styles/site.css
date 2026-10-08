@@ -110,9 +110,10 @@ h2 em{color:var(--mut);font-style:italic;font-weight:500}
 .st[aria-selected=true] .n{background:var(--ink);color:var(--paper);transform:scale(1.12)}
 .st[aria-selected=true] .nm{opacity:1}.st[aria-selected=true] .pg{opacity:1}
 .st[aria-selected=true] .pg i{transform:scaleX(var(--w,1))}
-.pin{position:relative}.stick,.stage-flow{display:flex;flex-direction:column;gap:56px}.stick{position:sticky;top:84px}
+.pin{position:relative}.stick-in{display:flex;flex-direction:column;gap:32px}
+.stick{position:sticky;top:60px;height:calc(100vh - 60px);display:flex;flex-direction:column;justify-content:center}
 
-.panel{display:flex;flex-wrap:wrap;gap:24px;align-items:stretch;animation:rv-swap 480ms var(--ease) both}
+.panel{min-height:410px;display:flex;flex-wrap:wrap;gap:24px;align-items:stretch;animation:rv-swap 480ms var(--ease) both}
 .rows{flex:1 1 420px;min-width:0;display:flex;flex-direction:column;border-top:1.5px solid var(--ink)}
 .row{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid var(--line)}
 .row>span:first-child{flex:0 0 96px;font:12px var(--mono);color:var(--mut);padding-top:4px}
@@ -130,7 +131,7 @@ h2 em{color:var(--mut);font-style:italic;font-weight:500}
 .doc .h{font-weight:600}.doc .k{color:var(--mut);font-weight:500}.doc .m{color:var(--mut)}.doc .r{color:var(--red);font-weight:600}.doc .q{color:var(--body);padding-left:12px;border-left:2px solid var(--line)}
 /* seq */
 .seqwrap{overflow-x:auto;border:1px solid var(--ink);border-radius:10px;background:var(--card)}
-.seq{position:relative;min-width:760px;padding:28px 0 36px}
+.seq{position:relative;min-width:760px;padding:24px 0 28px}
 .seq .cols,.seq .lanes,.seq .r{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .seq{--lp:1}.js .seq{--lp:0}
 .seq .cols{position:absolute;top:72px;bottom:24px;left:0;right:0;pointer-events:none;clip-path:inset(0 0 calc((1 - var(--lp))*100%) 0)}
@@ -138,16 +139,18 @@ h2 em{color:var(--mut);font-style:italic;font-weight:500}
 .seq .lanes{position:relative;margin-bottom:12px}.seq .lanes div{display:flex;justify-content:center}
 .seq .lanes span{display:inline-flex;align-items:center;height:34px;padding:0 16px;border-radius:4px;font-family:var(--serif);font-size:17px;font-weight:600;border:1.5px solid var(--ink);background:var(--card)}
 .seq .lanes div:first-child span{border-color:var(--red);background:var(--red);color:var(--paper)}
-.seq .r{position:relative;height:56px;align-items:end}
+.seq .r{position:relative;height:40px;align-items:end}
 .seq .r{--p:1}.js .seq .r{--p:0}
-.seq .r>div{display:flex;flex-direction:column;gap:6px;opacity:calc(.1 + .9*var(--p));color:var(--ink)}
+.seq .r>div{display:flex;flex-direction:column;gap:4px;color:var(--ink)}
+.seq .t{opacity:calc(.12 + .88*min(1,var(--p)*3))}
 .seq .r.h>div{color:var(--red)}.seq .r.h .t{font-weight:600}
 .seq .t{text-align:center;font-size:13px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px}
 .seq .t i{font:11px var(--mono);font-style:normal;opacity:.7;margin-right:6px}
-.seq .ar{display:flex;align-items:center;transform:scaleX(var(--p))}
-.seq .ar b{width:6px;height:6px;border-radius:50%;background:currentColor}.seq .ar u{flex:1;height:0;border-top:1.5px solid currentColor}
-.seq .ar s{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:9px solid currentColor}
-.seq .r.rt .ar{transform-origin:left}.seq .r.lf .ar{transform-origin:right;flex-direction:row-reverse}.seq .r.lf .ar s{transform:scaleX(-1)}
+.seq .ar{position:relative;height:10px}
+.seq .r.lf .ar{transform:scaleX(-1)}
+.seq .ar b{position:absolute;left:0;top:2px;width:6px;height:6px;border-radius:50%;background:currentColor;opacity:calc(var(--p)*30)}
+.seq .ar u{position:absolute;left:3px;top:5px;height:0;width:calc((100% - 12px)*var(--p) + 6px);border-top:1.5px solid currentColor;opacity:calc(var(--p)*30)}
+.seq .ar s{position:absolute;top:0;left:calc((100% - 9px)*var(--p));width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:9px solid currentColor;opacity:calc(var(--p)*30)}
 /* plan */
 .plan{display:flex;flex-wrap:wrap;gap:32px}
 .toc{flex:1.3 1 480px;min-width:0;display:flex;flex-direction:column}
