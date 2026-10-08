@@ -43,7 +43,6 @@ const zh = {
   seqLabel: '实施',
   seqTitle: '实施中的往来',
   seqSub: '逐任务派发与轻审，P0 修复后由同一审阅者复核；方案走不通时带证据交你确认；整体审阅通过后请你验收。',
-  replay: '重放',
   lanes: [ '你', '主代理', '执行者', '审阅者' ],
   seq: [
     '批准并授权实施',
@@ -250,7 +249,6 @@ const en: typeof zh = {
   seqLabel: 'Implementation',
   seqTitle: 'The back-and-forth of implementation',
   seqSub: 'Tasks are dispatched and lightly reviewed one by one; P0 fixes go back to the same reviewer. When the plan fails, evidence comes to you. After the full review passes, you accept.',
-  replay: 'Replay',
   lanes: [ 'You', 'Lead agent', 'Implementer', 'Reviewer' ],
   seq: [
     'Approve and authorise',

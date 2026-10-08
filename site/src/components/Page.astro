@@ -117,11 +117,11 @@ const nav = [['why', t.navWhy], ['how', t.navHow], ['principles', t.navPrin], ['
         <div class="plan">
           <div class="toc" data-reveal>
             <div class="cap"><b>plan.md</b><span>{t.tocCap}</span></div>
-            {t.chapters.map(([title, desc], i) => <div class="ch"><i>{i + 1}</i><b>{title}</b><u aria-hidden="true"></u><span>{desc}</span></div>)}
+            {t.chapters.map(([title, desc], i) => <div class="ch" style={`--i:${i}`}><i>{i + 1}</i><b>{title}</b><u aria-hidden="true"></u><span>{desc}</span></div>)}
           </div>
           <div class="tree" data-reveal>
             <div class="cap"><span>{t.treeCap}</span><span>tree</span></div>
-            {TREE.map(([pre, name, ni]) => <div class="n"><span><span class="p">{pre}</span><span class={name.endsWith('/') ? 'd' : ''}>{name === 'issues/' ? `issues/${t.issue}/` : name}</span></span><span>{t.tree[ni] || ' '}</span></div>)}
+            {TREE.map(([pre, name, ni], i) => <div class="n" style={`--i:${i}`}><span><span class="p">{pre}</span><span class={name.endsWith('/') ? 'd' : ''}>{name === 'issues/' ? `issues/${t.issue}/` : name}</span></span><span>{t.tree[ni] || ' '}</span></div>)}
             <div class="note">{t.treeNote}</div>
           </div>
         </div>
