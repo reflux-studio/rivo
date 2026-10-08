@@ -6,7 +6,7 @@
 
 面向 Claude Code 与 Codex 的软件交付技能
 
-<img alt="version" src="https://img.shields.io/badge/version-0.10.0-2f9e6b">
+<img alt="version" src="https://img.shields.io/badge/version-0.10.1-2f9e6b">
 <img alt="hosts" src="https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-5f6b7a">
 <img alt="license" src="https://img.shields.io/badge/license-MIT-5f6b7a">
 
