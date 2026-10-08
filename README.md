@@ -127,16 +127,16 @@ Rivo 让设计留在人手里。你带着需求和自己的拆解开始，AI 查
 
 ```text
 .rivo/
-  issues/<需求>/
-    note.md       需求总览、调查结论
-    adr/          重要决定及理由
-    plan.md       技术方案
-    task.md       实施方案与实施记录
-    assets/       图、图源与方案附表
-    reviews/      审阅报告
-    evidence/     验证证据
-  knowledge/      项目知识库
-  archived/       验收后归档的需求
+├── issues/<需求>/
+│   ├── note.md        需求总览、调查结论
+│   ├── adr/           重要决定及理由
+│   ├── plan.md        技术方案
+│   ├── task.md        实施方案与实施记录
+│   ├── assets/        图、图源与方案附表
+│   ├── reviews/       审阅报告
+│   └── evidence/      验证证据
+├── knowledge/         项目知识库
+└── archived/          验收后归档的需求
 ```
 
 用户或项目指定的位置优先。
