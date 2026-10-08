@@ -6,7 +6,7 @@
 
 面向 Claude Code 与 Codex 的软件交付技能
 
-<img alt="version" src="https://img.shields.io/badge/version-0.10.1-2f9e6b">
+<img alt="version" src="https://img.shields.io/badge/version-0.10.2-2f9e6b">
 <img alt="hosts" src="https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-5f6b7a">
 <img alt="license" src="https://img.shields.io/badge/license-MIT-5f6b7a">
 
@@ -58,11 +58,11 @@ Rivo 让设计留在人手里。你带着需求和自己的拆解开始，AI 查
 
 > 用 Rivo 完成供应商档案优化。本期包括字段配置、档案页展示、表单物料、历史数据处理和报表接入。先核对我的拆解，查清现状与依赖，再讨论需要决定的问题。
 
-没有拆解也可以只说目标。也可以只用其中一个技能，做完就结束：
+没有拆解也可以只说目标。交付依次经过讨论、方案、实施与用户验收、知识整理；方法技能可以独立使用，做完就结束：
 
 > 用 investigating 查清数组字段的读取方式。
 >
-> 用 writing-plans 根据团队评审意见修订这份技术方案。
+> 用 systematic-debugging 定位这个测试失败的原因。
 >
 > 用 writing-clearly 编辑这份报告，保留现有结构。
 

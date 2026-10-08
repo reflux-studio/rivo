@@ -10,7 +10,7 @@ project_dir="${CLAUDE_PROJECT_DIR:-$PWD}"
 
 if [ -d "${project_dir}/.rivo" ]; then
     using_rivo_content="$(cat "${PLUGIN_ROOT}/skills/using-rivo/SKILL.md")"
-    entry_context="This is a Rivo project. The Rivo entry skill is loaded below. Enter a delivery flow only when requested or when continuing an existing requirement. A standalone skill request stays within its requested scope; writing-clearly is an independent writing guide and does not start a delivery flow. Load skills from ${PLUGIN_ROOT}/skills/ with the host skill tool or file reader.
+    entry_context="This is a Rivo project. The Rivo entry skill is loaded below. Enter a delivery flow only when requested or when continuing an existing requirement. Delivery stages proceed through their confirmation and authorization gates, with user acceptance before knowledge consolidation. Method skills can be used independently and end within the requested scope. Load skills from ${PLUGIN_ROOT}/skills/ with the host skill tool or file reader.
 
 ${using_rivo_content}"
 else

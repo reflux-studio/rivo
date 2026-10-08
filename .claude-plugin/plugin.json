@@ -1,6 +1,6 @@
 {
   "name": "rivo",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "从需求模块与设计决策出发，按团队模板形成方案，完成实施验证与知识整理；通用写作规约可独立使用。",
   "author": {
     "name": "Xav1erSue"
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "Rivo",
     "shortDescription": "和 AI 讨论方案，完成实施并保留设计理由",
-    "longDescription": "沿用用户的需求拆解与方案方向，查清跨模块依赖并讨论重要取舍。按稳定模板编写技术方案，在已有批准与授权范围内实施、验证和审阅，验收后更新知识并归档。writing-clearly 独立指导各类文档表达，阶段模板负责产物内容与结构。",
+    "longDescription": "沿用用户的需求拆解与方案方向，查清跨模块依赖并讨论重要取舍。按稳定模板编写技术方案，在已有批准与授权范围内实施、验证和审阅，验收后更新知识并归档。交付阶段按顺序衔接，方法技能可独立使用。writing-clearly 指导各类文档表达，阶段模板负责产物内容与结构。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
