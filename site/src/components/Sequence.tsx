@@ -8,7 +8,7 @@ type T = typeof site.zh
 const NAV = 60 // 顶部导航高度，与 .stick 的 top 一致
 const STEP_VH = 22 // 固定时每一步占用的滚动距离
 
-// 实施中的往来：12 步按滚动进度依次生长，箭头头部始终在最前端；往回滚会收回。
+// 实施中的往来：各步按滚动进度依次生长，箭头头部始终在最前端；往回滚会收回。
 // 整块放得进视口时固定并居中，随滚动逐步画完；放不下时把进度分摊到整张图滚过的全程
 export default function Sequence({ t }: { t: T }) {
   const [pinned, setPinned] = useState(false)

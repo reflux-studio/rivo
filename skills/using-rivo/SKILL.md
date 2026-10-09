@@ -20,7 +20,7 @@ description: Rivo 的入口。用户要求用 Rivo 完成需求、点名某个 R
 
 | 阶段 | 技能 | 做什么 | 结束于 |
 | --- | --- | --- | --- |
-| 讨论 | converging | 整理需求总览，按依赖调查和讨论，把重要取舍写成 ADR | 用户确认理解一致 |
+| 讨论 | converging | 核对范围，按依赖调查和讨论，边聊边记决定，把重要取舍写成 ADR | 用户确认理解一致 |
 | 方案 | writing-plans | 按模板写 plan.md，独立审阅，交用户和团队评审 | 用户批准方案 |
 | 实施 | implementing-plans | 写粗粒度的 task.md，逐任务实施与审阅 | 用户验收 |
 | 知识 | knowledge-management | 把核实过的机制和理由写进知识库，归档需求目录 | 知识更新、目录归档 |
@@ -31,10 +31,13 @@ flowchart LR
     C -->|理解一致| P[writing-plans]
     P -->|批准并授权| I[implementing-plans]
     I -->|验收| K[knowledge-management]
-    P -.改变决定.-> C
-    I -.改变决定.-> C
-    I -.改变方案.-> P
+    P -.已确认的内容要改.-> R[revising]
+    I -.已确认的内容要改.-> R
+    R -.改决定.-> C
+    R -.改方案.-> P
 ```
+
+已定的范围和决定、已批准的方案、已开工的实施方案要改时，加载 revising。它从受影响的最上游一层改起，按决定、技术方案、实施方案、实现的顺序逐层修改，每层交给负责该产物的技能。
 
 方法技能按需加载，完成后回到原任务：
 
@@ -51,7 +54,7 @@ flowchart LR
 - **批准与授权**：沉默不算批准。批准方案不等于授权实施，用户可以一次给出两者。已有的批准和授权沿用，不重复询问
 - **外部操作**：推送、合并、发布需要相应授权，不从“完成需求”推导
 - **发现问题**：先查事实，只暂停依赖这个问题的工作
-- **核对进度**：继续工作时对照 ADR、plan.md、task.md、审阅报告和实际改动，不另设状态文件
+- **核对进度**：继续工作时对照 decisions.md、ADR、plan.md、task.md、审阅报告和实际改动，不另设状态文件
 
 各阶段技能按本阶段的含义写了这些约定的具体做法，以阶段技能为准。
 
@@ -59,15 +62,17 @@ flowchart LR
 
 材料放在目标项目的 `.rivo/issues/<slug>/`，用户或项目指定的位置优先。
 
-| 路径 | 内容 |
-| --- | --- |
-| `note.md` | 需求总览、调查结论、成文前暂存的做法 |
-| `adr/` | 重要决定、理由及相互依赖 |
-| `plan.md` | 技术方案，给人读、给人评审 |
-| `task.md` | 粗粒度实施方案与实施记录 |
-| `assets/` | 图、图源和方案附表 |
-| `reviews/` | 审阅报告：`plan-<n>.md`、`<任务>.md`、`final-<n>.md` |
-| `evidence/` | 验证证据 |
+| 路径 | 内容 | 谁写 |
+| --- | --- | --- |
+| `decisions.md` | 范围、全部决定、待决事项 | converging |
+| `adr/` | 重要取舍及理由 | converging |
+| `research/` | 按主题的调查笔记和原始材料 | investigating |
+| `plan.md`、`assets/` | 技术方案及其附件，给人读、给人评审 | writing-plans |
+| `task.md` | 粗粒度实施方案与实施记录 | implementing-plans |
+| `evidence/` | 实施中的验证证据 | implementing-plans |
+| `reviews/` | 审阅报告：`plan-<n>.md`、`<任务>.md`、`final-<n>.md` | 各阶段的审阅者 |
+
+一类产物只有一个位置。现状写进 `research/`，决定写进 `decisions.md` 和 `adr/`，本期做法写进 `plan.md`，互不搬运。
 
 项目知识库默认在 `.rivo/knowledge/`，验收后的需求目录移入 `.rivo/archived/`。
 

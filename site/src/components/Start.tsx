@@ -1,9 +1,12 @@
-import { useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import type { site } from '../i18n/site'
 
 type T = typeof site.zh
 
-const CMD = { cc: '/plugin marketplace add reflux-studio/rivo', codex: 'git clone https://github.com/reflux-studio/rivo' }
+const CMD = {
+  cc: ['/plugin marketplace add reflux-studio/rivo', '/plugin install rivo@rivo'],
+  codex: ['codex plugin marketplace add reflux-studio/rivo', 'codex plugin add rivo@rivo']
+}
 
 // 安装步骤（Claude Code / Codex 切换）与可复制的开口示例
 export default function Start({ t }: { t: T }) {
@@ -32,16 +35,20 @@ export default function Start({ t }: { t: T }) {
             <button type="button" aria-pressed={inst === 'codex'} onClick={() => setInst('codex')}>Codex</button>
           </div>
         </div>
-        <div className="cmd">
-          <i>{inst === 'cc' ? '>' : '$'}</i>
-          <code>{CMD[inst]}</code>
-          <button type="button" aria-label={t.copy} onClick={() => copy('inst', CMD[inst])}>{label('inst')}</button>
-        </div>
         {steps.map((x, i) => (
-          <div className="step" key={x}>
-            <i>0{i + 1}</i>
-            <span>{x}</span>
-          </div>
+          <Fragment key={`${inst}-${i}`}>
+            <div className="step">
+              <i>0{i + 1}</i>
+              <span>{x}</span>
+            </div>
+            {CMD[inst][i] && (
+              <div className="cmd">
+                <i>{inst === 'cc' ? '>' : '$'}</i>
+                <code>{CMD[inst][i]}</code>
+                <button type="button" aria-label={`${t.copy}: ${CMD[inst][i]}`} onClick={() => copy(`${inst}-${i}`, CMD[inst][i])}>{label(`${inst}-${i}`)}</button>
+              </div>
+            )}
+          </Fragment>
         ))}
         <p className="env">{t.stEnv}</p>
       </div>

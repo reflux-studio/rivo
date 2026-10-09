@@ -9,7 +9,7 @@
 
 - 本任务（摘自 task.md）：<任务条目原文>
 - 共同约定：<task.md 共同约定原文>
-- 技术方案与决定：<plan.md、adr/、note.md 的路径及 plan.md 版本>
+- 技术方案与决定：<plan.md、decisions.md、adr/ 的路径及 plan.md 版本>
 - 工作目录与可写范围：<实际内容>
 - 已有授权与限制：<是否可提交、不可做的操作>
 - 适用方法：行为实现用 test-driven-development，定位异常用 systematic-debugging，编写或修改文档时加载 writing-clearly（<技能位置>）

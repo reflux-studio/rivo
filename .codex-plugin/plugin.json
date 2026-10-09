@@ -1,6 +1,6 @@
 {
   "name": "rivo",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "description": "从需求模块与设计决策出发，按团队模板形成方案，完成实施验证与知识整理；通用写作规约可独立使用。",
   "author": {
     "name": "Xav1erSue"
