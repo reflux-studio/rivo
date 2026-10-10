@@ -17,7 +17,7 @@
 <br>
 
 <p align="center">
-  <img src="assets/delivery.svg" width="880" alt="一次交付：你给出需求与思路、决定取舍、批准并授权、验收；主代理依次经过讨论、方案、实施和知识整理，子代理负责查证、执行和独立审阅；已确认的内容要改时，按需经 revising 回到决定或方案">
+  <img src="assets/delivery.svg" width="880" alt="四阶段交付：讨论、方案、实施、知识；你在阶段间确认理解、批准并授权、验收；需变更已确认内容时，经你确认后从受影响的上游修订">
 </p>
 
 ## 为什么
@@ -38,7 +38,7 @@ Rivo 让设计留在人手里。你带着需求和自己的拆解开始，AI 查
 实施中发现方案的假设不成立，AI 带着证据回来找你，只暂停受影响的任务。下图是实施阶段里你、主代理、执行者和审阅者之间的往来：
 
 <p align="center">
-  <img src="assets/review.svg" width="820" alt="实施中的往来：逐任务派发与轻审，P0 修复后由同一审阅者复核；已确认的内容要改时带证据交你决定，逐层修订后重做受影响的任务；整体审阅通过后请你验收">
+  <img src="assets/review.svg" width="820" alt="实施时序：每项任务循环执行与轻审；仅有属实 P0 时修复并复核，仅需改变已确认内容时进入修订；全部任务完成后整体审阅，再请你验收">
 </p>
 
 每类产物只有一个位置，互不搬运：
@@ -112,7 +112,7 @@ codex plugin add rivo@rivo
 ## 技能
 
 <p align="center">
-  <img src="assets/skills.svg" width="880" alt="技能结构：入口 using-rivo 路由到四个阶段技能，每个阶段带自己的 references；revising 在已确认的内容要改时回到决定或方案；方法技能按名称加载">
+  <img src="assets/skills.svg" width="880" alt="技能分类：入口 using-rivo、按需修订 revising、四个阶段技能，以及可独立使用的调查、写作、测试和调试方法">
 </p>
 
 **交付流程**

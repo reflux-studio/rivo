@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { LANE, SEQ } from '../lib/data'
+import { LANE, SEQ, SEQ_GROUPS } from '../lib/data'
 import { clamp, onScroll } from '../lib/scroll'
 import type { site } from '../i18n/site'
 
@@ -67,25 +67,30 @@ export default function Sequence({ t }: { t: T }) {
                   </div>
                 ))}
               </div>
-              {SEQ.map(([f, to], i) => {
-                const a = LANE[f]
-                const b = LANE[to]
-                const lo = Math.min(a, b)
-                const hi = Math.max(a, b)
-                const span = hi - lo + 1
-                const human = f === 'you' || to === 'you'
-                return (
-                  <div key={i} className={`r${human ? ' h' : ''} ${b > a ? 'rt' : 'lf'}`}>
-                    <div style={{ gridColumn: `${lo + 1} / ${hi + 2}`, padding: `0 ${(100 / (2 * span)).toFixed(2)}%` }}>
-                      <span className="t">
-                        <i>{String(i + 1).padStart(2, '0')}</i>
-                        {t.seq[i]}
-                      </span>
-                      <div className="ar"><b /><u /><s /></div>
-                    </div>
-                  </div>
-                )
-              })}
+              {SEQ_GROUPS.map((group, groupIndex) => (
+                <div key={group.start} className={`seq-block${groupIndex === 0 ? ' intro' : ''}${groupIndex === 2 || groupIndex === 3 ? ' conditional' : ''}`}>
+                  {groupIndex > 0 && <div className="seq-group-title">{t.seqGroups[groupIndex - 1]}</div>}
+                  {SEQ.slice(group.start, group.end).map(([f, to], offset) => {
+                    const i = group.start + offset
+                    const a = LANE[f]
+                    const b = LANE[to]
+                    const lo = Math.min(a, b)
+                    const hi = Math.max(a, b)
+                    const span = hi - lo + 1
+                    const human = f === 'you' || to === 'you'
+                    return (
+                      <div key={i} className={`r${human ? ' h' : ''} ${b > a ? 'rt' : 'lf'}`}>
+                        <div style={{ gridColumn: `${lo + 1} / ${hi + 2}`, padding: `0 ${(100 / (2 * span)).toFixed(2)}%` }}>
+                          <span className="t">
+                            {t.seq[i]}
+                          </span>
+                          <div className="ar"><b /><u /><s /></div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
