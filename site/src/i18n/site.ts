@@ -88,8 +88,8 @@ const zh = {
     [ '不维护状态', '进度从文档、审阅报告和实际改动中核对，没有状态文件，也没有跨会话交接。' ],
     [ '技能自包含', '每个阶段带着自己的模板和审阅提示词，不依赖别的技能的文件。' ]
   ],
-  skTitle: '一个入口，五个流程技能，四种方法。',
-  skSub: '入口技能决定什么时候走 Rivo；每个阶段带着自己的模板与审阅提示词。方法技能按名称加载，做完就结束。',
+  skTitle: '一个入口，五个流程技能，五种方法。',
+  skSub: '入口技能决定什么时候走 Rivo；每个阶段带着自己的模板与审阅提示词，规定派发时机、独立审阅和产物。方法技能按名称加载，做完就结束。',
   skEntry: '入口 · 什么时候走 Rivo、交付顺序与宿主调用方式',
   skMethods: '方法',
   skMethodsSub: '按名称加载，可独立使用',
@@ -102,6 +102,7 @@ const zh = {
   revising: [ '修订', '已确认的决定、方案或实施方案要改时，从受影响的最上游一层改起，逐层改到代码。', '决定 → 技术方案 → 实施方案 → 实现' ],
   methodSkills: [
     [ 'investigating', '查清技术事实，维护调查笔记' ],
+    [ 'dispatching-subagents', '选择子代理，明确契约与并行边界，核验结果并处理受阻' ],
     [ 'writing-clearly', '文档的表达规约，可独立使用' ],
     [ 'test-driven-development', '用失败测试驱动行为实现' ],
     [ 'systematic-debugging', '复现异常，检验原因假设并验证修复' ]
@@ -187,7 +188,7 @@ const zh = {
   stTitle: '带着目标和你自己的拆解开始。',
   stInstall: '安装',
   stTry: '这样开口',
-  stEnv: '模型分工、画图工具和开发环境写在你项目的 AGENTS.md 或 CLAUDE.md 里，Rivo 不指定。',
+  stEnv: '模型分工遵循你的偏好和项目约定。未指定时，按任务难度、错误代价、成本与延迟选择实际可用且允许选择的子代理配置；配置固定时沿用。画图工具和开发环境写在项目的 AGENTS.md 或 CLAUDE.md 里。',
   stNote: '普通请求按普通方式处理。项目里有 .rivo/ 目录，也不会让每个请求都进入流程。',
   cc: [
     '在 Claude Code 会话中添加插件市场。',
@@ -339,8 +340,8 @@ const en: typeof zh = {
       'Each stage carries its own templates and review prompts, with no dependency on other skills’ files.'
     ]
   ],
-  skTitle: 'One entry, five flow skills, four methods.',
-  skSub: 'The entry skill decides when Rivo applies; each stage ships its own templates and review prompts. Method skills load by name and end when done.',
+  skTitle: 'One entry, five flow skills, five methods.',
+  skSub: 'The entry skill decides when Rivo applies; each stage carries its own templates and review prompts, governing dispatch timing, independent review and artifacts. Method skills load by name and end when done.',
   skEntry: 'Entry · when to use Rivo, delivery order, host invocation',
   skMethods: 'Methods',
   skMethodsSub: 'Load by name, use on their own',
@@ -358,6 +359,7 @@ const en: typeof zh = {
   revising: [ 'Revise', 'When a confirmed decision, plan or build plan must change, start at the highest affected layer and work down to code.', 'decisions → plan → build plan → code' ],
   methodSkills: [
     [ 'investigating', 'Establish technical facts; keep investigation notes' ],
+    [ 'dispatching-subagents', 'Select subagents, set contracts and parallel boundaries, verify results and handle blockers' ],
     [ 'writing-clearly', 'Writing conventions for docs; usable alone' ],
     [ 'test-driven-development', 'Drive behaviour with failing tests' ],
     [ 'systematic-debugging', 'Reproduce, test cause hypotheses, verify the fix' ]
@@ -443,7 +445,7 @@ const en: typeof zh = {
   stTitle: 'Start with a goal — and your own breakdown.',
   stInstall: 'Install',
   stTry: 'Say it like this',
-  stEnv: 'Model roles, diagram tools and dev environment belong in your project’s AGENTS.md or CLAUDE.md. Rivo doesn’t prescribe them.',
+  stEnv: 'Model roles follow your preferences and project conventions. When unspecified, choose an available, permitted subagent configuration by task difficulty, error cost, cost and latency; keep fixed configurations as they are. Diagram tools and dev environment belong in your project’s AGENTS.md or CLAUDE.md.',
   stNote: 'Ordinary requests are handled ordinarily. Having a .rivo/ directory doesn’t push every request into the process.',
   cc: [
     'Add the marketplace in a Claude Code session.',

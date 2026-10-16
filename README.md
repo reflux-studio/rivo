@@ -6,7 +6,7 @@
 
 面向 Claude Code 与 Codex 的软件交付技能
 
-<img alt="version" src="https://img.shields.io/badge/version-0.11.1-2f9e6b">
+<img alt="version" src="https://img.shields.io/badge/version-0.12.0-2f9e6b">
 <img alt="hosts" src="https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-5f6b7a">
 <img alt="license" src="https://img.shields.io/badge/license-MIT-5f6b7a">
 
@@ -112,7 +112,7 @@ codex plugin add rivo@rivo
 ## 技能
 
 <p align="center">
-  <img src="assets/skills.svg" width="880" alt="技能分类：入口 using-rivo、按需修订 revising、四个阶段技能，以及可独立使用的调查、写作、测试和调试方法">
+  <img src="assets/skills.svg" width="880" alt="技能分类：入口 using-rivo、按需修订 revising、四个阶段技能，以及可独立使用的调查、委派、写作、测试和调试方法">
 </p>
 
 **交付流程**
@@ -130,11 +130,14 @@ codex plugin add rivo@rivo
 | 技能 | 用途 |
 | --- | --- |
 | [investigating](skills/investigating/SKILL.md) | 查清技术事实，维护[调查笔记](skills/investigating/references/note-structure.md) |
+| [dispatching-subagents](skills/dispatching-subagents/SKILL.md) | 选择子代理、明确委派契约与并行边界，核验结果并处理受阻 |
 | [writing-clearly](skills/writing-clearly/SKILL.md) | 文档的表达规约，可独立使用 |
 | [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常，检验原因假设并验证修复 |
 
 [using-rivo](skills/using-rivo/SKILL.md) 是入口，说明什么时候走 Rivo、交付顺序和宿主调用方式。
+
+委派遵循用户偏好和项目约定。没有指定时，按任务难度、错误代价、成本与延迟选择实际可用且允许选择的子代理配置；配置固定时沿用。阶段技能仍负责派发时机、独立审阅和产物规则。
 
 ## 文件位置
 

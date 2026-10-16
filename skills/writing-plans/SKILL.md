@@ -43,7 +43,7 @@ description: Rivo 的方案阶段：把讨论确定的做法按模板写成技�
 
 首次定稿前做一次全量独立审阅。之后的修订由用户直接确认，不再重审：每次修订都重审，成本会远超修订本身。
 
-1. 按 [审阅提示词](references/plan-reviewer.md) 派一个审阅者
+1. 加载 dispatching-subagents，按 [审阅提示词](references/plan-reviewer.md) 派一个独立审阅者
 2. 报告写入 `reviews/plan-<n>.md`，n 递增，不覆盖旧报告
 3. 按 [接收审阅意见](references/receiving-review.md) 核实和处理；有 P0 时修复后交同一审阅者复核
 

@@ -44,6 +44,7 @@ flowchart LR
 | 技能 | 用途 |
 | --- | --- |
 | investigating | 查清技术事实，维护调查笔记 |
+| dispatching-subagents | 选择子代理、明确委派契约与并行边界，核验结果并处理受阻 |
 | writing-clearly | 所有文档的表达；阶段模板只管内容和结构 |
 | test-driven-development | 用失败测试驱动行为实现 |
 | systematic-debugging | 复现异常并验证根因 |
@@ -84,5 +85,5 @@ flowchart LR
 | 向用户提问 | AskUserQuestion | 当前可用的提问工具 |
 | 独立审阅与派发 | Agent 子代理 | spawn_agent 等子代理工具 |
 
-- 模型分工、画图工具和开发环境按项目约定（AGENTS.md、CLAUDE.md），未指定时沿用宿主配置
+- 画图工具和开发环境按项目约定（AGENTS.md、CLAUDE.md）。委派时加载 dispatching-subagents：沿用用户偏好和项目的模型分工，未指定时按任务选择实际可用且允许选择的配置；宿主配置固定时沿用
 - 子代理不可用时，继续不依赖审阅的工作，并报告审阅尚未完成。自查不算独立审阅

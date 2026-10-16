@@ -1,6 +1,6 @@
 {
   "name": "rivo",
-  "version": "0.11.1",
+  "version": "0.12.0",
   "description": "从需求模块与设计决策出发，按团队模板形成方案，完成实施验证与知识整理；通用写作规约可独立使用。",
   "author": {
     "name": "Xav1erSue"
@@ -33,6 +33,7 @@
       "用 implementing-plans 按已批准的方案实施。",
       "我已经验收通过，用 knowledge-management 收尾并更新知识库。",
       "用 investigating 查清这个机制并更新调查笔记。",
+      "用 dispatching-subagents 安排这些任务的委派、并行与结果核验。",
       "用 writing-clearly 改善这份文档，保持团队已有结构。"
     ]
   },

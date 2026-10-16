@@ -30,7 +30,7 @@ description: 查清影响需求或设计的技术事实、接入条件和候选�
 - **标明证据类型**：文档声明、代码推断、模拟实验、真实运行分开写
 - **证据冲突时回查来源和版本**，不挑最方便推进的那条
 
-需要独立探索时，按 [调查委派提示词](references/investigation-prompt.md) 派子代理。子代理只返回证据，由你核对后再写进调查笔记。
+需要独立探索时，加载 dispatching-subagents，按 [调查委派提示词](references/investigation-prompt.md) 派子代理。子代理只返回证据，由你核对后再写进调查笔记。
 
 ### 3. 结束调查
 
