@@ -1,0 +1,10 @@
+{
+  "name": "rivo-development",
+  "version": "1.0.0",
+  "description": "在公共 rivo 基础上从用户给定需求形成方案、实现、自测与修复。",
+  "author": {
+    "name": "Xav1erSue"
+  },
+  "skills": "./skills/",
+  "icon": "./assets/rivo-icon.png"
+}

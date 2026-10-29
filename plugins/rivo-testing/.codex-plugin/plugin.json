@@ -1,0 +1,27 @@
+{
+  "name": "rivo-testing",
+  "version": "1.0.0",
+  "description": "在公共 rivo 基础上设计并执行测试、报告问题、复测与回归。",
+  "author": {
+    "name": "Xav1erSue"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "rivo-testing",
+    "shortDescription": "专业测试、缺陷与回归",
+    "longDescription": "在公共 rivo 基础上设计并执行测试、报告问题、复测与回归。",
+    "developerName": "Xav1erSue",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "用 Rivo 处理这项测试工作，先通过公共 using-rivo 核对当前材料和授权。"
+    ],
+    "brandColor": "#C8402A",
+    "composerIcon": "./assets/rivo-icon.svg",
+    "logo": "./assets/rivo-icon.png"
+  }
+}

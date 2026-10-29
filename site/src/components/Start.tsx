@@ -1,72 +1,37 @@
-import { Fragment, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { site } from '../i18n/site'
 
 type T = typeof site.zh
-
 const CMD = {
   cc: ['/plugin marketplace add reflux-studio/rivo', '/plugin install rivo@rivo'],
   codex: ['codex plugin marketplace add reflux-studio/rivo', 'codex plugin add rivo@rivo']
 }
-
-// 安装步骤（Claude Code / Codex 切换）与可复制的开口示例
 export default function Start({ t }: { t: T }) {
-  const [inst, setInst] = useState<'cc' | 'codex'>('cc')
-  const [copied, setCopied] = useState<string | null>(null)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
-
-  const copy = (key: string, text: string) => {
-    const done = () => {
-      setCopied(key)
-      clearTimeout(timer.current)
-      timer.current = setTimeout(() => setCopied(null), 1600)
-    }
-    navigator.clipboard?.writeText(text).then(done, done) ?? done()
+  const [host, setHost] = useState<'cc' | 'codex'>('cc')
+  const [role, setRole] = useState(1)
+  const [feedback, setFeedback] = useState<{ key: string; ok: boolean } | null>(null)
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  useEffect(() => () => clearTimeout(timer.current), [])
+  const domain = t.roles[role].package
+  const commands = [...CMD[host], host === 'cc' ? `/plugin install ${domain}@rivo` : `codex plugin add ${domain}@rivo`]
+  const steps = host === 'cc' ? t.cc : t.cx
+  async function copy(key: string, text: string) {
+    let ok = false
+    try { await navigator.clipboard.writeText(text); ok = true } catch { /* Show an honest failure state. */ }
+    setFeedback({ key, ok }); clearTimeout(timer.current)
+    timer.current = setTimeout(() => setFeedback(null), 2000)
   }
-  const label = (k: string) => (copied === k ? t.copied : t.copy)
-  const steps = inst === 'cc' ? t.cc : t.cx
-
-  return (
-    <div className="start">
-      <div data-reveal>
-        <div className="sh">
-          <b>{t.stInstall}</b>
-          <div className="seg dark" role="group">
-            <button type="button" aria-pressed={inst === 'cc'} onClick={() => setInst('cc')}>Claude Code</button>
-            <button type="button" aria-pressed={inst === 'codex'} onClick={() => setInst('codex')}>Codex</button>
-          </div>
-        </div>
-        {steps.map((x, i) => (
-          <Fragment key={`${inst}-${i}`}>
-            <div className="step">
-              <i>0{i + 1}</i>
-              <span>{x}</span>
-            </div>
-            {CMD[inst][i] && (
-              <div className="cmd">
-                <i>{inst === 'cc' ? '>' : '$'}</i>
-                <code>{CMD[inst][i]}</code>
-                <button type="button" aria-label={`${t.copy}: ${CMD[inst][i]}`} onClick={() => copy(`${inst}-${i}`, CMD[inst][i])}>{label(`${inst}-${i}`)}</button>
-              </div>
-            )}
-          </Fragment>
-        ))}
-        <p className="env">{t.stEnv}</p>
-      </div>
-      <div>
-        <div className="sh" data-reveal>
-          <b>{t.stTry}</b>
-        </div>
-        {t.prompts.map((p, i) => (
-          <div className={`pq${i ? '' : ' main'}`} key={p} data-reveal>
-            <div>
-              <small>{i ? t.tagMethod : t.tagDelivery}</small>
-              <span>{p}</span>
-            </div>
-            <button type="button" aria-label={t.copy} onClick={() => copy(`p${i}`, p)}>{label(`p${i}`)}</button>
-          </div>
-        ))}
-        <p className="note2" data-reveal>{t.stNote}</p>
-      </div>
+  const label = (key: string) => feedback?.key === key ? (feedback.ok ? t.copied : t.copyFailed) : t.copy
+  return <div className="install-grid">
+    <div className="install-console">
+      <div className="console-head"><span>{t.stInstall}</span><div className="host-switch" role="group" aria-label="Coding agent">{(['cc', 'codex'] as const).map(id => <button type="button" key={id} aria-pressed={host === id} onClick={() => { setHost(id); setFeedback(null) }}>{id === 'cc' ? 'Claude Code' : 'Codex'}</button>)}</div></div>
+      <div className="install-role"><span className="tiny-label">{t.stDomain}</span><div role="group" aria-label={t.stDomain}>{t.roles.map((r, index) => <button type="button" key={r.id} aria-pressed={index === role} onClick={() => { setRole(index); setFeedback(null) }}>{r.name}</button>)}</div></div>
+      <ol className="install-steps">{commands.map((cmd, i) => {
+        const key = `${host}-${domain}-${i}`
+        return <li key={i}><span className="step-title">{steps[i]}</span><div className="command"><code>{cmd}</code><button type="button" aria-label={`${t.copy}: ${cmd}`} onClick={() => copy(key, cmd)}>{label(key)}</button></div></li>
+      })}</ol>
+      <p className="install-note">{t.stEnv}</p>
     </div>
-  )
+    <div className="prompt-panel"><span className="tiny-label">{t.stTry} / {t.roles[role].name}</span><p>{steps[3]}</p><div className="prompt-example"><span aria-hidden="true">↳</span><blockquote>{t.prompts[role]}</blockquote><button type="button" onClick={() => copy(`prompt-${role}`, t.prompts[role])}>{label(`prompt-${role}`)}</button></div><p className="muted">{t.stNote}</p><div role="status" className="copy-status">{feedback ? feedback.ok ? t.copied : t.copyFailed : ''}</div></div>
+  </div>
 }

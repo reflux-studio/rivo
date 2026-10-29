@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "按参与角色组合插件",
+    "locale": "zh-CN",
+    "output": "delivery.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "shared",
+      "type": "backend",
+      "label": "rivo",
+      "sublabel": "统一入口 · 公共方法",
+      "pos": [
+        330,
+        25
+      ],
+      "size": [
+        250,
+        75
+      ]
+    },
+    {
+      "id": "product",
+      "type": "backend",
+      "label": "rivo-product",
+      "sublabel": "研究 · 需求 · 设计",
+      "pos": [
+        25,
+        175
+      ],
+      "size": [
+        250,
+        75
+      ]
+    },
+    {
+      "id": "development",
+      "type": "backend",
+      "label": "rivo-development",
+      "sublabel": "方案 · 实施 · 调试",
+      "pos": [
+        330,
+        175
+      ],
+      "size": [
+        250,
+        75
+      ]
+    },
+    {
+      "id": "testing",
+      "type": "backend",
+      "label": "rivo-testing",
+      "sublabel": "测试设计 · 执行 · 缺陷",
+      "pos": [
+        635,
+        175
+      ],
+      "size": [
+        250,
+        75
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "shared-product",
+      "from": "shared",
+      "to": "product"
+    },
+    {
+      "id": "shared-development",
+      "from": "shared",
+      "to": "development"
+    },
+    {
+      "id": "shared-testing",
+      "from": "shared",
+      "to": "testing"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "rivo-development",
+  "version": "1.0.0",
+  "description": "在公共 rivo 基础上从用户给定需求形成方案、实现、自测与修复。",
+  "author": {
+    "name": "Xav1erSue"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "rivo-development",
+    "shortDescription": "技术方案、开发与自测",
+    "longDescription": "在公共 rivo 基础上从用户给定需求形成方案、实现、自测与修复。",
+    "developerName": "Xav1erSue",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "用 Rivo 处理这项开发工作，先通过公共 using-rivo 核对当前材料和授权。"
+    ],
+    "brandColor": "#C8402A",
+    "composerIcon": "./assets/rivo-icon.svg",
+    "logo": "./assets/rivo-icon.png"
+  }
+}

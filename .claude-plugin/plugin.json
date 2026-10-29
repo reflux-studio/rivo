@@ -1,41 +1,10 @@
 {
   "name": "rivo",
-  "version": "0.12.0",
-  "description": "从需求模块与设计决策出发，按团队模板形成方案，完成实施验证与知识整理；通用写作规约可独立使用。",
+  "version": "1.0.0",
+  "description": "公共入口、写作、调查、修订、恢复与协作，按产物归属开展工作。",
   "author": {
     "name": "Xav1erSue"
   },
-  "keywords": [
-    "delivery",
-    "requirements",
-    "architecture",
-    "design",
-    "knowledge",
-    "tdd",
-    "debugging"
-  ],
   "skills": "./skills/",
-  "interface": {
-    "displayName": "Rivo",
-    "shortDescription": "和 AI 讨论方案，完成实施并保留设计理由",
-    "longDescription": "沿用用户的需求拆解与方案方向，查清跨模块依赖并讨论重要取舍。按稳定模板编写技术方案，在已有批准与授权范围内实施、验证和审阅，验收后更新知识并归档。交付阶段按顺序衔接，方法技能可独立使用。writing-clearly 指导各类文档表达，阶段模板负责产物内容与结构。",
-    "developerName": "Xav1erSue",
-    "category": "Developer Tools",
-    "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
-    ],
-    "defaultPrompt": [
-      "用 Rivo 完成这个需求，先核对我的模块拆解和方案方向，再查依赖、讨论重要取舍。",
-      "用 converging 讨论这份 PRD 的目标和技术做法。",
-      "用 writing-plans 根据团队评审意见修订这份技术方案。",
-      "用 implementing-plans 按已批准的方案实施。",
-      "我已经验收通过，用 knowledge-management 收尾并更新知识库。",
-      "用 investigating 查清这个机制并更新调查笔记。",
-      "用 dispatching-subagents 安排这些任务的委派、并行与结果核验。",
-      "用 writing-clearly 改善这份文档，保持团队已有结构。"
-    ]
-  },
   "icon": "./assets/rivo-icon.png"
 }

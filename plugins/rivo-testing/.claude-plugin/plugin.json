@@ -1,0 +1,10 @@
+{
+  "name": "rivo-testing",
+  "version": "1.0.0",
+  "description": "在公共 rivo 基础上设计并执行测试、报告问题、复测与回归。",
+  "author": {
+    "name": "Xav1erSue"
+  },
+  "skills": "./skills/",
+  "icon": "./assets/rivo-icon.png"
+}

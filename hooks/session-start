@@ -1,47 +1,22 @@
 #!/usr/bin/env bash
-# SessionStart hook for Rivo plugin
-
 set -euo pipefail
-
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-
-project_dir="${CLAUDE_PROJECT_DIR:-$PWD}"
-
-if [ -d "${project_dir}/.rivo" ]; then
-    using_rivo_content="$(cat "${PLUGIN_ROOT}/skills/using-rivo/SKILL.md")"
-    entry_context="This is a Rivo project. The Rivo entry skill is loaded below. Enter a delivery flow only when requested or when continuing an existing requirement. Delivery stages proceed through their confirmation and authorization gates, with user acceptance before knowledge consolidation. Method skills can be used independently and end within the requested scope. Load skills from ${PLUGIN_ROOT}/skills/ with the host skill tool or file reader.
-
-${using_rivo_content}"
-else
-    entry_context="Rivo is available: for delivery work load ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md first. Standalone writing can use ${PLUGIN_ROOT}/skills/writing-clearly/SKILL.md directly without starting a delivery flow."
-fi
-
-escape_for_json() {
-    local s="$1"
-    s="${s//\\/\\\\}"
-    s="${s//\"/\\\"}"
-    s="${s//$'\n'/\\n}"
-    s="${s//$'\r'/\\r}"
-    s="${s//$'\t'/\\t}"
-    printf '%s' "$s"
+content="Rivo 公共方法可用。领域工作请先按需读取公共入口 ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md，确认角色与材料；独立方法完成当前请求即结束，不自动启动完整流程。"
+escape_json() {
+ local s="$1"
+ s="${s//\\/\\\\}"
+ s="${s//\"/\\\"}"
+ s="${s//$'\n'/\\n}"
+ s="${s//$'\r'/\\r}"
+ s="${s//$'\t'/\\t}"
+ printf '%s' "$s"
 }
-
-using_rivo_escaped=$(escape_for_json "$entry_context")
-session_context="${using_rivo_escaped}"
-
-# Output context injection as JSON.
-# Claude Code: hookSpecificOutput.additionalContext (nested).
-# Cursor: additional_context (snake_case).
-# Copilot CLI / SDK standard: additionalContext (top-level).
-# Claude Code reads BOTH additional_context and hookSpecificOutput without
-# deduplication, so emit only the field the current platform consumes.
+content="$(escape_json "$content")"
 if [ -n "${CURSOR_PLUGIN_ROOT:-}" ]; then
-  printf '{\n  "additional_context": "%s"\n}\n' "$session_context" | cat
+ printf '{"additional_context":"%s"}\n' "$content"
 elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
-  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context" | cat
+ printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$content"
 else
-  printf '{\n  "additionalContext": "%s"\n}\n' "$session_context" | cat
+ printf '{"additionalContext":"%s"}\n' "$content"
 fi
-
-exit 0

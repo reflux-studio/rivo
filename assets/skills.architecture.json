@@ -2,33 +2,84 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "技能各自负责什么",
+    "title": "Rivo 插件与技能归属",
     "locale": "zh-CN",
-    "output": "assets/skills.html",
-    "quality_profile": "showcase",
-    "legend": {
-      "entries": {
-        "external": { "label": "入口、修订与方法" },
-        "backend": { "label": "交付阶段" }
-      }
-    }
+    "output": "skills.html",
+    "quality_profile": "showcase"
   },
   "components": [
-    { "id": "entry", "type": "external", "icon": "none", "label": "入口 · 选择工作方式", "sublabel": "using-rivo", "pos": [145, 60], "size": [240, 76] },
-    { "id": "revise", "type": "external", "icon": "none", "label": "按需修订 · 从上游逐层修改", "sublabel": "revising", "pos": [695, 60], "size": [240, 76] },
-    { "id": "discuss", "type": "backend", "icon": "none", "label": "讨论 · 记录决定", "sublabel": "converging", "pos": [20, 240], "size": [240, 76] },
-    { "id": "plan", "type": "backend", "icon": "none", "label": "方案 · 设计做法", "sublabel": "writing-plans", "pos": [290, 240], "size": [240, 76] },
-    { "id": "build", "type": "backend", "icon": "none", "label": "实施 · 验证交付", "sublabel": "implementing-plans", "pos": [20, 370], "size": [240, 76] },
-    { "id": "knowledge", "type": "backend", "icon": "none", "label": "知识 · 整理归档", "sublabel": "knowledge-management", "pos": [290, 370], "size": [240, 76] },
-    { "id": "investigate", "type": "external", "icon": "none", "label": "调查 · 查清事实", "sublabel": "investigating", "pos": [580, 240], "size": [240, 76] },
-    { "id": "write", "type": "external", "icon": "none", "label": "写作 · 清楚表达", "sublabel": "writing-clearly", "pos": [850, 240], "size": [240, 76] },
-    { "id": "test", "type": "external", "icon": "none", "label": "测试 · 驱动实现", "sublabel": "test-driven-development", "pos": [580, 370], "size": [240, 76] },
-    { "id": "debug", "type": "external", "icon": "none", "label": "调试 · 验证根因", "sublabel": "systematic-debugging", "pos": [850, 370], "size": [240, 76] },
-    { "id": "dispatch", "type": "external", "icon": "none", "label": "委派 · 分工与核验", "sublabel": "dispatching-subagents", "pos": [715, 500], "size": [240, 76] }
+    {
+      "id": "shared",
+      "type": "backend",
+      "label": "rivo",
+      "sublabel": "统一入口 · 公共方法",
+      "pos": [
+        330,
+        25
+      ],
+      "size": [
+        250,
+        75
+      ]
+    },
+    {
+      "id": "product",
+      "type": "backend",
+      "label": "rivo-product",
+      "sublabel": "研究 · 需求 · 设计",
+      "pos": [
+        25,
+        175
+      ],
+      "size": [
+        250,
+        75
+      ]
+    },
+    {
+      "id": "development",
+      "type": "backend",
+      "label": "rivo-development",
+      "sublabel": "方案 · 实施 · 调试",
+      "pos": [
+        330,
+        175
+      ],
+      "size": [
+        250,
+        75
+      ]
+    },
+    {
+      "id": "testing",
+      "type": "backend",
+      "label": "rivo-testing",
+      "sublabel": "测试设计 · 执行 · 缺陷",
+      "pos": [
+        635,
+        175
+      ],
+      "size": [
+        250,
+        75
+      ]
+    }
   ],
-  "boundaries": [
-    { "kind": "region", "label": "阶段技能 · 按交付阶段使用", "wraps": ["discuss", "plan", "build", "knowledge"], "pad": 20 },
-    { "kind": "region", "label": "通用方法 · 按需使用，可独立完成", "wraps": ["investigate", "write", "test", "debug", "dispatch"], "pad": 20 }
-  ],
-  "connections": []
+  "connections": [
+    {
+      "id": "shared-product",
+      "from": "shared",
+      "to": "product"
+    },
+    {
+      "id": "shared-development",
+      "from": "shared",
+      "to": "development"
+    },
+    {
+      "id": "shared-testing",
+      "from": "shared",
+      "to": "testing"
+    }
+  ]
 }

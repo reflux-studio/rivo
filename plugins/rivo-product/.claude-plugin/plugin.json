@@ -1,0 +1,10 @@
+{
+  "name": "rivo-product",
+  "version": "1.0.0",
+  "description": "在公共 rivo 基础上开展产品探索、市场/竞品/用户调研、PRD和产品设计。",
+  "author": {
+    "name": "Xav1erSue"
+  },
+  "skills": "./skills/",
+  "icon": "./assets/rivo-icon.png"
+}

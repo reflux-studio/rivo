@@ -4,164 +4,72 @@
 
 **设计由你主导，AI 查证、实施，并把理由留下来。**
 
-面向 Claude Code 与 Codex 的软件交付技能
+面向 Claude Code 与 Codex 的产品、开发和测试协作技能 · v1.0.0 · MIT
 
-<img alt="version" src="https://img.shields.io/badge/version-0.12.0-2f9e6b">
-<img alt="hosts" src="https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-5f6b7a">
-<img alt="license" src="https://img.shields.io/badge/license-MIT-5f6b7a">
-
-[为什么](#为什么) · [怎样工作](#怎样工作) · [开始使用](#开始使用) · [设计原则](#设计原则) · [技能](#技能)
+[怎样工作](#怎样工作) · [安装](#安装) · [技能](#技能) · [贡献](CONTRIBUTING.md)
 
 </div>
 
-<br>
-
-<p align="center">
-  <img src="assets/delivery.svg" width="880" alt="四阶段交付：讨论、方案、实施、知识；你在阶段间确认理解、批准并授权、验收；需变更已确认内容时，经你确认后从受影响的上游修订">
-</p>
-
-## 为什么
-
-AI 能写出可以运行的代码，团队却未必清楚它为什么这样设计。设计交给 AI 之后，人对系统的理解越来越少；等到下一次修改，还得重新查明哪些行为能改、哪些约束必须保留。
-
-Rivo 让设计留在人手里。你带着需求和自己的拆解开始，AI 查清现状、指出需要决定的问题；重要取舍由你决定，理由写进文档。实施照着你批准的方案进行，验收后，核实过的机制和理由进入项目知识库。
-
 ## 怎样工作
 
-| 阶段 | AI 做什么 | 你决定什么 | 留下什么 |
-| --- | --- | --- | --- |
-| **讨论** | 核对你的拆解，查清依赖，提出需要取舍的问题 | 范围和重要取舍 | `decisions.md`、ADR、调查笔记 |
-| **方案** | 按模板写技术方案，组织一次独立审阅 | 是否批准 | `plan.md` |
-| **实施** | 按可验收的结果实施，逐任务和整体各审一次 | 是否验收 | 代码、`task.md`、验证证据 |
-| **知识** | 对照最新代码更新知识库，归档需求材料 | — | 项目知识库 |
+Rivo 让参与者围绕同一需求协作，保留决定、依据和验证结果。你可以从已有材料或当前问题开始，也可以单独使用公共方法，不必走完整交付流程。
 
-实施中发现方案的假设不成立，AI 带着证据回来找你，只暂停受影响的任务。下图是实施阶段里你、主代理、执行者和审阅者之间的往来：
+| 插件 | 职责 |
+| --- | --- |
+| `rivo` | 统一入口、协作、恢复、调查、修订、写作、委派与知识整理 |
+| `rivo-product` | 问题探索、研究、需求、设计与指标 |
+| `rivo-development` | 技术讨论、方案、实施、调试与测试驱动开发 |
+| `rivo-testing` | 测试设计、执行、缺陷报告与复测 |
 
-<p align="center">
-  <img src="assets/review.svg" width="820" alt="实施时序：每项任务循环执行与轻审；仅有属实 P0 时修复并复核，仅需改变已确认内容时进入修订；全部任务完成后整体审阅，再请你验收">
-</p>
+先安装公共 `rivo`，再按需安装领域包；领域工作流至少需要公共包和所选领域包，领域包之间不互相依赖。公共方法可单独使用。输入可以是你提供的文件、链接、粘贴内容或同事的材料，不要求来自其他插件。
 
-每类产物只有一个位置，互不搬运：
+[using-rivo](skills/using-rivo/SKILL.md) 是统一入口，按需读取领域参考。领域目录及默认产物位置集中在其 `references/product.md`、`development.md` 和 `testing.md`；用户提供的现有位置优先，无需复制材料。
 
-| 产物 | 回答什么 | 位置 |
-| --- | --- | --- |
-| 现状 | 现有系统怎样工作，怎样查到的 | `research/` |
-| 决定 | 本期做什么、不做什么，定了哪些事，为什么 | `decisions.md`、`adr/` |
-| 技术方案 | 本期怎么做 | `plan.md`、`assets/` |
-| 实施方案 | 按什么顺序做，实际做成了什么 | `task.md`、`evidence/` |
-| 知识库 | 系统现在怎样工作 | `knowledge/` |
+工单保持精简：登记参与方、角色、负责产物和协作索引；问题详情、回复和审计证据放在独立记录中。产品负责产品产物，开发负责技术方案与产品代码，测试负责用例与报告；跨角色问题交对应负责人，不代改对方产物。同一会话承担多个角色不构成独立质量保证。专业测试与开发自测分别报告；验收由有权的人决定。
 
-已确认的内容要改时，用 revising 从受影响的最上游一层改起，按决定、技术方案、实施方案、代码的顺序逐层核对。
+## 安装
 
-## 开始使用
+先添加市场并安装公共包，再选择需要的领域包。以下领域命令是可选项，可安装一个或多个。
 
-带着目标和你自己的拆解开始：
-
-> 用 Rivo 完成供应商档案优化。本期包括字段配置、档案页展示、表单物料、历史数据处理和报表接入。先核对我的拆解，查清现状与依赖，再讨论需要决定的问题。
-
-没有拆解也可以只说目标。交付依次经过讨论、方案、实施与用户验收、知识整理；方法技能可以独立使用，做完就结束：
-
-> 用 investigating 查清数组字段的读取方式。
->
-> 用 systematic-debugging 定位这个测试失败的原因。
->
-> 用 writing-clearly 编辑这份报告，保留现有结构。
-
-普通请求按普通方式处理。项目里有 `.rivo/` 目录，不会让每个请求都进入流程。
-
-### 安装
-
-#### Claude Code
-
-在 Claude Code 会话中依次运行：
+### Claude Code
 
 ```text
 /plugin marketplace add reflux-studio/rivo
 /plugin install rivo@rivo
+/plugin install rivo-product@rivo
+/plugin install rivo-development@rivo
+/plugin install rivo-testing@rivo
 ```
 
-#### Codex
-
-在终端依次运行：
+### Codex
 
 ```sh
 codex plugin marketplace add reflux-studio/rivo
 codex plugin add rivo@rivo
+codex plugin add rivo-product@rivo
+codex plugin add rivo-development@rivo
+codex plugin add rivo-testing@rivo
 ```
 
-安装后开启新会话，说「用 Rivo」并描述需求即可。
+开启新会话，说「用 Rivo」并描述任务。也可以单独请求公共方法，例如「用 writing-clearly 编辑这份报告」。涉及界面时，开发实施者和审阅者对照可访问的设计来源、版本与状态；无法读取时说明缺口。
 
-## 设计原则
+## 从 0.x 升级
 
-**人主导设计。** 你给出拆解和方向，AI 核对、查证、建议。范围、业务行为和重要取舍由你决定。
+`rivo` 在 1.0 中变为公共插件，原开发流程移到 `rivo-development`。已有开发用户升级后需要同时安装 `rivo` 和 `rivo-development`；产品与测试按职责另行选择。旧需求目录继续沿用既有位置，不自动迁移。各领域只读取用户给定材料，不要求其他领域插件生成输入。
 
-**一套流程，不分档位。** 小需求直接写代码，不必走 Rivo。中大型需求走同一套流程，是否进入由你决定。
-
-**稳定的主线，随内容展开。** 每种产物有自己的模板和固定的位置，团队知道去哪里找什么；章节随本次需求的内容增减。
-
-**审阅要克制。** 方案只在首次定稿前全量审阅一次，之后的修订由你确认。主代理核实每条审阅意见，可以拒绝。
-
-**每次实施都是对方案的检验。** 执行者发现方案走不通时停下来报告证据，不绕开硬做。
-
-**不维护状态。** 进度从文档、审阅报告和实际改动中核对，没有状态文件，也没有跨会话交接。
-
-**技能自包含。** 每个阶段带着自己的模板和审阅提示词，不依赖别的技能的文件。
-
-每条原则的来由见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+完整变更见 [CHANGELOG](CHANGELOG.md)。
 
 ## 技能
 
-<p align="center">
-  <img src="assets/skills.svg" width="880" alt="技能分类：入口 using-rivo、按需修订 revising、四个阶段技能，以及可独立使用的调查、委派、写作、测试和调试方法">
-</p>
-
-**交付流程**
-
-| 技能 | 用途 | 模板与提示词 |
-| --- | --- | --- |
-| [converging](skills/converging/SKILL.md) | 核对范围，讨论并记录每个决定 | [决定记录](skills/converging/references/decisions.md)、[ADR](skills/converging/references/adr.md) |
-| [writing-plans](skills/writing-plans/SKILL.md) | 编写、审阅和修订技术方案 | [技术方案](skills/writing-plans/references/plan-structure.md)、[审阅提示词](skills/writing-plans/references/plan-reviewer.md)、[接收审阅意见](skills/writing-plans/references/receiving-review.md) |
-| [implementing-plans](skills/implementing-plans/SKILL.md) | 安排实施、审阅与验收 | [实施方案](skills/implementing-plans/references/planning.md)、[执行者](skills/implementing-plans/references/implementer.md)、[审阅者](skills/implementing-plans/references/reviewer.md)、[接收意见](skills/implementing-plans/references/receiving-review.md) |
-| [knowledge-management](skills/knowledge-management/SKILL.md) | 维护项目知识，归档交付材料 | [知识文档](skills/knowledge-management/references/knowledge.md) |
-| [revising](skills/revising/SKILL.md) | 已确认的内容要改时，从上游逐层改到代码 | — |
-
-**方法**
-
-| 技能 | 用途 |
+| 包 | 技能 |
 | --- | --- |
-| [investigating](skills/investigating/SKILL.md) | 查清技术事实，维护[调查笔记](skills/investigating/references/note-structure.md) |
-| [dispatching-subagents](skills/dispatching-subagents/SKILL.md) | 选择子代理、明确委派契约与并行边界，核验结果并处理受阻 |
-| [writing-clearly](skills/writing-clearly/SKILL.md) | 文档的表达规约，可独立使用 |
-| [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
-| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常，检验原因假设并验证修复 |
+| 公共 | [using-rivo](skills/using-rivo/SKILL.md)、[collaborating](skills/collaborating/SKILL.md)、[resume](skills/resume/SKILL.md)、[writing-clearly](skills/writing-clearly/SKILL.md)、[investigating](skills/investigating/SKILL.md)、[dispatching-subagents](skills/dispatching-subagents/SKILL.md)、[revising](skills/revising/SKILL.md)、[knowledge-management](skills/knowledge-management/SKILL.md) |
+| 产品 | [discovering-products](plugins/rivo-product/skills/discovering-products/SKILL.md)、[market-research](plugins/rivo-product/skills/market-research/SKILL.md)、[competitive-analysis](plugins/rivo-product/skills/competitive-analysis/SKILL.md)、[user-research](plugins/rivo-product/skills/user-research/SKILL.md)、[writing-prds](plugins/rivo-product/skills/writing-prds/SKILL.md)、[designing-products](plugins/rivo-product/skills/designing-products/SKILL.md)、[reviewing-metrics](plugins/rivo-product/skills/reviewing-metrics/SKILL.md) |
+| 开发 | [converging](plugins/rivo-development/skills/converging/SKILL.md)、[writing-plans](plugins/rivo-development/skills/writing-plans/SKILL.md)、[implementing-plans](plugins/rivo-development/skills/implementing-plans/SKILL.md)、[systematic-debugging](plugins/rivo-development/skills/systematic-debugging/SKILL.md)、[test-driven-development](plugins/rivo-development/skills/test-driven-development/SKILL.md) |
+| 测试 | [designing-tests](plugins/rivo-testing/skills/designing-tests/SKILL.md)、[testing](plugins/rivo-testing/skills/testing/SKILL.md)、[reporting-defects](plugins/rivo-testing/skills/reporting-defects/SKILL.md) |
 
-[using-rivo](skills/using-rivo/SKILL.md) 是入口，说明什么时候走 Rivo、交付顺序和宿主调用方式。
+每个包的技能只在其对应目录维护一份。设计原则和贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-委派遵循用户偏好和项目约定。没有指定时，按任务难度、错误代价、成本与延迟选择实际可用且允许选择的子代理配置；配置固定时沿用。阶段技能仍负责派发时机、独立审阅和产物规则。
+## 本地检查
 
-## 文件位置
-
-```text
-.rivo/
-├── issues/<需求>/
-│   ├── decisions.md   范围、决定与待决事项
-│   ├── adr/           重要取舍及理由
-│   ├── research/      调查笔记与原始材料
-│   ├── plan.md        技术方案
-│   ├── assets/        方案附件
-│   ├── task.md        实施方案与实施记录
-│   ├── evidence/      验证证据
-│   └── reviews/       审阅报告
-├── knowledge/         项目知识库
-└── archived/          验收后归档的需求
-```
-
-用户或项目指定的位置优先。
-
-## 参与修改
-
-先读 [CONTRIBUTING.md](CONTRIBUTING.md)，再动技能。它记录了每个设计决定的理由。
-
-## 许可证
-
-[MIT](LICENSE)
+运行 `python3 scripts/check-package.py` 核对四包结构与实际 Hook 输出，运行 `python3 tests/check-distributions.py` 检查隔离组合、负例与本地并发登记。站点使用 `pnpm --dir site typecheck` 和 `pnpm --dir site build`。这些检查不替代真实宿主安装、Agent 行为试用或浏览器验证。
