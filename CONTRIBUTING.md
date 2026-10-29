@@ -6,7 +6,7 @@ Rivo 是公共方法与领域技能的插件集。人负责范围、业务行为
 
 公共技能只维护在根目录 `skills/`；产品、开发、测试技能分别维护在 `plugins/rivo-product/skills/`、`plugins/rivo-development/skills/`、`plugins/rivo-testing/skills/`。领域工作流依赖公共 `rivo`，领域插件之间不互相依赖。不要复制公共协议或为领域新增入口技能。
 
-`using-rivo` 是统一入口；领域路由、默认目录与产物归属集中维护在它的 `references/product.md`、`development.md`、`testing.md`。用户给定的已有材料和位置优先。各技能接收文件、链接、粘贴内容或人类同事材料，不要求其他领域插件产出。公共调查和修订适用于各领域；TDD 与系统调试属于开发插件。
+`using-rivo` 是统一入口；共用目录由它的 `references/workspace.md` 维护，领域路由、主文档和专有目录由 `references/product.md`、`development.md`、`testing.md` 维护。需求根目录按产物命名，不按角色增加目录层。共享材料按主题或被审对象命名，各文件记录负责人和依据版本；共用目录不授予跨角色修改权。用户给定的已有材料和位置优先。各技能接收文件、链接、粘贴内容或人类同事材料，不要求其他领域插件产出。公共调查和修订适用于各领域；TDD 与系统调试属于开发插件。
 
 ## 协作与边界
 

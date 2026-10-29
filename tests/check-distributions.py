@@ -46,6 +46,11 @@ def run():
                             resolved=(path.parent/link).resolve();resolved.relative_to(target.resolve());assert resolved.exists(),(name,path,link)
             assert set(found)==set(names)
             reports['isolated'][str(domain)]=found
+        legal=tmp/'legal-template-reference';shutil.copytree(base,legal)
+        with (legal/'plugins/rivo-testing/skills/designing-tests/SKILL.md').open('a') as file:
+            file.write('\n按公共入口定位当前用例，模板见[用例模板](references/cases.md)。\n')
+        errors,_=check(legal);assert not errors,errors
+        reports['legal_template_reference']='accepted internal references/cases.md without treating it as a requirement artifact'
         # Each control checks its intended diagnostic, not merely any unrelated failure.
         mutations=[
             ('missing-domain-skill',lambda p:shutil.rmtree(p/'plugins/rivo-product/skills/market-research'),'rivo-product: skill inventory'),
@@ -55,6 +60,11 @@ def run():
             ('old-namespace',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n加载 rivo:reporting-defects\n'),'wrong public skill namespace'),
             ('duplicate-directory',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n## 默认目录\n- testing/cases.md\n'),'duplicate domain directory'),
             ('private-directory-map',lambda p:(p/'plugins/rivo-testing/skills/testing/references/private.md').write_text('# 默认产物位置\nproduct/ development/ testing/\n'),'duplicate domain directory'),
+            ('central-role-directory',lambda p:(p/'skills/using-rivo/references/development.md').open('a').write('\n| development/plan.md | stale default |\n'),'central workspace retains role directory'),
+            ('flat-domain-map',lambda p:(p/'plugins/rivo-testing/skills/testing/references/private.md').write_text('# 测试资料\n| test-cases.md | 用例 |\n'),'domain hardcodes artifact filename'),
+            ('fixed-plan-binding',lambda p:(p/'plugins/rivo-development/skills/implementing-plans/references/implementer.md').open('a').write('\n请自己读取 plan.md。\n'),'domain hardcodes artifact filename'),
+            ('cjk-artifact-binding',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n用例写入test-cases.md。\n'),'domain hardcodes artifact filename'),
+            ('relative-artifact-binding',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n用例路径： ./test-cases.md\n'),'domain hardcodes artifact filename'),
             ('developer-assumption',lambda p:(p/'skills/revising/SKILL.md').open('a').write('\n先读取 plan.md\n'),'public method retains fixed developer artifact'),
             ('wrong-entry-hook',lambda p:(p/'hooks/session-start').write_text('#!/bin/sh\nprintf \'{"additionalContext":"old"}\\n\'\n'),'wrong public entry'),
         ]

@@ -72,6 +72,13 @@ def check(root):
                 text=path.read_text()
                 if re.search(r'\.rivo/issues|(?:product|development|testing)/(?:research|prd|plan|cases|runs|decisions|task)|(?:^|[\s`])(?:product|development|testing)/(?=[\s`]|$)|^#{1,6}[^\n]*(?:默认产物位置|默认目录|目录约定|目录树)',text,re.M):
                     errors.append(f'{name}: duplicate domain directory convention {path.relative_to(plugin)}')
+                artifacts=re.findall(r'(?<![A-Za-z0-9_/-])((?:[A-Za-z0-9_.-]+/)*(?:product-decisions|tech-decisions|prd|design|plan|task|test-plan|test-cases|decisions|cases)\.md)(?![A-Za-z0-9_.-])',text)
+                for artifact in artifacts:
+                    resource=(path.parent/artifact).resolve()
+                    if 'references/' in artifact and resource.is_relative_to(plugin) and resource.is_file():
+                        continue
+                    errors.append(f'{name}: domain hardcodes artifact filename {path.relative_to(plugin)}: {artifact}')
+                    break
                 for target in re.findall(r'rivo:([a-z][a-z0-9-]+)',text):
                     if target not in expected_skills['rivo']:
                         errors.append(f'{name}: wrong public skill namespace rivo:{target}')
@@ -111,6 +118,9 @@ def check(root):
         if any(old in names for names in inventory.values()):errors.append(f'obsolete skill: {old}')
     for domain in ('product','development','testing'):
         if not (root/f'skills/using-rivo/references/{domain}.md').is_file():errors.append(f'missing central domain {domain}')
+    for path in (root/'skills/using-rivo/references').glob('*.md'):
+        if re.search(r'(?:^|[\s|`])(?:product|development|testing)/',path.read_text(),re.M):
+            errors.append(f'central workspace retains role directory: {path.name}')
     if not {'test-driven-development','systematic-debugging'} <= set(inventory.get('rivo-development',[])):errors.append('developer methods absent')
     for name in ('investigating','revising','resume','knowledge-management','dispatching-subagents'):
         for path in (root/'skills'/name).rglob('*.md'):
