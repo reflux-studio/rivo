@@ -22,7 +22,7 @@ def run():
         tmp=Path(tmp);base=tmp/'all'
         for rel in ['.claude-plugin','.codex-plugin','skills','hooks','assets','plugins','scripts']:
             shutil.copytree(ROOT/rel,base/rel,ignore=shutil.ignore_patterns('.DS_Store','__pycache__'))
-        for rel in ['README.md','CONTRIBUTING.md','CHANGELOG.md']:shutil.copy2(ROOT/rel,base/rel)
+        for rel in ['README.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE']:shutil.copy2(ROOT/rel,base/rel)
         errors,inventory=check(base);assert not errors,errors
         reports['positive_skills']=sum(map(len,inventory.values()))
         # Copy only actual plugin payloads, not sibling plugins. Verify the declared skill roots.

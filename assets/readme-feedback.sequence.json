@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "需求疑问与缺陷怎样往返",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": ".archify/sequence-role-feedback-20261030-141708/role-feedback.html"
+  },
+  "participants": [
+    {
+      "id": "owner",
+      "type": "external",
+      "label": "你 / 有权负责人",
+      "sublabel": "业务与重要取舍",
+      "icon": "person"
+    },
+    {
+      "id": "product",
+      "type": "frontend",
+      "label": "产品 AI",
+      "sublabel": "维护需求与设计",
+      "icon": "person"
+    },
+    {
+      "id": "development",
+      "type": "backend",
+      "label": "开发 AI",
+      "sublabel": "维护方案与产品代码",
+      "icon": "person"
+    },
+    {
+      "id": "testing",
+      "type": "security",
+      "label": "测试 AI",
+      "sublabel": "维护用例与报告",
+      "icon": "person"
+    }
+  ],
+  "messages": [
+    {
+      "id": "question",
+      "from": "development",
+      "to": "product",
+      "y": 160,
+      "label": "停用主联系人后怎么办？"
+    },
+    {
+      "id": "proposal",
+      "from": "product",
+      "to": "owner",
+      "y": 220,
+      "label": "提出业务规则与建议"
+    },
+    {
+      "id": "confirm",
+      "from": "owner",
+      "to": "product",
+      "y": 280,
+      "label": "确认业务规则",
+      "variant": "return"
+    },
+    {
+      "id": "updated_requirement",
+      "from": "product",
+      "to": "development",
+      "y": 340,
+      "label": "更新需求与验收标准",
+      "variant": "return"
+    },
+    {
+      "id": "handoff",
+      "from": "development",
+      "to": "testing",
+      "y": 440,
+      "label": "交提测版本与自测结果",
+      "note": "实现、自测及开发审阅完成"
+    },
+    {
+      "id": "defect",
+      "from": "testing",
+      "to": "development",
+      "y": 520,
+      "label": "缺陷：刷新显示旧主联系人",
+      "variant": "return"
+    },
+    {
+      "id": "fixed",
+      "from": "development",
+      "to": "testing",
+      "y": 600,
+      "label": "提供修复版本",
+      "note": "开发修改产品代码并自测"
+    },
+    {
+      "id": "report",
+      "from": "testing",
+      "to": "owner",
+      "y": 680,
+      "label": "复测回归结果与剩余风险",
+      "note": "测试复验；是否验收由有权人决定"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "slate",
+      "title": "工作示意",
+      "items": [
+        "产品、开发、测试可由人类同事承担；直接通信以宿主能力和授权为准。",
+        "测试发现问题，开发修复产品代码，测试再验证；同一会话切换角色不构成独立测试。"
+      ]
+    }
+  ]
+}

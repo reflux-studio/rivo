@@ -1,0 +1,200 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Rivo：典型交付与人的确认点",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": ".archify/workflow-delivery-journey-20261030-141708/delivery-journey.html",
+    "legend": {
+      "entries": {
+        "backend": {
+          "label": "AI 工作"
+        },
+        "database": {
+          "label": "项目知识"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "delivery",
+      "label": "按角色工作的 AI"
+    },
+    {
+      "id": "early_tests",
+      "label": "测试 AI 提前准备"
+    }
+  ],
+  "mainPath": [
+    "requirements",
+    "choices",
+    "plan",
+    "build",
+    "test",
+    "knowledge"
+  ],
+  "nodes": [
+    {
+      "id": "requirements",
+      "lane": "delivery",
+      "col": 0,
+      "type": "backend",
+      "label": "01 澄清需求",
+      "sublabel": "规则、状态与验收标准",
+      "tag": "产品 AI",
+      "icon": "briefcase",
+      "yOffset": -80
+    },
+    {
+      "id": "choices",
+      "lane": "delivery",
+      "col": 0,
+      "type": "backend",
+      "label": "02 技术讨论",
+      "sublabel": "查证约束，比较做法",
+      "tag": "开发 AI",
+      "icon": "briefcase",
+      "yOffset": 80
+    },
+    {
+      "id": "plan",
+      "lane": "delivery",
+      "col": 1,
+      "type": "backend",
+      "label": "03 方案与独立审阅",
+      "sublabel": "写清做法与契约",
+      "tag": "开发 AI",
+      "icon": "briefcase",
+      "yOffset": -80
+    },
+    {
+      "id": "build",
+      "lane": "delivery",
+      "col": 1,
+      "type": "backend",
+      "label": "04 实施与开发审阅",
+      "sublabel": "实现、自测、轻审与整体审阅",
+      "tag": "开发 AI",
+      "icon": "briefcase",
+      "yOffset": 80
+    },
+    {
+      "id": "test",
+      "lane": "delivery",
+      "col": 2,
+      "type": "backend",
+      "label": "05 专业测试与复验",
+      "sublabel": "发现差异，修复后复测回归",
+      "tag": "测试 AI",
+      "icon": "briefcase",
+      "yOffset": -80
+    },
+    {
+      "id": "knowledge",
+      "lane": "delivery",
+      "col": 2,
+      "type": "database",
+      "label": "06 整理已核实知识",
+      "sublabel": "本人机制、依据与理由",
+      "tag": "各角色 AI",
+      "yOffset": 80
+    },
+    {
+      "id": "cases",
+      "lane": "early_tests",
+      "col": 1,
+      "type": "backend",
+      "label": "设计测试用例",
+      "sublabel": "依据已确认需求按风险设计",
+      "tag": "测试 AI",
+      "icon": "briefcase"
+    }
+  ],
+  "edges": [
+    {
+      "id": "requirements_choices",
+      "from": "requirements",
+      "to": "choices",
+      "label": "业务规则已确认",
+      "role": "main"
+    },
+    {
+      "id": "choices_plan",
+      "from": "choices",
+      "to": "plan",
+      "label": "重要取舍已确认",
+      "role": "main"
+    },
+    {
+      "id": "plan_build",
+      "from": "plan",
+      "to": "build",
+      "label": "方案确认且授权实施",
+      "role": "main"
+    },
+    {
+      "id": "build_test",
+      "from": "build",
+      "to": "test",
+      "label": "交提测版本",
+      "role": "main"
+    },
+    {
+      "id": "test_knowledge",
+      "from": "test",
+      "to": "knowledge",
+      "label": "用户验收后",
+      "role": "main"
+    },
+    {
+      "id": "requirements_cases",
+      "from": "requirements",
+      "to": "cases",
+      "label": "需求与设计",
+      "role": "branch"
+    },
+    {
+      "id": "cases_test",
+      "from": "cases",
+      "to": "test",
+      "label": "用例与预期",
+      "role": "branch",
+      "fromSide": "right",
+      "toSide": "right",
+      "route": "outside-right"
+    },
+    {
+      "id": "new_facts",
+      "from": "build",
+      "to": "choices",
+      "label": "新约束回到讨论",
+      "role": "return"
+    },
+    {
+      "id": "defect_fix",
+      "from": "test",
+      "to": "build",
+      "label": "缺陷交开发修复",
+      "role": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "你或有权负责人的工作",
+      "items": [
+        "决定范围、业务行为与重要取舍；确认方案与实施授权；根据结果决定验收。"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "如何读这张图",
+      "items": [
+        "这是工作方式示意；参与角色可以由人类同事承担。测试设计不构成开发开工的额外前提。",
+        "测试提出需求疑问时交需求负责人；各角色只修改自己的产物，执行失败后保留证据。"
+      ]
+    }
+  ]
+}
