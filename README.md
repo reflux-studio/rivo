@@ -4,7 +4,7 @@
 
 **设计由你主导，AI 查证、实施，并把理由留下来。**
 
-面向 Claude Code 与 Codex 的产品、开发和测试协作技能 · v1.2.0 · MIT
+面向 Claude Code 与 Codex 的产品、开发和测试协作技能 · v1.2.1 · MIT
 
 [为什么](#为什么) · [从你正在做的工作开始](#从你正在做的工作开始) · [一次需求怎样走完](#一次需求怎样走完) · [安装](#安装) · [技能](#技能) · [参与修改](CONTRIBUTING.md)
 
@@ -110,7 +110,7 @@ AI 帮你区分反复出现的问题、个别建议和待验证假设，按需�
 
 AI 查资料、运行系统或发送协作请求时，使用当前已经连接且获授权的工具。宿主支持直接交流、用户也授权联系对应参与方时，才通过通信工具发送；否则保留待转交记录，说明需要谁处理。工具或环境不足时，报告未完成的范围与解除条件，继续不依赖它的工作。
 
-换个会话时，给出需求目录或材料，说“用 resume 了解这个需求并继续”。AI 先核对自己的职责，再对照当前产物、协作记录、代码和验证证据恢复工作。已有目录继续沿用，只创建本次需要的材料；位置约定见[共享工作区](skills/using-rivo/references/workspace.md)，各领域产物见[产品](skills/using-rivo/references/product.md)、[开发](skills/using-rivo/references/development.md)、[测试](skills/using-rivo/references/testing.md)。
+换个会话时，给出需求目录或材料，说“用 resume 了解这个需求并继续”。AI 先核对自己的职责，再对照当前产物、协作记录、代码和验证证据恢复工作。已有目录继续沿用，只创建本次需要的材料；位置约定见[共享工作区](plugins/rivo/skills/using-rivo/references/workspace.md)，各领域产物见[产品](plugins/rivo/skills/using-rivo/references/product.md)、[开发](plugins/rivo/skills/using-rivo/references/development.md)、[测试](plugins/rivo/skills/using-rivo/references/testing.md)。
 
 ## 安装
 
@@ -146,12 +146,12 @@ codex plugin add rivo-development@rivo
 
 | 包 | 技能 |
 | --- | --- |
-| 公共 | [using-rivo](skills/using-rivo/SKILL.md)、[collaborating](skills/collaborating/SKILL.md)、[resume](skills/resume/SKILL.md)、[writing-clearly](skills/writing-clearly/SKILL.md)、[investigating](skills/investigating/SKILL.md)、[dispatching-subagents](skills/dispatching-subagents/SKILL.md)、[revising](skills/revising/SKILL.md)、[knowledge-management](skills/knowledge-management/SKILL.md) |
+| 公共 | [using-rivo](plugins/rivo/skills/using-rivo/SKILL.md)、[collaborating](plugins/rivo/skills/collaborating/SKILL.md)、[resume](plugins/rivo/skills/resume/SKILL.md)、[writing-clearly](plugins/rivo/skills/writing-clearly/SKILL.md)、[investigating](plugins/rivo/skills/investigating/SKILL.md)、[dispatching-subagents](plugins/rivo/skills/dispatching-subagents/SKILL.md)、[revising](plugins/rivo/skills/revising/SKILL.md)、[knowledge-management](plugins/rivo/skills/knowledge-management/SKILL.md) |
 | 产品 | [discovering-products](plugins/rivo-product/skills/discovering-products/SKILL.md)、[market-research](plugins/rivo-product/skills/market-research/SKILL.md)、[competitive-analysis](plugins/rivo-product/skills/competitive-analysis/SKILL.md)、[user-research](plugins/rivo-product/skills/user-research/SKILL.md)、[writing-prds](plugins/rivo-product/skills/writing-prds/SKILL.md)、[designing-products](plugins/rivo-product/skills/designing-products/SKILL.md)、[reviewing-metrics](plugins/rivo-product/skills/reviewing-metrics/SKILL.md) |
 | 开发 | [converging](plugins/rivo-development/skills/converging/SKILL.md)、[writing-plans](plugins/rivo-development/skills/writing-plans/SKILL.md)、[implementing-plans](plugins/rivo-development/skills/implementing-plans/SKILL.md)、[systematic-debugging](plugins/rivo-development/skills/systematic-debugging/SKILL.md)、[test-driven-development](plugins/rivo-development/skills/test-driven-development/SKILL.md) |
 | 测试 | [designing-tests](plugins/rivo-testing/skills/designing-tests/SKILL.md)、[testing](plugins/rivo-testing/skills/testing/SKILL.md)、[reporting-defects](plugins/rivo-testing/skills/reporting-defects/SKILL.md) |
 
-[using-rivo](skills/using-rivo/SKILL.md) 是统一入口。需要模板或委派提示词的技能，在自己的 references 中维护，方法按名称加载。设计原则及其来由见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+[using-rivo](plugins/rivo/skills/using-rivo/SKILL.md) 是统一入口。需要模板或委派提示词的技能，在自己的 references 中维护，方法按名称加载。设计原则及其来由见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 本地检查
 

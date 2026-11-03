@@ -27,7 +27,12 @@ def check(root):
     expected = set(expected_skills)
     if {e.get('name') for e in entries} != expected or len(entries) != 4:
         errors.append('marketplace must discover four distinct plugins')
+    discovered = {p.name for p in (root/'plugins').iterdir() if p.is_dir() and (p/'.claude-plugin/plugin.json').is_file() and (p/'.codex-plugin/plugin.json').is_file()}
+    if discovered != expected:
+        errors.append('plugins directory must discover four distinct plugins')
     for entry in entries:
+        if entry.get('source') != './plugins/' + entry['name']:
+            errors.append(f"{entry['name']}: marketplace source must match plugins directory")
         plugin = (root / entry['source']).resolve()
         try:
             plugin.relative_to(root.resolve())
@@ -117,19 +122,19 @@ def check(root):
     for old in ('implementing-designs','design-fidelity','running-e2e'):
         if any(old in names for names in inventory.values()):errors.append(f'obsolete skill: {old}')
     for domain in ('product','development','testing'):
-        if not (root/f'skills/using-rivo/references/{domain}.md').is_file():errors.append(f'missing central domain {domain}')
-    for path in (root/'skills/using-rivo/references').glob('*.md'):
+        if not (root/f'plugins/rivo/skills/using-rivo/references/{domain}.md').is_file():errors.append(f'missing central domain {domain}')
+    for path in (root/'plugins/rivo/skills/using-rivo/references').glob('*.md'):
         if re.search(r'(?:^|[\s|`])(?:product|development|testing)/',path.read_text(),re.M):
             errors.append(f'central workspace retains role directory: {path.name}')
     if not {'test-driven-development','systematic-debugging'} <= set(inventory.get('rivo-development',[])):errors.append('developer methods absent')
     for name in ('investigating','revising','resume','knowledge-management','dispatching-subagents'):
-        for path in (root/'skills'/name).rglob('*.md'):
+        for path in (root/'plugins/rivo/skills'/name).rglob('*.md'):
             if re.search(r'\b(?:plan|task)\.md\b|\.rivo/issues|技术方案 →',path.read_text()):errors.append(f'public method retains fixed developer artifact: {path}')
     for path in [root/'README.md',root/'CONTRIBUTING.md']:
         for target in re.findall(r'\]\(([^)]+)\)',path.read_text()):
             target=target.split('#',1)[0]
             if target and '://' not in target and not target.startswith('<') and not (path.parent/target).exists():errors.append(f'{path.name}: missing {target}')
-    for path in list((root/'scripts').glob('*.py'))+list((root/'skills').rglob('*.py')):
+    for path in list((root/'scripts').glob('*.py'))+list((root/'plugins').rglob('*.py')):
         try:ast.parse(path.read_text())
         except SyntaxError as exc:errors.append(f'Python syntax {path}: {exc}')
     return errors,inventory

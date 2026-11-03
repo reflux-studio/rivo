@@ -20,7 +20,7 @@ def run():
     reports={}
     with tempfile.TemporaryDirectory(prefix='rivo-distribution-') as tmp:
         tmp=Path(tmp);base=tmp/'all'
-        for rel in ['.claude-plugin','.codex-plugin','skills','hooks','assets','plugins','scripts']:
+        for rel in ['.claude-plugin','assets','plugins','scripts']:
             shutil.copytree(ROOT/rel,base/rel,ignore=shutil.ignore_patterns('.DS_Store','__pycache__'))
         for rel in ['README.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE']:shutil.copy2(ROOT/rel,base/rel)
         errors,inventory=check(base);assert not errors,errors
@@ -32,7 +32,7 @@ def run():
             names=['rivo']+(['rivo-'+d for d in ['product','development','testing']] if domain=='all' else ['rivo-'+domain] if domain else [])
             found={}
             for name in names:
-                source=ROOT if name=='rivo' else ROOT/'plugins'/name
+                source=ROOT/'plugins'/name
                 target=install/name;target.mkdir()
                 for rel in ['.claude-plugin','.codex-plugin','skills','hooks','assets']:
                     shutil.copytree(source/rel,target/rel,ignore=shutil.ignore_patterns('.DS_Store','__pycache__'))
@@ -52,21 +52,32 @@ def run():
         errors,_=check(legal);assert not errors,errors
         reports['legal_template_reference']='accepted internal references/cases.md without treating it as a requirement artifact'
         # Each control checks its intended diagnostic, not merely any unrelated failure.
+        def move_public_to_root(path):
+            for child in (path/'plugins/rivo').iterdir():
+                if child.name == '.claude-plugin':
+                    shutil.move(child/'plugin.json',path/'.claude-plugin/plugin.json')
+                elif child.name != 'assets':
+                    shutil.move(child,path/child.name)
+            shutil.rmtree(path/'plugins/rivo')
+            manifest=path/'.claude-plugin/marketplace.json'
+            manifest.write_text(manifest.read_text().replace('./plugins/rivo"','."'))
+
         mutations=[
+            ('public-at-root',move_public_to_root,'plugins directory must discover four distinct plugins'),
             ('missing-domain-skill',lambda p:shutil.rmtree(p/'plugins/rivo-product/skills/market-research'),'rivo-product: skill inventory'),
             ('bad-manifest',lambda p:(p/'plugins/rivo-testing/.codex-plugin/plugin.json').write_text('{'),'rivo-testing/.codex-plugin'),
             ('escaping-reference',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n[escape](../../../../README.md)\n'),'reference escapes package'),
-            ('wrong-hook-command',lambda p:(p/'hooks/hooks.json').write_text('{"hooks":{"SessionStart":[{"hooks":[{"type":"command","command":"true"}]}]}}'),'hook manifest does not execute'),
+            ('wrong-hook-command',lambda p:(p/'plugins/rivo/hooks/hooks.json').write_text('{"hooks":{"SessionStart":[{"hooks":[{"type":"command","command":"true"}]}]}}'),'hook manifest does not execute'),
             ('old-namespace',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n加载 rivo:reporting-defects\n'),'wrong public skill namespace'),
             ('duplicate-directory',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n## 默认目录\n- testing/cases.md\n'),'duplicate domain directory'),
             ('private-directory-map',lambda p:(p/'plugins/rivo-testing/skills/testing/references/private.md').write_text('# 默认产物位置\nproduct/ development/ testing/\n'),'duplicate domain directory'),
-            ('central-role-directory',lambda p:(p/'skills/using-rivo/references/development.md').open('a').write('\n| development/plan.md | stale default |\n'),'central workspace retains role directory'),
+            ('central-role-directory',lambda p:(p/'plugins/rivo/skills/using-rivo/references/development.md').open('a').write('\n| development/plan.md | stale default |\n'),'central workspace retains role directory'),
             ('flat-domain-map',lambda p:(p/'plugins/rivo-testing/skills/testing/references/private.md').write_text('# 测试资料\n| test-cases.md | 用例 |\n'),'domain hardcodes artifact filename'),
             ('fixed-plan-binding',lambda p:(p/'plugins/rivo-development/skills/implementing-plans/references/implementer.md').open('a').write('\n请自己读取 plan.md。\n'),'domain hardcodes artifact filename'),
             ('cjk-artifact-binding',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n用例写入test-cases.md。\n'),'domain hardcodes artifact filename'),
             ('relative-artifact-binding',lambda p:(p/'plugins/rivo-testing/skills/testing/SKILL.md').open('a').write('\n用例路径： ./test-cases.md\n'),'domain hardcodes artifact filename'),
-            ('developer-assumption',lambda p:(p/'skills/revising/SKILL.md').open('a').write('\n先读取 plan.md\n'),'public method retains fixed developer artifact'),
-            ('wrong-entry-hook',lambda p:(p/'hooks/session-start').write_text('#!/bin/sh\nprintf \'{"additionalContext":"old"}\\n\'\n'),'wrong public entry'),
+            ('developer-assumption',lambda p:(p/'plugins/rivo/skills/revising/SKILL.md').open('a').write('\n先读取 plan.md\n'),'public method retains fixed developer artifact'),
+            ('wrong-entry-hook',lambda p:(p/'plugins/rivo/hooks/session-start').write_text('#!/bin/sh\nprintf \'{"additionalContext":"old"}\\n\'\n'),'wrong public entry'),
         ]
         reports['negative_controls']={}
         for name,mutate,expected in mutations:
@@ -76,7 +87,7 @@ def run():
         # Real local process interleaving. Every writer starts from the same prepared file.
         case=tmp/'append';(case/'collaboration').mkdir(parents=True)
         issue=case/'issue.md';issue.write_text('# Fixture\n\n| 时间 | 发起方 | 接收方 | 协作记录 |\n| --- | --- | --- | --- |\n')
-        script=ROOT/'skills/collaborating/scripts/append-request.py'
+        script=ROOT/'plugins/rivo/skills/collaborating/scripts/append-request.py'
         processes=[]
         for index in range(24):
             rel=f'collaboration/request-{index}.md';(case/rel).write_text(f'request {index}')
