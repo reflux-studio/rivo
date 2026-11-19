@@ -475,11 +475,11 @@ rect.c-bg-rect { fill: var(--bg); }
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="reviewer" data-edge-label="发起逐任务轻审" data-edge-key="3" data-edge-id="review">
+        <g data-edge-from="main" data-edge-to="reviewer" data-edge-label="发起独立双轴审阅" data-edge-key="3" data-edge-id="review">
           <path data-composition-edge-from="main" data-composition-edge-to="reviewer" data-composition-edge-id="review" data-composition-points="426.6666666666667,248;938,248" d="M 426.6666666666667 248 L 938 248" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
         <g>
           <rect x="630.1333333333333" y="228" width="104.39999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="682.3333333333334" y="238" class="t-muted" font-size="11" text-anchor="middle">发起逐任务轻审</text>
+          <text x="682.3333333333334" y="238" class="t-muted" font-size="11" text-anchor="middle">发起独立双轴审阅</text>
         </g>
         </g>
 
@@ -574,7 +574,7 @@ rect.c-bg-rect { fill: var(--bg); }
         <!-- Segment Labels -->
         <g data-graph-role="segment-label" data-segment-id="0">
           <rect x="56" y="136" width="144" height="18" rx="3" class="c-mask"/>
-          <text x="62" y="149" class="t-dim" font-size="9" font-weight="600">循环 · 每项任务执行并轻审</text>
+          <text x="62" y="149" class="t-dim" font-size="9" font-weight="600">循环 · 每项任务实施与双轴审阅</text>
         </g>
         <g data-graph-role="segment-label" data-segment-id="1">
           <rect x="56" y="288" width="216.8" height="18" rx="3" class="c-mask"/>

@@ -9,7 +9,7 @@
       "displayName": "rivo",
       "source": ".",
       "category": "productivity",
-      "description": "核对需求模块与设计依赖，按团队模板形成方案并完成交付；通用写作规约可独立使用。"
+      "description": "围绕代码仓库的四阶段软件交付技能：讨论取舍、编写精炼技术方案并拆解任务、按任务实施与双轴独立审阅、按系统域维护项目 Wiki。"
     }
   ]
 }

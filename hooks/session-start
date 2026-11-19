@@ -14,7 +14,7 @@ if [ -d "${project_dir}/.rivo" ]; then
 
 ${using_rivo_content}"
 else
-    entry_context="Rivo is available: for delivery work load ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md first. Standalone writing can use ${PLUGIN_ROOT}/skills/writing-clearly/SKILL.md directly without starting a delivery flow."
+    entry_context="Rivo is available: for delivery work load ${PLUGIN_ROOT}/skills/using-rivo/SKILL.md first. Method skills (investigating, dispatching-subagents, test-driven-development, systematic-debugging) can also be used independently without starting a delivery flow."
 fi
 
 escape_for_json() {

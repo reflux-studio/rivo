@@ -4,66 +4,114 @@ import type { site } from '../i18n/site'
 
 type T = typeof site.zh
 
-// 首屏演示：打字 → 逐条核对 → 弹出决定卡 → 盖章 → 写入 ADR，循环播放
+// 首屏演示：按 讨论 → 方案 → 实施 → 知识 自动依次演进，也支持点击顶部标签直接查看对应阶段
 export default function HeroDemo({ t }: { t: T }) {
+  const stages = t.heroDemo.stages
+  const [stage, setStage] = useState(0)
+  const [auto, setAuto] = useState(true)
   const [hc, setHc] = useState(0)
   const [hs, setHs] = useState(0)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setHc(t.prompt.length)
+    const scene = stages[stage]
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !auto) {
+      setHc(scene.prompt.length)
       setHs(DEMO_STEPS)
       return
     }
+
     let c = 0
     let s = 0
+    setHc(0)
+    setHs(0)
+    const charStep = Math.max(3, Math.ceil(scene.prompt.length / 26))
+
     const tick = () => {
-      if (c < t.prompt.length) {
-        c += 2
+      if (c < scene.prompt.length) {
+        c = Math.min(scene.prompt.length, c + charStep)
         setHc(c)
-        timer.current = setTimeout(tick, 26)
+        timer.current = setTimeout(tick, 22)
       } else if (s < DEMO_STEPS) {
-        const d = s === 0 ? 500 : s === 4 ? 1100 : s === 5 ? 1200 : s === 6 ? 700 : 650
+        const d = s === 0 ? 350 : s === 4 ? 580 : s === 5 ? 720 : s === 6 ? 520 : 400
         timer.current = setTimeout(() => {
           setHs(++s)
           tick()
         }, d)
       } else {
         timer.current = setTimeout(() => {
-          c = 0
-          s = 0
-          setHc(0)
-          setHs(0)
-          tick()
-        }, 4200)
+          setStage((prev) => (prev + 1) % stages.length)
+        }, 2400)
       }
     }
+
     tick()
     return () => clearTimeout(timer.current)
-  }, [t])
+  }, [stages, stage, auto])
 
-  const done = hc >= t.prompt.length
+  const scene = stages[stage]
+  const done = hc >= scene.prompt.length
+  const cardCls = [
+    'dcard',
+    hs >= 5 ? 'on' : '',
+    hs >= 6 ? (scene.cardMode === 'choice' ? 'pick' : 'both') : '',
+    hs >= 7 ? 'stamped' : '',
+    hs >= 8 ? 'done' : ''
+  ].filter(Boolean).join(' ')
+
+  const selectStage = (i: number) => {
+    clearTimeout(timer.current)
+    setAuto(false)
+    setStage(i)
+    setHc(stages[i].prompt.length)
+    setHs(DEMO_STEPS)
+  }
+
+  const resumeAuto = () => {
+    clearTimeout(timer.current)
+    setAuto(true)
+    setStage((prev) => (prev + 1) % stages.length)
+  }
+
   return (
-    <div className="demo" aria-hidden="true">
-      <div className="back" />
+    <div className="demo">
+      <div className="back" aria-hidden="true" />
       <div className="win">
         <div className="bar">
-          <i />
-          <span>{t.demoTitle}</span>
-          <span style={{ flex: 'none' }}>rivo:converging</span>
+          <i aria-hidden="true" />
+          <span>{t.heroDemo.title}</span>
+          {!auto && (
+            <button type="button" className="demo-play" onClick={resumeAuto}>
+              {t.heroDemo.replay}
+            </button>
+          )}
+          <span className="demo-sk">rivo:{scene.skill}</span>
         </div>
-        <div className="body">
+        <div className="tabs" role="tablist" aria-label={t.heroDemo.tabsLabel}>
+          {stages.map((st, i) => (
+            <button
+              key={st.skill}
+              type="button"
+              role="tab"
+              aria-selected={i === stage}
+              onClick={() => selectStage(i)}
+            >
+              <b>0{i + 1}</b>
+              <span>{st.tab}</span>
+            </button>
+          ))}
+        </div>
+        <div className="body" role="tabpanel">
           <div className="you">
             <b>{t.you}</b>
             <span>
-              <span>{t.prompt.slice(0, hc)}</span>
-              <i className="caret" style={{ opacity: done && hs > 0 ? 0 : 1 }} />
+              <span>{scene.prompt.slice(0, hc)}</span>
+              {(!done || hs === 0) && <i className="caret" aria-hidden="true" />}
             </span>
           </div>
           <div className="found">
-            {t.lines.map(([k, v], i) => (
-              <div key={k} className={hs >= i + 2 ? 'on' : ''}>
+            {scene.lines.map(([k, v], i) => (
+              <div key={`${stage}-${k}`} className={hs >= i + 2 ? 'on' : ''}>
                 <em>✓</em>
                 <span>
                   <small>{k}</small>　{v}
@@ -71,36 +119,36 @@ export default function HeroDemo({ t }: { t: T }) {
               </div>
             ))}
           </div>
-          <div className={`dcard${hs >= 5 ? ' on' : ''}${hs >= 6 ? ' pick' : ''}${hs >= 7 ? ' stamped' : ''}${hs >= 8 ? ' done' : ''}`}>
+          <div className={cardCls}>
             <div className="hd">
-              <span>{t.dNeed}</span>
-              <span>1 / 2</span>
+              <span>{scene.cardHead}</span>
+              <span>{scene.cardStep}</span>
             </div>
-            <div className="q">{t.dQ}</div>
+            <div className="q">{scene.cardTitle}</div>
             <div className="opts">
               <div className="opt">
                 <b>
-                  <i>A</i>
-                  {t.dA}
+                  <i>{scene.opt1[0]}</i>
+                  {scene.opt1[1]}
                 </b>
-                <span>{t.dAd}</span>
+                <span>{scene.opt1[2]}</span>
               </div>
               <div className="opt">
                 <b>
-                  <i>B</i>
-                  {t.dB}
+                  <i>{scene.opt2[0]}</i>
+                  {scene.opt2[1]}
                 </b>
-                <span>{t.dBd}</span>
+                <span>{scene.opt2[2]}</span>
               </div>
             </div>
-            <div className="stamp">
-              <b>{t.stamp}</b>
-              <small>2026·10·08</small>
+            <div className="stamp" aria-hidden="true">
+              <b>{scene.stamp}</b>
+              <small>{scene.stampDate}</small>
             </div>
           </div>
           <div className={`wrote${hs >= 8 ? ' on' : ''}`}>
             <i>→</i>
-            <span>{t.dWritten}</span>
+            <span>{scene.wrote}</span>
           </div>
         </div>
       </div>

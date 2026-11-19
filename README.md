@@ -4,10 +4,10 @@
 
 **设计由你主导，AI 查证、实施，并把理由留下来。**
 
-面向 Claude Code 与 Codex 的软件交付技能
+面向 Claude Code、Codex、Antigravity 与 Gemini CLI 的软件交付技能，围绕代码仓库分阶段推进需求。
 
-<img alt="version" src="https://img.shields.io/badge/version-0.12.0-2f9e6b">
-<img alt="hosts" src="https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-5f6b7a">
+<img alt="version" src="https://img.shields.io/badge/version-0.13.0-2f9e6b">
+<img alt="hosts" src="https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex%20%7C%20Antigravity%20%7C%20Gemini%20CLI-5f6b7a">
 <img alt="license" src="https://img.shields.io/badge/license-MIT-5f6b7a">
 
 [为什么](#为什么) · [怎样工作](#怎样工作) · [开始使用](#开始使用) · [设计原则](#设计原则) · [技能](#技能)
@@ -22,50 +22,46 @@
 
 ## 为什么
 
-AI 能写出可以运行的代码，团队却未必清楚它为什么这样设计。设计交给 AI 之后，人对系统的理解越来越少；等到下一次修改，还得重新查明哪些行为能改、哪些约束必须保留。
+AI 写出了能运行的代码，团队却未必清楚它为什么这样设计。等到下一次修改，大家还得重新查明哪些行为可以改、哪些约束必须保留。
 
-Rivo 让设计留在人手里。你带着需求和自己的拆解开始，AI 查清现状、指出需要决定的问题；重要取舍由你决定，理由写进文档。实施照着你批准的方案进行，验收后，核实过的机制和理由进入项目知识库。
+Rivo 把设计和决定权留在人手里。你从需求和自己的思路开始，AI 查清现状、提出需要取舍的问题；重要决定由你拍板，理由写进文档。方案批准后拆成可逐项走查的任务，做完经过独立审阅与验收，再把核实过的机制整理进项目知识库。
 
 ## 怎样工作
 
 | 阶段 | AI 做什么 | 你决定什么 | 留下什么 |
 | --- | --- | --- | --- |
-| **讨论** | 核对你的拆解，查清依赖，提出需要取舍的问题 | 范围和重要取舍 | `decisions.md`、ADR、调查笔记 |
-| **方案** | 按模板写技术方案，组织一次独立审阅 | 是否批准 | `plan.md` |
-| **实施** | 按可验收的结果实施，逐任务和整体各审一次 | 是否验收 | 代码、`task.md`、验证证据 |
-| **知识** | 对照最新代码更新知识库，归档需求材料 | — | 项目知识库 |
+| **讨论** | 先问你是否已有方向，查清现状与组件映射，按决策树提问 | 范围、方向与重要取舍 | `decisions.md`、ADR、`research/` |
+| **方案** | 写出精炼的技术方案并审阅；你批准后，在同会话拆出 `task.md` | 是否批准方案 | `plan.md`、`task.md` |
+| **实施** | 按任务实施、自测与独立审阅，收尾时对照项目约定核对发布准备 | 走查校准与是否验收 | 代码、`task.md`、验证与审阅记录 |
+| **知识** | 对照最新代码把核实过的机制合进知识库 Wiki，归档需求目录 | — | 项目知识库（`knowledge/`） |
 
-实施中发现方案的假设不成立，AI 带着证据回来找你，只暂停受影响的任务。下图是实施阶段里你、主代理、执行者和审阅者之间的往来：
+实施中发现方案局部有误时，通过 `revising` 从受影响的最上游一层逐层修改；如果中后期发现底层模型需要推翻重做，先收尾或冻结当前需求，另开独立的重构需求。下图是实施阶段的往来：
 
 <p align="center">
-  <img src="assets/review.svg" width="820" alt="实施时序：每项任务循环执行与轻审；仅有属实 P0 时修复并复核，仅需改变已确认内容时进入修订；全部任务完成后整体审阅，再请你验收">
+  <img src="assets/review.svg" width="820" alt="实施时序：每项任务实施与审阅；有属实 P0 时修复并复核，需改变已确认内容时进入修订；全部任务完成后整体审阅并核对发布准备，再请你验收">
 </p>
 
 每类产物只有一个位置，互不搬运：
 
 | 产物 | 回答什么 | 位置 |
 | --- | --- | --- |
-| 现状 | 现有系统怎样工作，怎样查到的 | `research/` |
+| 现状 | 现有系统怎样工作，设计稿对应哪些本地组件 | `research/` |
 | 决定 | 本期做什么、不做什么，定了哪些事，为什么 | `decisions.md`、`adr/` |
-| 技术方案 | 本期怎么做 | `plan.md`、`assets/` |
-| 实施方案 | 按什么顺序做，实际做成了什么 | `task.md`、`evidence/` |
-| 知识库 | 系统现在怎样工作 | `knowledge/` |
-
-已确认的内容要改时，用 revising 从受影响的最上游一层改起，按决定、技术方案、实施方案、代码的顺序逐层核对。
+| 技术方案 | 架构边界、核心模型、参照样板与新增契约 | `plan.md`、`assets/` |
+| 实施方案 | 任务拆解、复用约定，以及每项任务的实测踩坑记录 | `task.md`、`evidence/` |
+| 知识库 | 各系统模块现在怎样工作（按系统域组织的 Wiki） | `knowledge/` |
 
 ## 开始使用
 
-带着目标和你自己的拆解开始：
+带着目标和你自己的思路开始（还没有具体思路时，也可以让 AI 先查现状再给建议）：
 
-> 用 Rivo 完成供应商档案优化。本期包括字段配置、档案页展示、表单物料、历史数据处理和报表接入。先核对我的拆解，查清现状与依赖，再讨论需要决定的问题。
+> 用 Rivo 完成供应商档案优化。本期包括字段配置、档案页展示、表单物料、历史数据处理和报表接入。先核对我的拆解，查清现状与组件映射，再讨论需要决定的问题。
 
-没有拆解也可以只说目标。交付依次经过讨论、方案、实施与用户验收、知识整理；方法技能可以独立使用，做完就结束：
+交付依次经过讨论、方案（含拆解 `task.md`）、实施与用户验收、知识整理；方法技能可以独立使用，做完就结束：
 
 > 用 investigating 查清数组字段的读取方式。
 >
 > 用 systematic-debugging 定位这个测试失败的原因。
->
-> 用 writing-clearly 编辑这份报告，保留现有结构。
 
 普通请求按普通方式处理。项目里有 `.rivo/` 目录，不会让每个请求都进入流程。
 
@@ -89,55 +85,60 @@ codex plugin marketplace add reflux-studio/rivo
 codex plugin add rivo@rivo
 ```
 
-安装后开启新会话，说「用 Rivo」并描述需求即可。
+#### Antigravity
+
+在终端运行：
+
+```sh
+agy plugin install https://github.com/reflux-studio/rivo
+```
+
+#### Gemini CLI
+
+在终端运行：
+
+```sh
+gemini extensions install https://github.com/reflux-studio/rivo
+```
+
+各宿主分别通过根目录 `plugin.json`（Antigravity）、`gemini-extension.json`（Gemini CLI）、`.claude-plugin/` 与 `hooks/claude-hooks.json`（Claude Code）、`.codex-plugin/`（Codex）加载同一套 `skills/`。安装后开启新会话，说「用 Rivo」并描述需求即可。
 
 ## 设计原则
 
-**人主导设计。** 你给出拆解和方向，AI 核对、查证、建议。范围、业务行为和重要取舍由你决定。
-
-**一套流程，不分档位。** 小需求直接写代码，不必走 Rivo。中大型需求走同一套流程，是否进入由你决定。
-
-**稳定的主线，随内容展开。** 每种产物有自己的模板和固定的位置，团队知道去哪里找什么；章节随本次需求的内容增减。
-
-**审阅要克制。** 方案只在首次定稿前全量审阅一次，之后的修订由你确认。主代理核实每条审阅意见，可以拒绝。
-
-**每次实施都是对方案的检验。** 执行者发现方案走不通时停下来报告证据，不绕开硬做。
-
-**不维护状态。** 进度从文档、审阅报告和实际改动中核对，没有状态文件，也没有跨会话交接。
-
-**技能自包含。** 每个阶段带着自己的模板和审阅提示词，不依赖别的技能的文件。
+- 人主导设计：设计前先问你是否已有方向，没有时 AI 再拟方案；代码和配置能查明的事实由 AI 自己查，重要取舍由你决定。
+- 方案与任务同会话产出，实施分次接力：批准 `plan.md` 后趁当前上下文完整立即拆出 `task.md`；之后可按任务分次开启新会话推进，靠 `task.md` 的实测记录和已提交的样板代码接力，既不用一个会话硬撑上千轮，也不用把新功能盲目外包给缺少上下文的子代理。
+- 方案做减法，代码先复用：`plan.md` 只写架构、边界、参照样板和新增契约，不抄 PRD 里的按钮显隐细则；动手写代码前先复用仓库已有的组件和样板。
+- 独立双轴审阅：每项任务和整体收尾由独立审阅者分别检查“代码写得好不好”和“需求做对没有”，并在任务开始时建待办清单防止遗漏。
+- 知识库按系统域维护：像 Wiki 一样按系统或能力域合并更新，不为每个需求单新建结项总结；写作和画图遵循项目自身的约定，不绑定特定工具。
 
 每条原则的来由见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 技能
 
 <p align="center">
-  <img src="assets/skills.svg" width="880" alt="技能分类：入口 using-rivo、按需修订 revising、四个阶段技能，以及可独立使用的调查、委派、写作、测试和调试方法">
+  <img src="assets/skills.svg" width="880" alt="技能分类：入口 using-rivo、按需修订 revising、四个阶段技能，以及可独立使用的调查、委派、测试和调试方法">
 </p>
 
 **交付流程**
 
 | 技能 | 用途 | 模板与提示词 |
 | --- | --- | --- |
-| [converging](skills/converging/SKILL.md) | 核对范围，讨论并记录每个决定 | [决定记录](skills/converging/references/decisions.md)、[ADR](skills/converging/references/adr.md) |
-| [writing-plans](skills/writing-plans/SKILL.md) | 编写、审阅和修订技术方案 | [技术方案](skills/writing-plans/references/plan-structure.md)、[审阅提示词](skills/writing-plans/references/plan-reviewer.md)、[接收审阅意见](skills/writing-plans/references/receiving-review.md) |
-| [implementing-plans](skills/implementing-plans/SKILL.md) | 安排实施、审阅与验收 | [实施方案](skills/implementing-plans/references/planning.md)、[执行者](skills/implementing-plans/references/implementer.md)、[审阅者](skills/implementing-plans/references/reviewer.md)、[接收意见](skills/implementing-plans/references/receiving-review.md) |
-| [knowledge-management](skills/knowledge-management/SKILL.md) | 维护项目知识，归档交付材料 | [知识文档](skills/knowledge-management/references/knowledge.md) |
-| [revising](skills/revising/SKILL.md) | 已确认的内容要改时，从上游逐层改到代码 | — |
+| [converging](skills/converging/SKILL.md) | 询问方向、查清事实与组件映射，按决策树讨论并记录决定 | [决定记录](skills/converging/references/decisions.md)、[ADR](skills/converging/references/adr.md) |
+| [writing-plans](skills/writing-plans/SKILL.md) | 编写、审阅和修订技术方案，批准后在同会话拆出 `task.md` | [技术方案](skills/writing-plans/references/plan-structure.md)、[方案审阅](skills/writing-plans/references/plan-reviewer.md)、[接收意见](skills/writing-plans/references/receiving-review.md)、[拆解任务](skills/writing-plans/references/planning.md) |
+| [implementing-plans](skills/implementing-plans/SKILL.md) | 按任务实施、独立双轴审阅、发布核对与验收 | [审阅者](skills/implementing-plans/references/reviewer.md)、[接收意见](skills/implementing-plans/references/receiving-review.md) |
+| [knowledge-management](skills/knowledge-management/SKILL.md) | 把核实过的机制合进知识库 Wiki，归档需求材料 | [知识 Wiki 结构](skills/knowledge-management/references/knowledge.md) |
+| [revising](skills/revising/SKILL.md) | 已确认的内容局部有变时，从受影响的上游逐层改到代码 | — |
 
 **方法**
 
 | 技能 | 用途 |
 | --- | --- |
-| [investigating](skills/investigating/SKILL.md) | 查清技术事实，维护[调查笔记](skills/investigating/references/note-structure.md) |
-| [dispatching-subagents](skills/dispatching-subagents/SKILL.md) | 选择子代理、明确委派契约与并行边界，核验结果并处理受阻 |
-| [writing-clearly](skills/writing-clearly/SKILL.md) | 文档的表达规约，可独立使用 |
+| [investigating](skills/investigating/SKILL.md) | 查清技术事实与组件映射，维护[调查笔记](skills/investigating/references/note-structure.md) |
+| [dispatching-subagents](skills/dispatching-subagents/SKILL.md) | 安排独立调查、独立审阅或样板定型后的批量委派 |
 | [test-driven-development](skills/test-driven-development/SKILL.md) | 用失败测试驱动行为实现 |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | 复现异常，检验原因假设并验证修复 |
 
-[using-rivo](skills/using-rivo/SKILL.md) 是入口，说明什么时候走 Rivo、交付顺序和宿主调用方式。
-
-委派遵循用户偏好和项目约定。没有指定时，按任务难度、错误代价、成本与延迟选择实际可用且允许选择的子代理配置；配置固定时沿用。阶段技能仍负责派发时机、独立审阅和产物规则。
+[using-rivo](skills/using-rivo/SKILL.md) 是入口，说明什么时候走 Rivo、交付顺序和目录约定。
 
 ## 文件位置
 
@@ -146,17 +147,17 @@ codex plugin add rivo@rivo
 ├── issues/<需求>/
 │   ├── decisions.md   范围、决定与待决事项
 │   ├── adr/           重要取舍及理由
-│   ├── research/      调查笔记与原始材料
+│   ├── research/      按主题维护的调查笔记
 │   ├── plan.md        技术方案
 │   ├── assets/        方案附件
-│   ├── task.md        实施方案与实施记录
-│   ├── evidence/      验证证据
+│   ├── task.md        实施方案与每项任务的实测记录
+│   ├── evidence/      验证证据与一次性排障记录
 │   └── reviews/       审阅报告
-├── knowledge/         项目知识库
+├── knowledge/         按系统域组织的知识库 Wiki
 └── archived/          验收后归档的需求
 ```
 
-用户或项目指定的位置优先。
+用户或项目指定的位置优先。需求根目录只放以上入口，不留临时对比或一次性脚本。
 
 ## 参与修改
 

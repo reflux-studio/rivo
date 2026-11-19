@@ -12,4 +12,4 @@ export const SEQ_GROUPS = [{ start: 0, end: 1 }, { start: 1, end: 5 }, { start: 
 export const TREE: [string, string, number][] = [['', '.rivo/', 0], ['├── ', 'issues/', 0], ['│   ├── ', 'decisions.md', 1], ['│   ├── ', 'adr/', 2], ['│   ├── ', 'research/', 3], ['│   ├── ', 'plan.md', 4], ['│   ├── ', 'assets/', 5], ['│   ├── ', 'task.md', 6], ['│   ├── ', 'evidence/', 7], ['│   └── ', 'reviews/', 8], ['├── ', 'knowledge/', 9], ['└── ', 'archived/', 10]]
 
 export const STAGE_SKILLS = ['converging', 'writing-plans', 'implementing-plans', 'knowledge-management']
-export const DEMO_STEPS = 9
+export const DEMO_STEPS = 8

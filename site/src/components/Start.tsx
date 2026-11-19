@@ -5,12 +5,16 @@ type T = typeof site.zh
 
 const CMD = {
   cc: ['/plugin marketplace add reflux-studio/rivo', '/plugin install rivo@rivo'],
-  codex: ['codex plugin marketplace add reflux-studio/rivo', 'codex plugin add rivo@rivo']
-}
+  codex: ['codex plugin marketplace add reflux-studio/rivo', 'codex plugin add rivo@rivo'],
+  agy: ['agy plugin install https://github.com/reflux-studio/rivo'],
+  gemini: ['gemini extensions install https://github.com/reflux-studio/rivo']
+} as const
 
-// 安装步骤（Claude Code / Codex 切换）与可复制的开口示例
+type Host = keyof typeof CMD
+
+// 安装步骤（Claude Code / Codex / Antigravity / Gemini CLI 切换）与可复制的开口示例
 export default function Start({ t }: { t: T }) {
-  const [inst, setInst] = useState<'cc' | 'codex'>('cc')
+  const [inst, setInst] = useState<Host>('cc')
   const [copied, setCopied] = useState<string | null>(null)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
@@ -23,7 +27,7 @@ export default function Start({ t }: { t: T }) {
     navigator.clipboard?.writeText(text).then(done, done) ?? done()
   }
   const label = (k: string) => (copied === k ? t.copied : t.copy)
-  const steps = inst === 'cc' ? t.cc : t.cx
+  const steps = inst === 'cc' ? t.cc : inst === 'codex' ? t.cx : inst === 'agy' ? t.agy : t.gemini
 
   return (
     <div className="start">
@@ -33,6 +37,8 @@ export default function Start({ t }: { t: T }) {
           <div className="seg dark" role="group">
             <button type="button" aria-pressed={inst === 'cc'} onClick={() => setInst('cc')}>Claude Code</button>
             <button type="button" aria-pressed={inst === 'codex'} onClick={() => setInst('codex')}>Codex</button>
+            <button type="button" aria-pressed={inst === 'agy'} onClick={() => setInst('agy')}>Antigravity</button>
+            <button type="button" aria-pressed={inst === 'gemini'} onClick={() => setInst('gemini')}>Gemini CLI</button>
           </div>
         </div>
         {steps.map((x, i) => (

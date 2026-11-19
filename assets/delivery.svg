@@ -463,13 +463,13 @@ rect.c-bg-rect { fill: var(--bg); }
           <text x="133" y="139" class="t-muted" font-size="8" text-anchor="middle">核对范围 · 记录决定</text>
         </g>
 
-        <g id="node-plan" data-node-id="plan" data-node-label="方案" tabindex="0" role="button" aria-label="聚焦方案，技术方案 · 独立审阅, 交付主线" aria-pressed="false" data-node-kind="backend" data-node-sublabel="技术方案 · 独立审阅" data-node-context="交付主线">
-          <title>方案 · 技术方案 · 独立审阅 · 交付主线</title>
+        <g id="node-plan" data-node-id="plan" data-node-label="方案" tabindex="0" role="button" aria-label="聚焦方案，技术方案 · 拆解任务, 交付主线" aria-pressed="false" data-node-kind="backend" data-node-sublabel="技术方案 · 拆解任务" data-node-context="交付主线">
+          <title>方案 · 技术方案 · 拆解任务 · 交付主线</title>
           <rect x="303.2" y="101" width="170" height="72" rx="6" class="c-mask"/>
           <rect x="303.2" y="101" width="170" height="72" rx="6" class="c-backend" stroke-width="1.5"/>
 
           <text data-node-label="" x="388.2" y="122" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">方案</text>
-          <text x="388.2" y="139" class="t-muted" font-size="8" text-anchor="middle">技术方案 · 独立审阅</text>
+          <text x="388.2" y="139" class="t-muted" font-size="8" text-anchor="middle">技术方案 · 拆解任务</text>
         </g>
 
         <g id="node-build" data-node-id="build" data-node-label="实施" tabindex="0" role="button" aria-label="聚焦实施，执行 · 验证 · 审阅, 交付主线" aria-pressed="false" data-node-kind="backend" data-node-sublabel="执行 · 验证 · 审阅" data-node-context="交付主线">
