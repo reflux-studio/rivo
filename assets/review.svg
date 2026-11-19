@@ -451,59 +451,59 @@ rect.c-bg-rect { fill: var(--bg); }
 
 
         <!-- Messages -->
-        <g data-edge-from="you" data-edge-to="main" data-edge-label="批准方案并授权实施" data-edge-key="0" data-edge-id="authorize">
+        <g data-edge-from="you" data-edge-to="main" data-edge-label="批准双方案并授权实施" data-edge-key="0" data-edge-id="authorize">
           <path data-composition-edge-from="you" data-composition-edge-to="main" data-composition-edge-id="authorize" data-composition-points="164,160;412.6666666666667,160" d="M 164 160 L 412.6666666666667 160" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="222.93333333333337" y="140" width="130.8" height="18" rx="3" class="c-mask"/>
-          <text x="288.33333333333337" y="150" class="t-muted" font-size="11" text-anchor="middle">批准方案并授权实施</text>
+          <rect x="216.33333333333337" y="140" width="144" height="18" rx="3" class="c-mask"/>
+          <text x="288.33333333333337" y="150" class="t-muted" font-size="11" text-anchor="middle">批准双方案并授权实施</text>
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="worker" data-edge-label="派发任务" data-edge-key="1" data-edge-id="dispatch">
+        <g data-edge-from="main" data-edge-to="worker" data-edge-label="派发任务与引用 TC-xx" data-edge-key="1" data-edge-id="dispatch">
           <path data-composition-edge-from="main" data-composition-edge-to="worker" data-composition-edge-id="dispatch" data-composition-points="426.6666666666667,192;675.3333333333334,192" d="M 426.6666666666667 192 L 675.3333333333334 192" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
         <g>
-          <rect x="518.6" y="172" width="64.8" height="18" rx="3" class="c-mask"/>
-          <text x="551" y="182" class="t-edge-emphasis" font-size="11" text-anchor="middle">派发任务</text>
+          <rect x="470" y="172" width="162" height="18" rx="3" class="c-mask"/>
+          <text x="551" y="182" class="t-edge-emphasis" font-size="11" text-anchor="middle">派发任务与引用 TC-xx</text>
         </g>
         </g>
 
-        <g data-edge-from="worker" data-edge-to="main" data-edge-label="提交结果与验证" data-edge-key="2" data-edge-id="done">
+        <g data-edge-from="worker" data-edge-to="main" data-edge-label="提交改动与单测/集成输出" data-edge-key="2" data-edge-id="done">
           <path data-composition-edge-from="worker" data-composition-edge-to="main" data-composition-edge-id="done" data-composition-points="675.3333333333334,220;426.6666666666667,220" d="M 675.3333333333334 220 L 426.6666666666667 220" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="498.8" y="200" width="104.39999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="551" y="210" class="t-muted" font-size="11" text-anchor="middle">提交结果与验证</text>
+          <rect x="462" y="200" width="178" height="18" rx="3" class="c-mask"/>
+          <text x="551" y="210" class="t-muted" font-size="11" text-anchor="middle">提交改动与单测/集成输出</text>
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="reviewer" data-edge-label="发起独立双轴审阅" data-edge-key="3" data-edge-id="review">
+        <g data-edge-from="main" data-edge-to="reviewer" data-edge-label="发起独立代码审阅" data-edge-key="3" data-edge-id="review">
           <path data-composition-edge-from="main" data-composition-edge-to="reviewer" data-composition-edge-id="review" data-composition-points="426.6666666666667,248;938,248" d="M 426.6666666666667 248 L 938 248" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
         <g>
           <rect x="630.1333333333333" y="228" width="104.39999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="682.3333333333334" y="238" class="t-muted" font-size="11" text-anchor="middle">发起独立双轴审阅</text>
+          <text x="682.3333333333334" y="238" class="t-muted" font-size="11" text-anchor="middle">发起独立代码审阅</text>
         </g>
         </g>
 
-        <g data-edge-from="reviewer" data-edge-to="main" data-edge-label="报告结论与问题" data-edge-key="4" data-edge-id="result">
+        <g data-edge-from="reviewer" data-edge-to="main" data-edge-label="报告两轴结论与测试核验" data-edge-key="4" data-edge-id="result">
           <path data-composition-edge-from="reviewer" data-composition-edge-to="main" data-composition-edge-id="result" data-composition-points="938,276;426.6666666666667,276" d="M 938 276 L 426.6666666666667 276" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="630.1333333333333" y="256" width="104.39999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="682.3333333333334" y="266" class="t-muted" font-size="11" text-anchor="middle">报告结论与问题</text>
+          <rect x="603.8333333333334" y="256" width="157" height="18" rx="3" class="c-mask"/>
+          <text x="682.3333333333334" y="266" class="t-muted" font-size="11" text-anchor="middle">报告两轴结论与测试核验</text>
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="worker" data-edge-label="修复核实属实的 P0" data-edge-key="5" data-edge-id="fix">
+        <g data-edge-from="main" data-edge-to="worker" data-edge-label="修复属实 P0 并重跑验证" data-edge-key="5" data-edge-id="fix">
           <path data-composition-edge-from="main" data-composition-edge-to="worker" data-composition-edge-id="fix" data-composition-points="426.6666666666667,322;675.3333333333334,322" d="M 426.6666666666667 322 L 675.3333333333334 322" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="488.9" y="302" width="124.19999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="551" y="312" class="t-muted" font-size="11" text-anchor="middle">修复核实属实的 P0</text>
+          <rect x="473" y="302" width="156" height="18" rx="3" class="c-mask"/>
+          <text x="551" y="312" class="t-muted" font-size="11" text-anchor="middle">修复属实 P0 并重跑验证</text>
         </g>
         </g>
 
-        <g data-edge-from="worker" data-edge-to="main" data-edge-label="提交修复与验证" data-edge-key="6" data-edge-id="fixed">
+        <g data-edge-from="worker" data-edge-to="main" data-edge-label="提交修复与自动测试输出" data-edge-key="6" data-edge-id="fixed">
           <path data-composition-edge-from="worker" data-composition-edge-to="main" data-composition-edge-id="fixed" data-composition-points="675.3333333333334,350;426.6666666666667,350" d="M 675.3333333333334 350 L 426.6666666666667 350" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="498.8" y="330" width="104.39999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="551" y="340" class="t-muted" font-size="11" text-anchor="middle">提交修复与验证</text>
+          <rect x="473" y="330" width="156" height="18" rx="3" class="c-mask"/>
+          <text x="551" y="340" class="t-muted" font-size="11" text-anchor="middle">提交修复与自动测试输出</text>
         </g>
         </g>
 
@@ -515,78 +515,78 @@ rect.c-bg-rect { fill: var(--bg); }
         </g>
         </g>
 
-        <g data-edge-from="reviewer" data-edge-to="main" data-edge-label="无 P0，通过" data-edge-key="8" data-edge-id="pass">
+        <g data-edge-from="reviewer" data-edge-to="main" data-edge-label="无 P0，通过后再做端到端与验收" data-edge-key="8" data-edge-id="pass">
           <path data-composition-edge-from="reviewer" data-composition-edge-to="main" data-composition-edge-id="pass" data-composition-points="938,406;426.6666666666667,406" d="M 938 406 L 426.6666666666667 406" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="640.0333333333334" y="386" width="84.6" height="18" rx="3" class="c-mask"/>
-          <text x="682.3333333333334" y="396" class="t-muted" font-size="11" text-anchor="middle">无 P0，通过</text>
+          <rect x="593.3333333333334" y="386" width="178" height="18" rx="3" class="c-mask"/>
+          <text x="682.3333333333334" y="396" class="t-muted" font-size="11" text-anchor="middle">无 P0，通过后再做端到端与验收</text>
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="you" data-edge-label="报告证据与修订建议" data-edge-key="9" data-edge-id="escalate">
+        <g data-edge-from="main" data-edge-to="you" data-edge-label="请求人工验收或修订确认" data-edge-key="9" data-edge-id="escalate">
           <path data-composition-edge-from="main" data-composition-edge-to="you" data-composition-edge-id="escalate" data-composition-points="412.6666666666667,452;164,452" d="M 412.6666666666667 452 L 164 452" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="222.93333333333337" y="432" width="130.8" height="18" rx="3" class="c-mask"/>
-          <text x="288.33333333333337" y="442" class="t-muted" font-size="11" text-anchor="middle">报告证据与修订建议</text>
+          <rect x="200.33333333333337" y="432" width="176" height="18" rx="3" class="c-mask"/>
+          <text x="288.33333333333337" y="442" class="t-muted" font-size="11" text-anchor="middle">请求人工验收或修订确认</text>
         </g>
         </g>
 
-        <g data-edge-from="you" data-edge-to="main" data-edge-label="决定或确认修订" data-edge-key="10" data-edge-id="confirm">
+        <g data-edge-from="you" data-edge-to="main" data-edge-label="给出验收反馈或确认修订" data-edge-key="10" data-edge-id="confirm">
           <path data-composition-edge-from="you" data-composition-edge-to="main" data-composition-edge-id="confirm" data-composition-points="164,480;412.6666666666667,480" d="M 164 480 L 412.6666666666667 480" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="236.13333333333338" y="460" width="104.39999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="288.33333333333337" y="470" class="t-muted" font-size="11" text-anchor="middle">决定或确认修订</text>
+          <rect x="202.33333333333337" y="460" width="172" height="18" rx="3" class="c-mask"/>
+          <text x="288.33333333333337" y="470" class="t-muted" font-size="11" text-anchor="middle">给出验收反馈或确认修订</text>
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="worker" data-edge-label="逐层修订，重做受影响任务" data-edge-key="11" data-edge-id="revise">
+        <g data-edge-from="main" data-edge-to="worker" data-edge-label="逐层修订或按影响面复测" data-edge-key="11" data-edge-id="revise">
           <path data-composition-edge-from="main" data-composition-edge-to="worker" data-composition-edge-id="revise" data-composition-points="426.6666666666667,508;675.3333333333334,508" d="M 426.6666666666667 508 L 675.3333333333334 508" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="465.8" y="488" width="170.39999999999998" height="18" rx="3" class="c-mask"/>
-          <text x="551" y="498" class="t-muted" font-size="11" text-anchor="middle">逐层修订，重做受影响任务</text>
+          <rect x="470" y="488" width="162" height="18" rx="3" class="c-mask"/>
+          <text x="551" y="498" class="t-muted" font-size="11" text-anchor="middle">逐层修订或按影响面复测</text>
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="reviewer" data-edge-label="发起整体审阅" data-edge-key="12" data-edge-id="final">
+        <g data-edge-from="main" data-edge-to="reviewer" data-edge-label="发起整体代码审阅" data-edge-key="12" data-edge-id="final">
           <path data-composition-edge-from="main" data-composition-edge-to="reviewer" data-composition-edge-id="final" data-composition-points="426.6666666666667,554;938,554" d="M 426.6666666666667 554 L 938 554" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
         <g>
-          <rect x="636.7333333333333" y="534" width="91.19999999999999" height="18" rx="3" class="c-mask"/>
-          <text x="682.3333333333334" y="544" class="t-edge-emphasis" font-size="11" text-anchor="middle">发起整体审阅</text>
+          <rect x="623.3333333333334" y="534" width="118" height="18" rx="3" class="c-mask"/>
+          <text x="682.3333333333334" y="544" class="t-edge-emphasis" font-size="11" text-anchor="middle">发起整体代码审阅</text>
         </g>
         </g>
 
-        <g data-edge-from="reviewer" data-edge-to="main" data-edge-label="无 P0，通过" data-edge-key="13" data-edge-id="final-pass">
+        <g data-edge-from="reviewer" data-edge-to="main" data-edge-label="无 P0，运行全量/精准回归" data-edge-key="13" data-edge-id="final-pass">
           <path data-composition-edge-from="reviewer" data-composition-edge-to="main" data-composition-edge-id="final-pass" data-composition-points="938,582;426.6666666666667,582" d="M 938 582 L 426.6666666666667 582" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#arrowhead)"/>
         <g>
-          <rect x="640.0333333333334" y="562" width="84.6" height="18" rx="3" class="c-mask"/>
-          <text x="682.3333333333334" y="572" class="t-muted" font-size="11" text-anchor="middle">无 P0，通过</text>
+          <rect x="598.3333333333334" y="562" width="168" height="18" rx="3" class="c-mask"/>
+          <text x="682.3333333333334" y="572" class="t-muted" font-size="11" text-anchor="middle">无 P0，运行全量/精准回归</text>
         </g>
         </g>
 
-        <g data-edge-from="main" data-edge-to="you" data-edge-label="交付结果，请验收" data-edge-key="14" data-edge-id="accept">
+        <g data-edge-from="main" data-edge-to="you" data-edge-label="交测试报告与发布核对，请验收" data-edge-key="14" data-edge-id="accept">
           <path data-composition-edge-from="main" data-composition-edge-to="you" data-composition-edge-id="accept" data-composition-points="412.6666666666667,610;164,610" d="M 412.6666666666667 610 L 164 610" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
         <g>
-          <rect x="229.53333333333336" y="590" width="117.6" height="18" rx="3" class="c-mask"/>
-          <text x="288.33333333333337" y="600" class="t-edge-emphasis" font-size="11" text-anchor="middle">交付结果，请验收</text>
+          <rect x="190.33333333333337" y="590" width="196" height="18" rx="3" class="c-mask"/>
+          <text x="288.33333333333337" y="600" class="t-edge-emphasis" font-size="11" text-anchor="middle">交测试报告与发布核对，请验收</text>
         </g>
         </g>
 
         <!-- Segment Labels -->
         <g data-graph-role="segment-label" data-segment-id="0">
-          <rect x="56" y="136" width="144" height="18" rx="3" class="c-mask"/>
-          <text x="62" y="149" class="t-dim" font-size="9" font-weight="600">循环 · 每项任务实施与双轴审阅</text>
+          <rect x="56" y="136" width="196" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="149" class="t-dim" font-size="9" font-weight="600">循环 · 自动验证先于独立审阅</text>
         </g>
         <g data-graph-role="segment-label" data-segment-id="1">
-          <rect x="56" y="288" width="216.8" height="18" rx="3" class="c-mask"/>
-          <text x="62" y="301" class="t-dim" font-size="9" font-weight="600">仅有属实 P0 时 · 修复后复核，通过才继续</text>
+          <rect x="56" y="288" width="240" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="301" class="t-dim" font-size="9" font-weight="600">若有 P0 修完复核 · 审阅通过后再做端到端与人工验收</text>
         </g>
         <g data-graph-role="segment-label" data-segment-id="2">
-          <rect x="56" y="396" width="196" height="18" rx="3" class="c-mask"/>
-          <text x="62" y="409" class="t-dim" font-size="9" font-weight="600">仅需改已确认内容时 · 执行中随时进入</text>
+          <rect x="56" y="396" width="226" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="409" class="t-dim" font-size="9" font-weight="600">需要人工验收或修订方案时 · 按需进入</text>
         </g>
         <g data-graph-role="segment-label" data-segment-id="3">
-          <rect x="56" y="520" width="175.20000000000002" height="18" rx="3" class="c-mask"/>
-          <text x="62" y="533" class="t-dim" font-size="9" font-weight="600">全部任务完成后 · 整体审阅与验收</text>
+          <rect x="56" y="520" width="226" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="533" class="t-dim" font-size="9" font-weight="600">全部完成后 · 全量审阅、分层回归与发布核对</text>
         </g>
 
         <!-- Participants -->

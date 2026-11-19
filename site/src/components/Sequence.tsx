@@ -68,7 +68,7 @@ export default function Sequence({ t }: { t: T }) {
                 ))}
               </div>
               {SEQ_GROUPS.map((group, groupIndex) => (
-                <div key={group.start} className={`seq-block${groupIndex === 0 ? ' intro' : ''}${groupIndex === 2 || groupIndex === 3 ? ' conditional' : ''}`}>
+                <div key={group.start} className={`seq-block${groupIndex === 0 ? ' intro' : ''}`}>
                   {groupIndex > 0 && <div className="seq-group-title">{t.seqGroups[groupIndex - 1]}</div>}
                   {SEQ.slice(group.start, group.end).map(([f, to], offset) => {
                     const i = group.start + offset

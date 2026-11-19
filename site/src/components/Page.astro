@@ -2,6 +2,7 @@
 import '../styles/site.css'
 import { site, type Locale } from '../i18n/site'
 import { GH, REPO, TREE } from '../lib/data'
+import ArtifactsToc from './ArtifactsToc'
 import HeroDemo from './HeroDemo'
 import Sequence from './Sequence'
 import Stages from './Stages'
@@ -62,7 +63,7 @@ const nav = [['why', t.navWhy], ['how', t.navHow], ['principles', t.navPrin], ['
       <div class="lines" aria-hidden="true"></div>
       <div class="in">
         <div class="l">
-          <div class="kick"><span>v0.13.0</span><span>{t.kicker}</span></div>
+          <div class="kick"><span>v0.14.0</span><span>{t.kicker}</span></div>
           <h1>
             <span class="ln">{t.h1a}<span class="hl">{t.h1b}</span>{t.h1c}</span>
             <span class="ln">{t.h1d}</span>
@@ -112,8 +113,7 @@ const nav = [['why', t.navWhy], ['how', t.navHow], ['principles', t.navPrin], ['
         </div>
         <div class="plan">
           <div class="toc" data-reveal>
-            <div class="cap"><b>plan.md</b><span>{t.tocCap}</span></div>
-            {t.chapters.map(([title, desc], i) => <div class="ch" style={`--i:${i}`}><i>{i + 1}</i><b>{title}</b><u aria-hidden="true"></u><span>{desc}</span></div>)}
+            <ArtifactsToc client:load t={t} />
           </div>
           <div class="tree" data-reveal>
             <div class="cap"><span>{t.treeCap}</span><span>tree</span></div>
@@ -174,7 +174,7 @@ const nav = [['why', t.navWhy], ['how', t.navHow], ['principles', t.navPrin], ['
         <div class="meth">
           <div class="t" data-reveal><b>{t.skMethods}</b><span>{t.skMethodsSub}</span></div>
           <div class="mg">
-            {t.methodSkills.map(([name, desc]) => <a class="mc" data-reveal href={`${GH}${name}/SKILL.md`} target="_blank" rel="noopener"><b>{name}</b><span>{desc}</span></a>)}
+            {t.methodSkills.map(([name, tag, desc]) => <a class="mc" data-reveal href={`${GH}${name}/SKILL.md`} target="_blank" rel="noopener"><small>{tag}</small><b>{name}</b><span>{desc}</span></a>)}
           </div>
         </div>
       </div>

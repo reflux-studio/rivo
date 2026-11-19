@@ -1,7 +1,7 @@
 {
   "name": "rivo",
-  "version": "0.13.0",
-  "description": "围绕代码仓库的四阶段软件交付技能：讨论方案与取舍、编写精炼技术方案并拆解任务、按任务分次实施与双轴独立审阅、按系统域维护项目 Wiki。",
+  "version": "0.14.0",
+  "description": "围绕代码仓库的四阶段软件交付技能：讨论取舍与验收底线、产出并审阅技术/测试双方案、按任务分次实施与分层回归、按系统域维护项目 Wiki。",
   "author": {
     "name": "Xav1erSue"
   },
@@ -11,6 +11,8 @@
     "architecture",
     "design",
     "knowledge",
+    "testing",
+    "code-review",
     "tdd",
     "debugging"
   ],
@@ -18,8 +20,8 @@
   "hooks": "./hooks/claude-hooks.json",
   "interface": {
     "displayName": "Rivo",
-    "shortDescription": "和 AI 讨论方案，按任务实施与双轴审阅，留下理由与项目 Wiki",
-    "longDescription": "设计方案前先询问用户是否已有方向，查清现状与前端组件映射后按决策树讨论取舍。方案阶段产出架构级技术方案并经批准后拆出 task.md；实施阶段按任务分次接力并由独立审阅者从代码规范与方案符合度两个方向审阅，验收后把核实机制合并进按系统域组织的知识库 Wiki。",
+    "shortDescription": "和 AI 讨论方案，灰盒测试左移与双轴审阅，留下理由与项目 Wiki",
+    "longDescription": "设计方案前先询问用户是否已有方向，查清现状与组件映射并对齐验收底线。方案阶段同会话产出技术方案与灰盒测试方案并经独立审阅，评审批准后拆出挂载用例与 HITL 走查节点的 task.md；实施阶段按成本漏斗先跑静态/单测/集成测试，再做双轴独立审阅与精准回归，产出独立测试报告，验收后合入按系统域组织的 Wiki。",
     "developerName": "Xav1erSue",
     "category": "Developer Tools",
     "capabilities": [
@@ -28,13 +30,14 @@
       "Write"
     ],
     "defaultPrompt": [
-      "用 Rivo 完成这个需求，先核对我的方向和模块拆解，再查依赖、讨论重要取舍。",
-      "用 converging 讨论这份 PRD 的目标和技术做法。",
-      "用 writing-plans 写出精炼的技术方案，批准后再拆解实施任务。",
-      "用 implementing-plans 按任务实施并做独立双轴审阅。",
+      "用 Rivo 完成这个需求，先核对我的方向和模块拆解，再查依赖、对齐取舍与回归底线。",
+      "用 converging 讨论这份 PRD 的目标、技术取舍与验收底线。",
+      "用 writing-plans 产出并审阅技术方案与测试方案，批准后再拆解实施任务。",
+      "用 implementing-plans 按任务实施、跑分层自测、双轴审阅并产出测试报告。",
       "我已经验收通过，用 knowledge-management 合并更新项目知识库 Wiki 并归档。",
-      "用 investigating 查清这个机制或设计稿组件映射，更新研究笔记。",
-      "用 dispatching-subagents 安排只读调查、独立审阅或样板定型后的批量委派。"
+      "用 test-design 基于这份 PRD 和方案设计灰盒分层测试矩阵。",
+      "用 code-review 从代码质量与方案符合度独立审阅本次改动。",
+      "用 verifying 按成本漏斗执行精准回归并出具独立验证报告。"
     ]
   },
   "icon": "./assets/rivo-icon.png"

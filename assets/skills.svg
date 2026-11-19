@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 976 506" role="img" lang="zh-CN" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase" data-reader-fit="intrinsic-height" data-reader-min-text="7.5" data-reader-primary-text="14" style="width: 976px; height: 506px; min-width: 0px;" width="976" height="506" xmlns="http://www.w3.org/2000/svg"><style>
+<svg viewBox="0 0 960 572" role="img" lang="zh-CN" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase" data-reader-fit="intrinsic-height" data-reader-min-text="7.5" data-reader-primary-text="14" style="width: 960px; height: 572px; min-width: 0px;" width="960" height="572" xmlns="http://www.w3.org/2000/svg"><style>
 /*
 JetBrains Mono variable WOFF2 subsets from Google Fonts service revision v24.
 These fixed bytes are shared by the viewer and its SVG/raster exports.
@@ -433,9 +433,9 @@ rect.c-bg-rect { fill: var(--bg); }
 
 
         <!-- Boundaries (behind everything) -->
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" data-composition-frame-label="阶段技能 · 按交付阶段使用" x="24" y="206" width="452" height="232" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" data-composition-frame-label="阶段技能 · 按交付阶段使用" x="24" y="156" width="912" height="132" rx="12" class="c-region" stroke-width="1"/>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" data-composition-frame-label="通用方法 · 按需使用，可独立完成" x="484" y="206" width="452" height="232" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" data-composition-frame-label="通用方法 · 按需使用，可独立完成（构建与测试）" x="24" y="316" width="912" height="224" rx="12" class="c-region" stroke-width="1"/>
 
         <!-- Connection paths (before components for correct z-order) -->
 
@@ -443,92 +443,128 @@ rect.c-bg-rect { fill: var(--bg); }
         <!-- Components -->
         <g id="node-entry" data-node-id="entry" data-node-label="入口 · 选择工作方式" tabindex="0" role="button" aria-label="聚焦入口 · 选择工作方式，using-rivo, 架构组件" aria-pressed="false" data-node-kind="external" data-node-sublabel="using-rivo" data-node-context="架构组件">
           <title>入口 · 选择工作方式 · using-rivo · 架构组件</title>
-          <rect x="40" y="60" width="420" height="76" rx="6" class="c-mask"/>
-          <rect x="40" y="60" width="420" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+          <rect x="40" y="48" width="430" height="72" rx="6" class="c-mask"/>
+          <rect x="40" y="48" width="430" height="72" rx="6" class="c-external" stroke-width="1.5"/>
 
-          <text data-node-label="" x="250" y="96" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">入口 · 选择工作方式</text>
-        <text x="250" y="112" class="t-muted" font-size="9" text-anchor="middle">using-rivo</text>
+          <text data-node-label="" x="255" y="82" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">入口 · 选择工作方式</text>
+          <text x="255" y="98" class="t-muted" font-size="9" text-anchor="middle">using-rivo</text>
         </g>
 
         <g id="node-revise" data-node-id="revise" data-node-label="按需修订 · 从上游逐层修改" tabindex="0" role="button" aria-label="聚焦按需修订 · 从上游逐层修改，revising, 架构组件" aria-pressed="false" data-node-kind="external" data-node-sublabel="revising" data-node-context="架构组件">
           <title>按需修订 · 从上游逐层修改 · revising · 架构组件</title>
-          <rect x="500" y="60" width="420" height="76" rx="6" class="c-mask"/>
-          <rect x="500" y="60" width="420" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+          <rect x="490" y="48" width="430" height="72" rx="6" class="c-mask"/>
+          <rect x="490" y="48" width="430" height="72" rx="6" class="c-external" stroke-width="1.5"/>
 
-          <text data-node-label="" x="710" y="96" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">按需修订 · 从上游逐层修改</text>
-        <text x="710" y="112" class="t-muted" font-size="9" text-anchor="middle">revising</text>
+          <text data-node-label="" x="705" y="82" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">按需修订 · 从上游逐层修改</text>
+          <text x="705" y="98" class="t-muted" font-size="9" text-anchor="middle">revising</text>
         </g>
 
-        <g id="node-discuss" data-node-id="discuss" data-node-label="讨论 · 记录决定" tabindex="0" role="button" aria-label="聚焦讨论 · 记录决定，converging, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="converging" data-node-context="阶段技能 · 按交付阶段使用">
-          <title>讨论 · 记录决定 · converging · 阶段技能 · 按交付阶段使用</title>
-          <rect x="40" y="230" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="40" y="230" width="200" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
+        <g id="node-discuss" data-node-id="discuss" data-node-label="讨论 · 对齐决定与底线" tabindex="0" role="button" aria-label="聚焦讨论 · 对齐决定与底线，converging, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="converging" data-node-context="阶段技能 · 按交付阶段使用">
+          <title>讨论 · 对齐决定与底线 · converging · 阶段技能 · 按交付阶段使用</title>
+          <rect x="40" y="194" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="40" y="194" width="206" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
 
-          <text data-node-label="" x="140" y="266" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">讨论 · 记录决定</text>
-        <text x="140" y="282" class="t-muted" font-size="9" text-anchor="middle">converging</text>
+          <text data-node-label="" x="143" y="230" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">讨论 · 对齐决定与底线</text>
+          <text x="143" y="246" class="t-muted" font-size="9" text-anchor="middle">converging</text>
         </g>
 
-        <g id="node-plan" data-node-id="plan" data-node-label="方案 · 设计做法" tabindex="0" role="button" aria-label="聚焦方案 · 设计做法，writing-plans, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="writing-plans" data-node-context="阶段技能 · 按交付阶段使用">
-          <title>方案 · 设计做法 · writing-plans · 阶段技能 · 按交付阶段使用</title>
-          <rect x="260" y="230" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="260" y="230" width="200" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
+        <g id="node-plan" data-node-id="plan" data-node-label="方案 · 双方案与拆解" tabindex="0" role="button" aria-label="聚焦方案 · 双方案与拆解，writing-plans, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="writing-plans" data-node-context="阶段技能 · 按交付阶段使用">
+          <title>方案 · 双方案与拆解 · writing-plans · 阶段技能 · 按交付阶段使用</title>
+          <rect x="262" y="194" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="262" y="194" width="206" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
 
-          <text data-node-label="" x="360" y="266" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">方案 · 设计做法</text>
-        <text x="360" y="282" class="t-muted" font-size="9" text-anchor="middle">writing-plans</text>
+          <text data-node-label="" x="365" y="230" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">方案 · 双方案与拆解</text>
+          <text x="365" y="246" class="t-muted" font-size="9" text-anchor="middle">writing-plans</text>
         </g>
 
-        <g id="node-build" data-node-id="build" data-node-label="实施 · 验证交付" tabindex="0" role="button" aria-label="聚焦实施 · 验证交付，implementing-plans, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="implementing-plans" data-node-context="阶段技能 · 按交付阶段使用">
-          <title>实施 · 验证交付 · implementing-plans · 阶段技能 · 按交付阶段使用</title>
-          <rect x="40" y="342" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="40" y="342" width="200" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
+        <g id="node-build" data-node-id="build" data-node-label="实施 · 自测审阅与回归" tabindex="0" role="button" aria-label="聚焦实施 · 自测审阅与回归，implementing-plans, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="implementing-plans" data-node-context="阶段技能 · 按交付阶段使用">
+          <title>实施 · 自测审阅与回归 · implementing-plans · 阶段技能 · 按交付阶段使用</title>
+          <rect x="484" y="194" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="484" y="194" width="206" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
 
-          <text data-node-label="" x="140" y="378" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">实施 · 验证交付</text>
-        <text x="140" y="394" class="t-muted" font-size="9" text-anchor="middle">implementing-plans</text>
+          <text data-node-label="" x="587" y="230" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">实施 · 自测审阅与回归</text>
+          <text x="587" y="246" class="t-muted" font-size="9" text-anchor="middle">implementing-plans</text>
         </g>
 
-        <g id="node-knowledge" data-node-id="knowledge" data-node-label="知识 · 整理归档" tabindex="0" role="button" aria-label="聚焦知识 · 整理归档，knowledge-management, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="knowledge-management" data-node-context="阶段技能 · 按交付阶段使用">
-          <title>知识 · 整理归档 · knowledge-management · 阶段技能 · 按交付阶段使用</title>
-          <rect x="260" y="342" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="260" y="342" width="200" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
+        <g id="node-knowledge" data-node-id="knowledge" data-node-label="知识 · 机制与回归入库" tabindex="0" role="button" aria-label="聚焦知识 · 机制与回归入库，knowledge-management, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="knowledge-management" data-node-context="阶段技能 · 按交付阶段使用">
+          <title>知识 · 机制与回归入库 · knowledge-management · 阶段技能 · 按交付阶段使用</title>
+          <rect x="706" y="194" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="706" y="194" width="206" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
 
-          <text data-node-label="" x="360" y="378" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">知识 · 整理归档</text>
-        <text x="360" y="394" class="t-muted" font-size="9" text-anchor="middle">knowledge-management</text>
+          <text data-node-label="" x="809" y="230" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">知识 · 机制与回归入库</text>
+          <text x="809" y="246" class="t-muted" font-size="9" text-anchor="middle">knowledge-management</text>
         </g>
 
-        <g id="node-investigate" data-node-id="investigate" data-node-label="调查 · 查清事实" tabindex="0" role="button" aria-label="聚焦调查 · 查清事实，investigating, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="investigating" data-node-context="通用方法 · 按需使用，可独立完成">
-          <title>调查 · 查清事实 · investigating · 通用方法 · 按需使用，可独立完成</title>
-          <rect x="500" y="230" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="500" y="230" width="200" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+        <g id="node-investigate" data-node-id="investigate" data-node-label="调查 · 查清事实映射" tabindex="0" role="button" aria-label="聚焦调查 · 查清事实映射，investigating, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="investigating" data-node-context="通用方法 · 按需使用，可独立完成">
+          <title>调查 · 查清事实映射 · investigating · 通用方法 · 按需使用，可独立完成</title>
+          <rect x="40" y="354" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="40" y="354" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
 
-          <text data-node-label="" x="600" y="266" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">调查 · 查清事实</text>
-        <text x="600" y="282" class="t-muted" font-size="9" text-anchor="middle">investigating</text>
+          <text data-node-label="" x="143" y="390" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">调查 · 查清事实映射</text>
+          <text x="143" y="406" class="t-muted" font-size="9" text-anchor="middle">investigating</text>
+        </g>
+
+        <g id="node-system-design" data-node-id="system-design" data-node-label="技术方案 · 架构与审阅" tabindex="0" role="button" aria-label="聚焦技术方案 · 架构与审阅，system-design, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="system-design" data-node-context="通用方法 · 按需使用，可独立完成">
+          <title>技术方案 · 架构与审阅 · system-design · 通用方法 · 按需使用，可独立完成</title>
+          <rect x="262" y="354" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="262" y="354" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+
+          <text data-node-label="" x="365" y="390" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">技术方案 · 架构与审阅</text>
+          <text x="365" y="406" class="t-muted" font-size="9" text-anchor="middle">system-design</text>
+        </g>
+
+        <g id="node-test" data-node-id="test" data-node-label="TDD · 失败测试驱动" tabindex="0" role="button" aria-label="聚焦 TDD · 失败测试驱动，test-driven-development, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="test-driven-development" data-node-context="通用方法 · 按需使用，可独立完成">
+          <title>TDD · 失败测试驱动 · test-driven-development · 通用方法 · 按需使用，可独立完成</title>
+          <rect x="484" y="354" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="484" y="354" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+
+          <text data-node-label="" x="587" y="390" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">TDD · 失败测试驱动</text>
+          <text x="587" y="406" class="t-muted" font-size="9" text-anchor="middle">test-driven-development</text>
+        </g>
+
+        <g id="node-code-review" data-node-id="code-review" data-node-label="代码审阅 · 独立检查" tabindex="0" role="button" aria-label="聚焦代码审阅 · 独立检查，code-review, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="code-review" data-node-context="通用方法 · 按需使用，可独立完成">
+          <title>代码审阅 · 独立检查 · code-review · 通用方法 · 按需使用，可独立完成</title>
+          <rect x="706" y="354" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="706" y="354" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+
+          <text data-node-label="" x="809" y="390" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">代码审阅 · 独立检查</text>
+          <text x="809" y="406" class="t-muted" font-size="9" text-anchor="middle">code-review</text>
         </g>
 
         <g id="node-dispatch" data-node-id="dispatch" data-node-label="委派 · 分工与核验" tabindex="0" role="button" aria-label="聚焦委派 · 分工与核验，dispatching-subagents, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="dispatching-subagents" data-node-context="通用方法 · 按需使用，可独立完成">
           <title>委派 · 分工与核验 · dispatching-subagents · 通用方法 · 按需使用，可独立完成</title>
-          <rect x="720" y="230" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="720" y="230" width="200" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+          <rect x="40" y="446" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="40" y="446" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
 
-          <text data-node-label="" x="820" y="266" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">委派 · 分工与核验</text>
-        <text x="820" y="282" class="t-muted" font-size="9" text-anchor="middle">dispatching-subagents</text>
+          <text data-node-label="" x="143" y="482" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">委派 · 分工与核验</text>
+          <text x="143" y="498" class="t-muted" font-size="9" text-anchor="middle">dispatching-subagents</text>
         </g>
 
-        <g id="node-test" data-node-id="test" data-node-label="测试 · 驱动实现" tabindex="0" role="button" aria-label="聚焦测试 · 驱动实现，test-driven-development, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="test-driven-development" data-node-context="通用方法 · 按需使用，可独立完成">
-          <title>测试 · 驱动实现 · test-driven-development · 通用方法 · 按需使用，可独立完成</title>
-          <rect x="500" y="342" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="500" y="342" width="200" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+        <g id="node-test-design" data-node-id="test-design" data-node-label="测试设计 · 分层矩阵" tabindex="0" role="button" aria-label="聚焦测试设计 · 分层矩阵，test-design, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="test-design" data-node-context="通用方法 · 按需使用，可独立完成">
+          <title>测试设计 · 分层矩阵 · test-design · 通用方法 · 按需使用，可独立完成</title>
+          <rect x="262" y="446" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="262" y="446" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
 
-          <text data-node-label="" x="600" y="378" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">测试 · 驱动实现</text>
-        <text x="600" y="394" class="t-muted" font-size="9" text-anchor="middle">test-driven-development</text>
+          <text data-node-label="" x="365" y="482" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">测试设计 · 分层矩阵</text>
+          <text x="365" y="498" class="t-muted" font-size="9" text-anchor="middle">test-design</text>
         </g>
 
-        <g id="node-debug" data-node-id="debug" data-node-label="调试 · 验证根因" tabindex="0" role="button" aria-label="聚焦调试 · 验证根因，systematic-debugging, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="systematic-debugging" data-node-context="通用方法 · 按需使用，可独立完成">
-          <title>调试 · 验证根因 · systematic-debugging · 通用方法 · 按需使用，可独立完成</title>
-          <rect x="720" y="342" width="200" height="76" rx="6" class="c-mask"/>
-          <rect x="720" y="342" width="200" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+        <g id="node-debug" data-node-id="debug" data-node-label="排障 · 证据验证根因" tabindex="0" role="button" aria-label="聚焦排障 · 证据验证根因，systematic-debugging, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="systematic-debugging" data-node-context="通用方法 · 按需使用，可独立完成">
+          <title>排障 · 证据验证根因 · systematic-debugging · 通用方法 · 按需使用，可独立完成</title>
+          <rect x="484" y="446" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="484" y="446" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
 
-          <text data-node-label="" x="820" y="378" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">调试 · 验证根因</text>
-        <text x="820" y="394" class="t-muted" font-size="9" text-anchor="middle">systematic-debugging</text>
+          <text data-node-label="" x="587" y="482" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">排障 · 证据验证根因</text>
+          <text x="587" y="498" class="t-muted" font-size="9" text-anchor="middle">systematic-debugging</text>
+        </g>
+
+        <g id="node-verifying" data-node-id="verifying" data-node-label="验证回归 · 实测报告" tabindex="0" role="button" aria-label="聚焦验证回归 · 实测报告，verifying, 通用方法 · 按需使用，可独立完成" aria-pressed="false" data-node-kind="external" data-node-sublabel="verifying" data-node-context="通用方法 · 按需使用，可独立完成">
+          <title>验证回归 · 实测报告 · verifying · 通用方法 · 按需使用，可独立完成</title>
+          <rect x="706" y="446" width="206" height="76" rx="6" class="c-mask"/>
+          <rect x="706" y="446" width="206" height="76" rx="6" class="c-external" stroke-width="1.5"/>
+
+          <text data-node-label="" x="809" y="482" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">验证回归 · 实测报告</text>
+          <text x="809" y="498" class="t-muted" font-size="9" text-anchor="middle">verifying</text>
         </g>
 
         <!-- Connection labels -->
@@ -536,13 +572,13 @@ rect.c-bg-rect { fill: var(--bg); }
 
         <!-- Boundary labels (foreground masks keep routes out of titles) -->
         <g data-graph-role="structural-frame-label" data-composition-frame-id="0" data-composition-frame-kind="region" data-composition-frame-label="阶段技能 · 按交付阶段使用">
-          <rect data-graph-role="structural-frame-label-mask" x="28" y="210" width="145" height="16" rx="3" class="c-mask"/>
-          <text data-boundary-label="" x="32" y="223" class="t-cloud" font-size="9" font-weight="600">阶段技能 · 按交付阶段使用</text>
+          <rect data-graph-role="structural-frame-label-mask" x="28" y="160" width="145" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="32" y="173" class="t-cloud" font-size="9" font-weight="600">阶段技能 · 按交付阶段使用</text>
         </g>
 
-        <g data-graph-role="structural-frame-label" data-composition-frame-id="1" data-composition-frame-kind="region" data-composition-frame-label="通用方法 · 按需使用，可独立完成">
-          <rect data-graph-role="structural-frame-label-mask" x="488" y="210" width="177.4" height="16" rx="3" class="c-mask"/>
-          <text data-boundary-label="" x="492" y="223" class="t-cloud" font-size="9" font-weight="600">通用方法 · 按需使用，可独立完成</text>
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="1" data-composition-frame-kind="region" data-composition-frame-label="通用方法 · 按需使用，可独立完成（构建与测试）">
+          <rect data-graph-role="structural-frame-label-mask" x="28" y="320" width="256" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="32" y="333" class="t-cloud" font-size="9" font-weight="600">通用方法 · 按需使用，可独立完成（构建与测试）</text>
         </g>
 
         <!-- Legend -->

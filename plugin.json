@@ -1,8 +1,8 @@
 {
   "name": "rivo",
   "displayName": "Rivo",
-  "version": "0.13.0",
-  "description": "围绕代码仓库的四阶段软件交付技能：讨论方案与取舍、编写精炼技术方案并拆解任务、分次实施与双轴独立审阅、按系统域维护项目 Wiki。",
+  "version": "0.14.0",
+  "description": "围绕代码仓库的四阶段软件交付技能：讨论取舍与验收底线、产出并审阅技术/测试双方案、分层自测与双轴独立审阅、按系统域维护项目 Wiki。",
   "author": {
     "name": "Xav1erSue"
   },
@@ -10,8 +10,8 @@
   "repository": "https://github.com/reflux-studio/rivo",
   "logo": "assets/rivo-icon.svg",
   "suggestedPrompts": [
-    "用 Rivo 完成这个需求，先核对我的方向和模块拆解，再查现状、讨论重要取舍。",
-    "用 writing-plans 写出精炼的技术方案，我批准后再拆解实施任务。",
-    "用 implementing-plans 执行下一项任务，完成后做独立双轴审阅。"
+    "用 Rivo 完成这个需求，先核对我的方向和模块拆解，再查现状、对齐取舍与回归底线。",
+    "用 writing-plans 产出并审阅技术方案与测试方案，评审批准后再合并拆出实施任务。",
+    "用 implementing-plans 按任务实施与分层自测，完成后交独立双轴审阅与精准回归。"
   ]
 }
