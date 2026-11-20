@@ -29,7 +29,7 @@ const zh = {
         lines: [
           [ '方向与拆解', '沿用单 schema；5 个模块一致，老报表导出必须保持兼容' ],
           [ '代码现状', '档案页有 3 处直接读取旧字段结构，空数组缺省返回 null' ],
-          [ '组件与底线', '基础控件复用 FormKit；异常处理与回归范围写入 decisions.md' ]
+          [ '组件与回归范围', '基础控件复用 FormKit；异常处理与回归范围写入 decisions.md' ]
         ],
         cardMode: 'choice' as 'choice' | 'pair',
         cardHead: '需要你决定',
@@ -82,9 +82,9 @@ const zh = {
       {
         tab: '知识',
         skill: 'knowledge-management',
-        prompt: '整体验收已通过，对照最新代码与测试报告更新按系统域组织的知识库 Wiki，保留回归基线后再归档。',
+        prompt: '整体验收已通过，对照最新代码与测试报告更新按系统域组织的知识库 Wiki，保留回归范围后再归档。',
         lines: [
-          [ '核实最新真相', '对照最新代码与 test-report.md 确认机制与回归基线' ],
+          [ '核实最新真相', '对照最新代码与 test-report.md 确认机制与回归范围' ],
           [ '合并系统域 Wiki', '更新 supplier-archive.md 与测试环境踩坑，不建结项总结' ],
           [ '归档需求目录', '移入 .rivo/archived/供应商档案优化/' ]
         ],
@@ -92,7 +92,7 @@ const zh = {
         cardHead: '知识库已按系统域更新',
         cardStep: 'Wiki',
         cardTitle: 'knowledge/supplier-archive.md',
-        opt1: [ '机制与基线', '核心架构与回归点', 'schema 契约、组件复用与必保旧导出回归项' ] as [string, string, string],
+        opt1: [ '机制与回归', '核心架构与回归点', 'schema 契约、组件复用与必保旧导出回归项' ] as [string, string, string],
         opt2: [ '环境与溯源', '演进来源与踩坑', '关联归档目录、ADR-001 与测试数据前提' ] as [string, string, string],
         stamp: '已归档',
         stampDate: 'WIKI SYNC',
@@ -105,7 +105,7 @@ const zh = {
   whyLa: '问题',
   whyLb: 'Rivo 的做法',
   whyP1: '让 AI 一口气写完需求，往往换来上万行牵一发而动全身的代码，人不知道为什么这样设计，也不敢确认没把老功能改坏；自测常挑刚写的正常路径写几条宽松断言，而硬拆成“开发阶段 → 测试阶段”来回扯皮，又只会重走瀑布流老路、凭空增加返工。',
-  whyP2: 'Rivo 把设计与拍板权留在人手里，把测试和验证放进编码过程本身：你先定方向、重要取舍和不能破坏的老功能；AI 在同一会话写清技术方案和测试方案再拆任务，先跑自动检查再做独立审阅，只在关键页面和流程节点请你人工验收；全部做完后交出真实验证报告，验收后把核实过的机制与回归基线留进项目 Wiki。',
+  whyP2: 'Rivo 把设计与拍板权留在人手里，把测试和验证放进编码过程本身：你先定方向、重要取舍和不能破坏的老功能；AI 在同一会话写清技术方案和测试方案再拆任务，先跑自动检查再做独立审阅，只在关键页面和流程节点请你人工验收；全部做完后交出真实验证报告，验收后把核实过的机制与回归范围留进项目 Wiki。',
   howTitle: '四个阶段，你只守住关键节点，其余交给仓库里的证据。',
   howSub: '需求依次经过讨论、方案、实施与验收、知识沉淀。局部假设或预期有变时，用 revising 从受影响的上游逐层修订；如果底层模型走不通，及时暂停或收尾，另开独立重构需求，不往原目录堆平行方案。',
   colAi: 'AI 做什么',
@@ -122,7 +122,7 @@ const zh = {
     '回归与沉淀 · 回归出报告，把系统脉络留进项目知识库'
   ],
   seq: [
-    '给出需求目标、方向思路与关键底线',
+    '给出需求目标、方向思路和不能破坏的老功能',
     '查清代码现状、组件对应与受影响老功能',
     '技术方案与测试方案各自独立审阅，查漏边界',
     '呈交关键取舍与两份方案；批准后拆出 task.md',
@@ -151,14 +151,14 @@ const zh = {
     [ '环境与数据前提', '账号权限、依赖 Mock 边界与预置存量数据' ],
     [ '测试分层与平台约定', '单元、集成与端到端边界，以及外部测试平台对接' ],
     [ '功能测试矩阵', '按业务模块以等价类、边界值与状态迁移编排用例' ],
-    [ '老功能影响面与回归范围', '对照技术方案圈出公共改动波及的老功能底线' ],
+    [ '老功能影响面与回归范围', '对照技术方案圈出公共改动会波及的老功能' ],
     [ '不测范围与已知限制', '明确划出本期不覆盖的场景与环境约束' ]
   ],
   wikiTocCap: '项目知识库 · 按系统域演进',
   wikiChapters: [
     [ '核心机制与数据落点', '系统现在怎样运转，入口、存储与各端配合' ],
     [ '约束与设计理由', '必须遵守的契约边界，以及关键取舍的原因' ],
-    [ '变更与运维', '改动入口、发版步骤、核心回归基线与已知缺口' ],
+    [ '变更与运维', '改动入口、发版步骤、核心回归范围与已知缺口' ],
     [ '演进来源', '关联已归档的需求目录与 ADR，按需回溯' ]
   ],
   treeCap: '文件位置',
@@ -181,10 +181,10 @@ const zh = {
   prinTitle: '四条克制，管住失控也避开过场。',
   prinMore: '每条原则的来由见 CONTRIBUTING.md',
   principles: [
-    [ '设计权留在人手里', '动手设计前先问你是否已有方向，代码和配置能查明的事实由 AI 自己查；影响架构、异常处理和老功能底线的关键取舍，按依赖交你拍板并留下 ADR。' ],
+    [ '设计权留在人手里', '动手设计前先问你是否已有方向，代码和配置能查明的事实由 AI 自己查；影响架构、异常处理和老功能回归范围的关键取舍，按依赖交你拍板并留下 ADR。' ],
     [ '开发与测试合一，先快后慢验证', '不拆成割裂的开发和测试阶段，编码前同时对照需求和技术方案定下 TC-xx 与回归范围；开发时先过编译和单测，关键节点请人验收，最后交出独立的 test-report.md。' ],
     [ '独立审阅查盲区，不盲从多余改动', '技术方案、测试方案与代码改动都交给独立审阅者检查；同时明确识别并拒绝为未发生需求抽层的过度设计，以及对已保证前提重复判空的过度防御。' ],
-    [ '只留活文档，不绑定任何工具', '方案十分钟读完、不搬运 PRD 细则；验收后把系统机制与回归基线合并进按系统域组织的 Wiki；画图、写作与外部测试平台（如 MeterSphere、Etest）遵循项目 AGENTS.md。' ]
+    [ '只留活文档，不绑定任何工具', '方案十分钟读完、不搬运 PRD 细则；验收后把系统机制与回归范围合并进按系统域组织的 Wiki；画图、写作和外部测试平台（如果项目接入了）按项目 AGENTS.md 的约定来。' ]
   ],
   skTitle: '一套完整交付流程，八种可单独带走的工程方法。',
   skSub: '中大型需求走流程保住上下游一致与系统记忆；平时单查一段代码、写一份方案、设计测试用例或审一次 PR，八个方法技能零 .rivo/ 依赖，拿去任意仓库都能单用。',
@@ -195,7 +195,7 @@ const zh = {
     [ 'converging', '讨论', '先问方向、查清现状与组件对应，按依赖逐轮讨论并记下决定与回归范围', [ '决定记录', 'ADR' ] ],
     [ 'writing-plans', '方案', '依次写出并独立审阅技术方案与测试方案，批准后同会话拆出 task.md', [ 'plan.md', 'test-plan.md', 'task.md' ] ],
     [ 'implementing-plans', '实施', '先自动验证再独立审阅、关键节点请人验收，最后整体回归并出验证报告', [ '分层验证', '验证报告', '发布核对' ] ],
-    [ 'knowledge-management', '知识', '验收后对照最新代码与报告，把机制和回归基线合进系统域 Wiki 并归档', [ '知识 Wiki' ] ]
+    [ 'knowledge-management', '知识', '验收后对照最新代码与报告，把机制和回归范围合进系统域 Wiki 并归档', [ '知识 Wiki' ] ]
   ],
   revising: [ '修订', '已确认的决定、方案或任务需局部调整时，从受影响的最上游逐层改到代码；如果底层模型要推翻重做，另开独立重构需求。', '决定 → 技术 / 测试方案 → 任务清单 → 代码' ],
   methodSkills: [
@@ -206,19 +206,19 @@ const zh = {
     [ 'dispatching-subagents', '基础 · 委派', '安排独立调查、独立审阅，或在样板跑通契约稳定后批量委派任务' ],
     [ 'test-design', '设计 · 测试', '对照需求与技术方案做测试分析，产出按模块分层的用例并独立审阅' ],
     [ 'systematic-debugging', '排障 · 测试', '从证据复现并检验原因假设，定位根因后再修复并保留回归验证' ],
-    [ 'verifying', '把关 · 测试', '按从快到慢的顺序做分层验证与回归测试，产出独立验证报告' ]
+    [ 'verifying', '把关 · 测试', '从快到慢做分层验证和回归测试，写出验证报告' ]
   ] as [string, string, string][],
   stages: [
     {
       name: '讨论',
       ai: '先问你的方向，查清现状与组件对应，确认取舍与回归范围',
-      you: '方向、范围、重要取舍与底线',
+      you: '方向、范围、重要取舍与验收标准',
       leaves: [ 'decisions.md', 'ADR', 'research/' ],
       file: 'issues/供应商档案优化/adr/001-历史数据读时兼容.md',
       doc: [
         [ 'h', '# 001：历史数据采用读时兼容' ],
         [ 'm', '状态：接受（用户，2026-10-08）' ],
-        [ 'm', '影响模块：历史数据处理、报表接入；底线：旧格式导出不能报错' ],
+        [ 'm', '影响模块：历史数据处理、报表接入；不能破坏：旧格式导出不能报错' ],
         [ '', '' ],
         [ 'k', '背景与约束' ],
         [ '', '报表接入依赖历史数据；一次性迁移需要停机窗口。' ],
@@ -262,7 +262,7 @@ const zh = {
     },
     {
       name: '知识',
-      ai: '验收后对照最新代码与验证报告，把机制与回归基线合进系统域 Wiki 并归档',
+      ai: '验收后对照最新代码与验证报告，把机制与回归范围合进系统域 Wiki 并归档',
       you: '无需决定',
       leaves: [ 'knowledge/', 'archived/' ],
       file: 'knowledge/supplier-archive.md',
@@ -271,7 +271,7 @@ const zh = {
         [ 'm', '适用范围：supplier-service · supplier-web · vms-report' ],
         [ 'k', '核心机制与数据落点' ],
         [ '', '字段由 schema 驱动，档案页与表单共用；FormKit 统一承载录入控件。' ],
-        [ 'k', '变更与运维（含回归基线）' ],
+        [ 'k', '变更与运维（含回归范围）' ],
         [ '', '改字段 schema 必跑旧格式导出与 null-array 适配器回归测试（TC-02）。' ],
         [ 'k', '演进来源' ],
         [ 'm', '#供应商档案优化（2026-10-16）：archived/供应商档案优化 · ADR-001' ],
@@ -282,7 +282,7 @@ const zh = {
   stTitle: '带着目标和你自己的想法开始。',
   stInstall: '安装',
   stTry: '这样开口',
-  stEnv: '模型分工遵循你的偏好和项目约定；默认按任务分次由主会话实施，独立审阅与批量重构再交给子代理。画图工具、写作风格、构建测试命令与外部测试平台（如 MeterSphere、Etest）同步规则写在目标项目的 AGENTS.md 或 CLAUDE.md 里，Rivo 不做绑定。',
+  stEnv: '模型分工遵循你的偏好和项目约定；默认按任务分次由主会话实施，独立审阅与批量重构再交给子代理。画图工具、写作风格、构建测试命令，以及外部测试平台（如果项目接入了）的同步规则，写在目标项目的 AGENTS.md 或 CLAUDE.md 里，Rivo 不做绑定。',
   stNote: '普通请求按普通方式处理。项目里有 .rivo/ 目录，也不会让每个请求都进入流程。',
   cc: [
     '在 Claude Code 会话中添加插件市场。',
@@ -308,17 +308,17 @@ const zh = {
     '用 Rivo 完成供应商档案优化。本期包括字段配置、档案页展示、表单物料、历史数据处理和报表接入。我倾向字段与表单共用一套 schema，先核对我的拆解、现状与组件对应关系，再讨论需要决定的问题和不能改坏的老功能。',
     '用 test-design 对照这份 PRD 和接口方案写出分层测试方案，按模块编号方便导出测试平台。',
     '用 code-review 独立审阅这次分支改动，核实代码质量、需求落地和测试覆盖是否真实，不接受过度设计。',
-    '用 verifying 先跑编译、单测和集成测试，再针对改动影响面做回归测试并输出独立验证报告。'
+    '用 verifying 先跑编译、单测和集成测试，再按改动影响面做回归测试，写出验证报告。'
   ],
   copy: '复制',
   copied: '已复制',
-  footLine: '下一次修改时，理由、设计脉络与回归底线都在。',
+  footLine: '下一次修改时，理由、设计脉络和回归范围都还在。',
   footCta: '在 GitHub 上获取 Rivo',
   skip: '跳到正文',
   meta: {
     htmlLang: 'zh-CN',
     title: 'Rivo — 设计由你主导',
-    description: '面向 Claude Code、Codex、Antigravity 与 Gemini CLI 的软件交付技能。你主导方向与取舍，AI 查清现状、写清技术方案与测试方案、先自动验证再独立审阅，交付验证报告并把系统机制与回归基线留进项目 Wiki。'
+    description: '面向 Claude Code、Codex、Antigravity 与 Gemini CLI 的软件交付技能。你主导方向与取舍，AI 查清现状、写清技术方案与测试方案、先自动验证再独立审阅，交付验证报告并把系统机制与回归范围留进项目 Wiki。'
   }
 }
 
@@ -346,11 +346,11 @@ const en: typeof zh = {
       {
         tab: 'Discuss',
         skill: 'converging',
-        prompt: 'Use Rivo on supplier profiles: share one schema across fields, profile page, form assets, legacy data & reporting. Check the code first, then align trade-offs and regression baselines.',
+        prompt: 'Use Rivo on supplier profiles: share one schema across fields, profile page, form assets, legacy data & reporting. Check the code first, then align trade-offs and regression scope.',
         lines: [
           [ 'direction', 'single-schema confirmed; 5 modules match and legacy exports stay intact' ],
           [ 'current', '3 direct reads of legacy fields returning null on empty arrays' ],
-          [ 'UI & baselines', 'base inputs reuse FormKit; fallbacks & baselines saved in decisions.md' ]
+          [ 'UI & scope', 'base inputs reuse FormKit; fallbacks & regression scope saved in decisions.md' ]
         ],
         cardMode: 'choice' as 'choice' | 'pair',
         cardHead: 'YOUR CALL',
@@ -403,7 +403,7 @@ const en: typeof zh = {
       {
         tab: 'Wiki',
         skill: 'knowledge-management',
-        prompt: 'Acceptance is done. Verify against latest code and test-report.md, merge live mechanisms and regression baselines into the domain Wiki, and archive.',
+        prompt: 'Acceptance is done. Verify against latest code and test-report.md, merge live mechanisms and regression scope into the domain Wiki, and archive.',
         lines: [
           [ 'verified truth', 'checked latest code & test-report.md for live contracts' ],
           [ 'domain Wiki', 'merged into supplier-archive.md with regression & test-data notes' ],
@@ -413,11 +413,11 @@ const en: typeof zh = {
         cardHead: 'DOMAIN WIKI UPDATED',
         cardStep: 'Wiki',
         cardTitle: 'knowledge/supplier-archive.md',
-        opt1: [ 'Mechanisms', 'Contracts & baselines', 'Schema flow, FormKit reuse & mandatory legacy export checks' ] as [string, string, string],
+        opt1: [ 'Mechanisms', 'Contracts & regression', 'Schema flow, FormKit reuse & mandatory legacy export checks' ] as [string, string, string],
         opt2: [ 'History', 'Pitfalls & provenance', 'Points to archive folder, ADR-001 & test-data setup' ] as [string, string, string],
         stamp: 'ARCHIVED',
         stampDate: 'WIKI SYNC',
-        wrote: 'Next session opens README.md with live system rules & regression baselines'
+        wrote: 'Next session opens README.md with live system rules & regression scope'
       }
     ]
   },
@@ -426,7 +426,7 @@ const en: typeof zh = {
   whyLa: 'The problem',
   whyLb: 'What Rivo does',
   whyP1: 'One-shot AI coding leaves sprawling lines nobody understands, alongside self-written Happy Path tests that share the code’s blind spots and miss what breaks elsewhere. Splitting AI into fake “Dev vs QA” personas just revives waterfall handoffs and wasted tokens.',
-  whyP2: 'Rivo keeps design authority with humans and builds verification directly into engineering. You set direction, trade-offs, and regression baselines; AI drafts peer technical and gray-box test plans in the same session, runs fast automated checks before isolated reviews, pauses for walkthroughs only where interactive judgment matters, and folds live facts back into a domain Wiki.',
+  whyP2: 'Rivo keeps design authority with humans and builds verification directly into engineering. You set direction, trade-offs, and regression scope; AI drafts a technical plan and a test plan in the same session, runs fast automated checks before isolated reviews, pauses for walkthroughs only where interactive judgment matters, and folds live facts back into a domain Wiki.',
   howTitle: 'Four stages. You steer the key gates; evidence in the repo carries the rest.',
   howSub: 'Discussion, dual plans & task split, build & acceptance, and knowledge consolidation. Local mismatches trigger a layered fix via revising; if core models fail late, wrap up and open a dedicated refactor issue.',
   colAi: 'AI does',
@@ -443,7 +443,7 @@ const en: typeof zh = {
     'Close & retain · run layered regression into test-report.md and update Wiki'
   ],
   seq: [
-    'Share goals, initial direction, and key baselines',
+    'Share goals, initial direction, and key constraints',
     'Inspect current code, UI mapping, and affected flows',
     'Independently stress-test technical & gray-box test plans',
     'Review trade-offs & plans; split task.md',
@@ -469,7 +469,7 @@ const en: typeof zh = {
   ],
   testTocCap: 'Gray-box test plan · modules & regression',
   testChapters: [
-    [ 'Setup & data preconditions', 'Test accounts, mock boundaries, and baseline fixtures' ],
+    [ 'Setup & data preconditions', 'Test accounts, mock boundaries, and required fixtures' ],
     [ 'Test layering & platform sync', 'UT/IT/E2E split plus external platform export rules' ],
     [ 'Functional test matrix', 'Equivalence, boundary & state TC-xx cases by module' ],
     [ 'Regression & blast radius', 'Existing flows affected by shared code or schema changes' ],
@@ -479,14 +479,14 @@ const en: typeof zh = {
   wikiChapters: [
     [ 'Core mechanisms & data flow', 'How the module works today across entry points and stores' ],
     [ 'Constraints & rationale', 'Must-keep contracts and why key trade-offs were chosen' ],
-    [ 'Operations & regression baseline', 'Where to edit, rollout steps, smoke baselines & open gaps' ],
+    [ 'Operations & regression scope', 'Where to edit, rollout steps, smoke scope & open gaps' ],
     [ 'Evolution history', 'Links back to archived issue folders and ADRs when needed' ]
   ],
   treeCap: 'File layout',
   treeNote: 'Locations set by you or the project take precedence; keep only these entries in the issue root.',
   tree: [
     '',
-    'scope, decisions, baselines, open items',
+    'scope, decisions, regression scope, open items',
     'key trade-offs and reasons',
     'topic-based investigation notes',
     'lean technical plan',
@@ -502,10 +502,10 @@ const en: typeof zh = {
   prinTitle: 'Four principles — stay in control without extra ceremony.',
   prinMore: 'The reasoning behind each lives in CONTRIBUTING.md',
   principles: [
-    [ 'Keep design authority human', 'Ask if the user already has a direction before proposing one. AI verifies codebase facts itself and brings architectural trade-offs and regression baselines to you as a decision tree.' ],
+    [ 'Keep design authority human', 'Ask if the user already has a direction before proposing one. AI verifies codebase facts itself and brings architectural trade-offs and regression scope to you as a decision tree.' ],
     [ 'Build quality in, reject role-play', 'Never split Dev vs QA personas. Lock gray-box TC-xx and regression domains before coding, pass compile/unit checks before review, pause only at key UAT gates, and deliver test-report.md.' ],
     [ 'Fresh eyes without speculative bloat', 'Technical plans, test plans, and diffs are reviewed in isolated contexts—paired with explicit receiving-review guards that reject premature abstractions and redundant defensive checks.' ],
-    [ 'Live project docs, tool-agnostic', 'Keep technical plans readable in ten minutes without copying PRD rules. Fold verified mechanisms and baselines into a domain Wiki, and honor repo AGENTS.md for diagrams and test platforms.' ]
+    [ 'Live project docs, tool-agnostic', 'Keep technical plans readable in ten minutes without copying PRD rules. Fold verified mechanisms and regression scope into a domain Wiki, and honor repo AGENTS.md for diagrams and test platforms.' ]
   ],
   skTitle: 'One delivery flow. Eight standalone engineering methods.',
   skSub: 'Run the five flow skills when shipping major work; invoke any of the eight Build × Test method skills on its own in any repository with zero .rivo/ coupling.',
@@ -513,10 +513,10 @@ const en: typeof zh = {
   skMethods: 'Methods (Build × Test symmetry)',
   skMethodsSub: 'Standalone outside Rivo — one skill, one job',
   stageSkills: [
-    [ 'converging', 'Discuss', 'Ask direction, check code & UI mapping, align decisions and acceptance/regression baselines', [ 'Decisions', 'ADR' ] ],
+    [ 'converging', 'Discuss', 'Ask direction, check code & UI mapping, align decisions, acceptance criteria, and regression scope', [ 'Decisions', 'ADR' ] ],
     [ 'writing-plans', 'Plan', 'Draft and review peer plan.md & test-plan.md sequentially; split task.md on approval', [ 'plan.md', 'test-plan.md', 'task.md' ] ],
     [ 'implementing-plans', 'Build', 'Run fast checks before independent review, marked walkthroughs, layered regression & release check', [ 'Layered checks', 'Test report', 'Release check' ] ],
-    [ 'knowledge-management', 'Knowledge', 'Merge verified mechanisms and regression baselines into the domain Wiki & archive', [ 'Knowledge Wiki' ] ]
+    [ 'knowledge-management', 'Knowledge', 'Merge verified mechanisms and regression scope into the domain Wiki & archive', [ 'Knowledge Wiki' ] ]
   ],
   revising: [ 'Revise', 'When confirmed decisions, dual plans or tasks need local changes, update from the highest affected layer down to code; if core models break, open a dedicated refactor issue.', 'decisions → plan & test-plan → task → code' ],
   methodSkills: [
@@ -532,14 +532,14 @@ const en: typeof zh = {
   stages: [
     {
       name: 'Discuss',
-      ai: 'Asks direction, checks code & UI mapping, aligns trade-offs & regression baselines',
-      you: 'Direction, scope, trade-offs & baselines',
+      ai: 'Asks direction, checks code & UI mapping, aligns trade-offs & regression scope',
+      you: 'Direction, scope, trade-offs & criteria',
       leaves: [ 'decisions.md', 'ADR', 'research/' ],
       file: 'issues/supplier-profile/adr/001-read-time-compat.md',
       doc: [
         [ 'h', '# 001: Legacy data uses read-time compat' ],
         [ 'm', 'Status: accepted (user, 2026-10-08)' ],
-        [ 'm', 'Modules: legacy data, reporting · Baseline: old export stays intact' ],
+        [ 'm', 'Modules: legacy data, reporting · Must keep: old export intact' ],
         [ '', '' ],
         [ 'k', 'Context & constraints' ],
         [ '', 'Reporting depends on legacy data; migration needs downtime.' ],
@@ -583,7 +583,7 @@ const en: typeof zh = {
     },
     {
       name: 'Knowledge',
-      ai: 'Merges verified mechanisms & regression baselines into Wiki after acceptance',
+      ai: 'Merges verified mechanisms & regression scope into Wiki after acceptance',
       you: 'Nothing to decide',
       leaves: [ 'knowledge/', 'archived/' ],
       file: 'knowledge/supplier-archive.md',
@@ -592,7 +592,7 @@ const en: typeof zh = {
         [ 'm', 'Scope: supplier-service · supplier-web · vms-report' ],
         [ 'k', 'Core mechanisms & data flow' ],
         [ '', 'Fields are schema-driven across page & form; FormKit backs inputs.' ],
-        [ 'k', 'Operations & regression baseline' ],
+        [ 'k', 'Operations & regression scope' ],
         [ '', 'Schema edits must pass legacy export & null-array adapter regression (TC-02).' ],
         [ 'k', 'History' ],
         [ 'm', '#supplier-profile (2026-10-16): archived/supplier-profile · ADR-001' ],
@@ -603,7 +603,7 @@ const en: typeof zh = {
   stTitle: 'Start with a goal — and your own direction.',
   stInstall: 'Install',
   stTry: 'Say it like this',
-  stEnv: 'Model choices follow your preferences and repo conventions. By default the main session builds incrementally while independent subagents handle investigation, review, or post-exemplar batch edits. Put diagram tools, writing style, build/test commands, and external platform sync rules (e.g. MeterSphere, Etest) in your repo’s AGENTS.md or CLAUDE.md.',
+  stEnv: 'Model choices follow your preferences and repo conventions. By default the main session builds incrementally while independent subagents handle investigation, review, or post-exemplar batch edits. Put diagram tools, writing style, build/test commands, and external test platform sync rules (if your project uses one) in your repo’s AGENTS.md or CLAUDE.md.',
   stNote: 'Ordinary requests are handled ordinarily. Having a .rivo/ directory doesn’t force every prompt into the delivery flow.',
   cc: [
     'Add the marketplace in a Claude Code session.',
@@ -626,14 +626,14 @@ const en: typeof zh = {
   tagDelivery: 'full delivery',
   tagMethod: 'standalone method skill',
   prompts: [
-    'Use Rivo to improve supplier profiles: field config, profile page, form assets, legacy data and reporting. I want fields and forms to share one schema — check my breakdown, current code, UI mapping, and regression baselines.',
+    'Use Rivo to improve supplier profiles: field config, profile page, form assets, legacy data and reporting. I want fields and forms to share one schema — check my breakdown, current code, UI mapping, and regression scope.',
     'Use test-design on this PRD and API design to build a layered gray-box test matrix ready for test platform import.',
     'Use code-review to independently check quality, requirement fit, and real test coverage on this branch while rejecting speculative bloat.',
     'Use verifying to run compile, unit, and integration checks first, execute impact-scoped regression, and write test-report.md.'
   ],
   copy: 'copy',
   copied: 'copied',
-  footLine: 'At the next change, the reasons, design map, and regression baselines are still there.',
+  footLine: 'At the next change, the reasons, design map, and regression scope are still there.',
   footCta: 'Get Rivo on GitHub',
   skip: 'Skip to content',
   meta: {

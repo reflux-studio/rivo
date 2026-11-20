@@ -21,7 +21,7 @@ description: Rivo 的知识阶段：用户验收后，把本次核实的系统�
 - 读本次需求材料：`decisions.md`、ADR、`research/` 的调查笔记、`plan.md`、`test-plan.md`、`task.md` 的实测记录和 `evidence/test-report.md`
 - 分清材料说的是什么：`research/` 是改动前查到的现状，`plan.md` 与 `test-plan.md` 是当时批准的目标，`task.md` 的实测记录、`evidence/test-report.md` 和最新代码才是改动后的真相。写入前对照最新代码和运行结果核实
 - 比较 `decisions.md` 记录的知识库初始版本与当前版本，保留其他需求在此期间写入的更新
-- 把核实过的核心回归基线和测试环境注意事项（例如测试数据前置、Mock 边界与易踩坑）一并合入对应专题的“变更与运维”节
+- 把核实过的核心回归范围和测试环境注意事项（例如测试数据前置、Mock 边界与易踩坑）一并合入对应专题的“变更与运维”节
 
 ### 3. 写入知识库
 

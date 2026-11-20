@@ -435,7 +435,7 @@ rect.c-bg-rect { fill: var(--bg); }
         <!-- Boundaries (behind everything) -->
         <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" data-composition-frame-label="阶段技能 · 按交付阶段使用" x="24" y="156" width="912" height="132" rx="12" class="c-region" stroke-width="1"/>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" data-composition-frame-label="通用方法 · 按需使用，可独立完成（构建与测试）" x="24" y="316" width="912" height="224" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" data-composition-frame-label="通用方法 · 按需使用，可单独完成" x="24" y="316" width="912" height="224" rx="12" class="c-region" stroke-width="1"/>
 
         <!-- Connection paths (before components for correct z-order) -->
 
@@ -459,12 +459,12 @@ rect.c-bg-rect { fill: var(--bg); }
           <text x="705" y="98" class="t-muted" font-size="9" text-anchor="middle">revising</text>
         </g>
 
-        <g id="node-discuss" data-node-id="discuss" data-node-label="讨论 · 对齐决定与底线" tabindex="0" role="button" aria-label="聚焦讨论 · 对齐决定与底线，converging, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="converging" data-node-context="阶段技能 · 按交付阶段使用">
-          <title>讨论 · 对齐决定与底线 · converging · 阶段技能 · 按交付阶段使用</title>
+        <g id="node-discuss" data-node-id="discuss" data-node-label="讨论 · 定下决定与验收标准" tabindex="0" role="button" aria-label="聚焦讨论 · 定下决定与验收标准，converging, 阶段技能 · 按交付阶段使用" aria-pressed="false" data-node-kind="backend" data-node-sublabel="converging" data-node-context="阶段技能 · 按交付阶段使用">
+          <title>讨论 · 定下决定与验收标准 · converging · 阶段技能 · 按交付阶段使用</title>
           <rect x="40" y="194" width="206" height="76" rx="6" class="c-mask"/>
           <rect x="40" y="194" width="206" height="76" rx="6" class="c-backend" stroke-width="1.5"/>
 
-          <text data-node-label="" x="143" y="230" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">讨论 · 对齐决定与底线</text>
+          <text data-node-label="" x="143" y="230" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">讨论 · 定下决定与验收标准</text>
           <text x="143" y="246" class="t-muted" font-size="9" text-anchor="middle">converging</text>
         </g>
 
@@ -576,9 +576,9 @@ rect.c-bg-rect { fill: var(--bg); }
           <text data-boundary-label="" x="32" y="173" class="t-cloud" font-size="9" font-weight="600">阶段技能 · 按交付阶段使用</text>
         </g>
 
-        <g data-graph-role="structural-frame-label" data-composition-frame-id="1" data-composition-frame-kind="region" data-composition-frame-label="通用方法 · 按需使用，可独立完成（构建与测试）">
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="1" data-composition-frame-kind="region" data-composition-frame-label="通用方法 · 按需使用，可单独完成">
           <rect data-graph-role="structural-frame-label-mask" x="28" y="320" width="256" height="16" rx="3" class="c-mask"/>
-          <text data-boundary-label="" x="32" y="333" class="t-cloud" font-size="9" font-weight="600">通用方法 · 按需使用，可独立完成（构建与测试）</text>
+          <text data-boundary-label="" x="32" y="333" class="t-cloud" font-size="9" font-weight="600">通用方法 · 按需使用，可单独完成</text>
         </g>
 
         <!-- Legend -->

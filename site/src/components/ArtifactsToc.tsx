@@ -4,7 +4,7 @@ import type { site } from '../i18n/site'
 type T = typeof site.zh
 type DocTab = 'plan' | 'test' | 'wiki'
 
-// 产物章节浏览：在技术方案 plan.md、灰盒测试方案 test-plan.md 与知识库 Wiki 之间切换
+// 产物章节浏览：在技术方案 plan.md、测试方案 test-plan.md 与知识库 Wiki 之间切换
 export default function ArtifactsToc({ t }: { t: T }) {
   const [doc, setDoc] = useState<DocTab>('plan')
   const items = doc === 'plan' ? t.chapters : doc === 'test' ? t.testChapters : t.wikiChapters
